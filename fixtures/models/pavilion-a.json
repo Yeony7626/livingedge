@@ -4,144 +4,997 @@
   "created_at": "2026-01-01T00:00:00.000Z",
   "intention": {
     "character": "open timber pavilion with a sitting edge",
-    "ecological_ambition": "moss and lichen growth on selected outer surfaces",
-    "material_expression": "porous lime render over a concrete plinth, larch overhang, oak seat"
+    "ecological_ambition": "moss and lichen on selected outer surfaces; planted ground kept off the wall foot",
+    "material_expression": "porous lime render on a ventilated rainscreen, concrete plinth, larch overhang, oak seat"
   },
   "environment": {
-    "location": "temperate maritime",
-    "rain_exposure": { "value": "high", "confidence": "qualitative" },
-    "humidity": { "value": "high", "confidence": "qualitative" }
+    "location": "Vancouver, BC",
+    "climate_id": "vancouver",
+    "orientation_deg": {
+      "value": 0,
+      "confidence": "illustrative"
+    },
+    "rain_exposure": {
+      "value": "high",
+      "confidence": "qualitative"
+    },
+    "wind_exposure": {
+      "value": "moderate",
+      "confidence": "qualitative"
+    },
+    "humidity": {
+      "value": "high",
+      "confidence": "qualitative"
+    }
+  },
+  "ground": {
+    "soil_library_id": "mat.topsoil",
+    "soil_type": {
+      "value": "unknown",
+      "confidence": "illustrative"
+    },
+    "planting": {
+      "kind": "groundcover",
+      "distance_mm": 300
+    }
   },
   "human_use": {
     "sitting": true,
     "touching": true,
-    "maintenance_actions": ["replace_component"]
+    "use_intensity": "daily",
+    "maintenance": "occasional",
+    "maintenance_actions": [
+      "replace_component"
+    ]
   },
   "assumptions": [
-    { "field": "geometry.wall_height_mm", "value": 3000, "source": "default", "editable": true, "note": "typical pavilion eave height" },
-    { "field": "geometry.ground_clearance_mm", "value": 150, "source": "default", "editable": true, "note": "splash-zone clearance above finished ground" },
-    { "field": "environment.humidity", "value": "high", "source": "inferred", "editable": true, "note": "inferred from rainy climate" }
+    {
+      "field": "environment.orientation_deg",
+      "value": 0,
+      "source": "default",
+      "editable": true,
+      "note": "north-facing edge, the slowest to dry"
+    },
+    {
+      "field": "geometry.wall_height_mm",
+      "value": 3000,
+      "source": "default",
+      "editable": true,
+      "note": "typical pavilion eave height"
+    },
+    {
+      "field": "geometry.ground_clearance_mm",
+      "value": 200,
+      "source": "default",
+      "editable": true,
+      "note": "Vancouver minimum for moisture-sensitive cladding"
+    },
+    {
+      "field": "ground.soil_type",
+      "value": "unknown",
+      "source": "default",
+      "editable": true
+    }
   ],
-  "open_questions": ["Which façade orientation faces the prevailing rain?"],
+  "open_questions": [
+    "Which way does the prevailing rain come from on this site?"
+  ],
   "constraints": [
     {
-      "rule": "ground_clearance_mm >= 150",
-      "expression": "geometry.ground_clearance_mm >= 150",
+      "rule": "cladding at least 200 mm above finished ground",
+      "expression": "geometry.ground_clearance_mm >= 200",
       "origin": "library",
-      "must_preserve": true
+      "must_preserve": true,
+      "evidence_ref": "req.cladding-clearance-to-grade"
     }
   ],
   "geometry": {
-    "ground_clearance_mm": { "value": 150, "confidence": "illustrative" },
-    "overhang_mm": { "value": 600, "confidence": "illustrative" },
-    "wall_height_mm": { "value": 3000, "confidence": "illustrative" },
+    "ground_clearance_mm": {
+      "value": 200,
+      "confidence": "illustrative"
+    },
+    "overhang_mm": {
+      "value": 600,
+      "confidence": "illustrative"
+    },
+    "wall_height_mm": {
+      "value": 3000,
+      "confidence": "illustrative"
+    },
+    "extrusion_mm": 1500,
     "ledges": [],
     "recesses": [],
-    "seat": { "height_mm": 450, "depth_mm": 400, "layer_id": "L-seat" },
+    "seat": {
+      "height_mm": 450,
+      "depth_mm": 400,
+      "layer_id": "L-seat"
+    },
     "section": [
-      { "layer_id": "L-ground", "polygon": [[-1500, 0], [-300, 0], [-300, -400], [-1500, -400]] },
-      { "layer_id": "L-drain", "polygon": [[-300, 0], [0, 0], [0, -400], [-300, -400]] },
-      { "layer_id": "L-base", "polygon": [[0, 150], [200, 150], [200, -400], [0, -400]] },
-      { "layer_id": "L-sep", "polygon": [[0, 153], [200, 153], [200, 150], [0, 150]] },
-      { "layer_id": "L-clad", "polygon": [[-25, 3000], [0, 3000], [0, 153], [-25, 153]] },
-      { "layer_id": "L-overhang", "polygon": [[-625, 3050], [200, 3050], [200, 3000], [-625, 3000]] },
-      { "layer_id": "L-seat", "polygon": [[-425, 450], [-25, 450], [-25, 405], [-425, 405]] }
+      {
+        "layer_id": "L-ground",
+        "polygon": [
+          [
+            -1500,
+            0
+          ],
+          [
+            -300,
+            0
+          ],
+          [
+            -300,
+            -400
+          ],
+          [
+            -1500,
+            -400
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-drain",
+        "polygon": [
+          [
+            -300,
+            0
+          ],
+          [
+            -10,
+            0
+          ],
+          [
+            -10,
+            -400
+          ],
+          [
+            -300,
+            -400
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-base",
+        "polygon": [
+          [
+            -10,
+            190
+          ],
+          [
+            200,
+            190
+          ],
+          [
+            200,
+            -400
+          ],
+          [
+            -10,
+            -400
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-sep",
+        "polygon": [
+          [
+            0,
+            193
+          ],
+          [
+            150,
+            193
+          ],
+          [
+            150,
+            190
+          ],
+          [
+            0,
+            190
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-wall",
+        "polygon": [
+          [
+            0,
+            3000
+          ],
+          [
+            150,
+            3000
+          ],
+          [
+            150,
+            193
+          ],
+          [
+            0,
+            193
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-drip",
+        "polygon": [
+          [
+            -55,
+            200
+          ],
+          [
+            0,
+            200
+          ],
+          [
+            0,
+            195
+          ],
+          [
+            -55,
+            195
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-cavity",
+        "polygon": [
+          [
+            -19,
+            3000
+          ],
+          [
+            0,
+            3000
+          ],
+          [
+            0,
+            200
+          ],
+          [
+            -19,
+            200
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-clad",
+        "polygon": [
+          [
+            -44,
+            3000
+          ],
+          [
+            -19,
+            3000
+          ],
+          [
+            -19,
+            200
+          ],
+          [
+            -44,
+            200
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-overhang",
+        "polygon": [
+          [
+            -644,
+            3050
+          ],
+          [
+            150,
+            3050
+          ],
+          [
+            150,
+            3000
+          ],
+          [
+            -644,
+            3000
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-seat",
+        "polygon": [
+          [
+            -444,
+            450
+          ],
+          [
+            -44,
+            450
+          ],
+          [
+            -44,
+            405
+          ],
+          [
+            -444,
+            405
+          ]
+        ]
+      }
     ]
   },
   "assembly": {
     "layers": [
-      { "id": "L-overhang", "library_id": "mat.larch-board", "role": "overhang", "thickness_mm": { "value": 50, "confidence": "illustrative" }, "order": 0, "replaceable": true },
-      { "id": "L-seat", "library_id": "mat.oak-seat", "role": "seat", "thickness_mm": { "value": 45, "confidence": "illustrative" }, "order": 1, "replaceable": true },
-      { "id": "L-clad", "library_id": "mat.lime-render", "role": "cladding", "thickness_mm": { "value": 25, "confidence": "illustrative" }, "order": 2, "replaceable": true },
-      { "id": "L-sep", "library_id": "mat.bitumen-dpc", "role": "separation", "thickness_mm": { "value": 3, "confidence": "illustrative" }, "order": 3, "replaceable": false },
-      { "id": "L-base", "library_id": "mat.concrete-plinth", "role": "base", "thickness_mm": { "value": 200, "confidence": "illustrative" }, "order": 4, "replaceable": false },
-      { "id": "L-drain", "library_id": "mat.gravel-drainage", "role": "drainage", "thickness_mm": { "value": 300, "confidence": "illustrative" }, "order": 5, "replaceable": true },
-      { "id": "L-ground", "library_id": "mat.topsoil", "role": "ground", "thickness_mm": { "value": 400, "confidence": "illustrative" }, "order": 6, "replaceable": false }
+      {
+        "id": "L-overhang",
+        "library_id": "mat.larch-board",
+        "role": "overhang",
+        "thickness_mm": {
+          "value": 50,
+          "confidence": "illustrative"
+        },
+        "order": 0,
+        "build_step": 8,
+        "replaceable": true
+      },
+      {
+        "id": "L-seat",
+        "library_id": "mat.oak-seat",
+        "role": "seat",
+        "thickness_mm": {
+          "value": 45,
+          "confidence": "illustrative"
+        },
+        "order": 1,
+        "build_step": 9,
+        "replaceable": true
+      },
+      {
+        "id": "L-clad",
+        "library_id": "mat.lime-render",
+        "role": "cladding",
+        "thickness_mm": {
+          "value": 25,
+          "confidence": "illustrative"
+        },
+        "order": 2,
+        "build_step": 7,
+        "replaceable": true
+      },
+      {
+        "id": "L-cavity",
+        "library_id": "mat.rainscreen-cavity-19",
+        "role": "cavity",
+        "thickness_mm": {
+          "value": 19,
+          "confidence": "illustrative"
+        },
+        "order": 3,
+        "build_step": 6,
+        "replaceable": false
+      },
+      {
+        "id": "L-drip",
+        "library_id": "mat.metal-base-flashing",
+        "role": "drip",
+        "thickness_mm": {
+          "value": 1,
+          "confidence": "illustrative"
+        },
+        "order": 4,
+        "build_step": 5,
+        "replaceable": true
+      },
+      {
+        "id": "L-wall",
+        "library_id": "mat.douglas-fir-frame",
+        "role": "wall",
+        "thickness_mm": {
+          "value": 150,
+          "confidence": "illustrative"
+        },
+        "order": 5,
+        "build_step": 4,
+        "replaceable": false
+      },
+      {
+        "id": "L-sep",
+        "library_id": "mat.bitumen-dpc",
+        "role": "separation",
+        "thickness_mm": {
+          "value": 3,
+          "confidence": "illustrative"
+        },
+        "order": 6,
+        "build_step": 3,
+        "replaceable": false
+      },
+      {
+        "id": "L-base",
+        "library_id": "mat.concrete-plinth",
+        "role": "base",
+        "thickness_mm": {
+          "value": 210,
+          "confidence": "illustrative"
+        },
+        "order": 7,
+        "build_step": 1,
+        "replaceable": false
+      },
+      {
+        "id": "L-drain",
+        "library_id": "mat.gravel-drainage",
+        "role": "drainage",
+        "thickness_mm": {
+          "value": 290,
+          "confidence": "illustrative"
+        },
+        "order": 8,
+        "build_step": 2,
+        "replaceable": true
+      },
+      {
+        "id": "L-ground",
+        "library_id": "mat.topsoil",
+        "role": "ground",
+        "thickness_mm": {
+          "value": 400,
+          "confidence": "illustrative"
+        },
+        "order": 9,
+        "build_step": 10,
+        "replaceable": false
+      }
     ],
     "joints": [
-      { "id": "J-overhang-clad", "between": ["L-overhang", "L-clad"], "kind": "drip", "water_path": "sheds" },
-      { "id": "J-clad-sep", "between": ["L-clad", "L-sep"], "kind": "drip", "water_path": "sheds" },
-      { "id": "J-seat-clad", "between": ["L-seat", "L-clad"], "kind": "open", "water_path": "holds" },
-      { "id": "J-base-drain", "between": ["L-base", "L-drain"], "kind": "open", "water_path": "admits" },
-      { "id": "J-drain-ground", "between": ["L-drain", "L-ground"], "kind": "open", "water_path": "admits" }
+      {
+        "id": "J-overhang-clad",
+        "between": [
+          "L-overhang",
+          "L-clad"
+        ],
+        "kind": "drip",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-clad-drip",
+        "between": [
+          "L-clad",
+          "L-drip"
+        ],
+        "kind": "overlap",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-cavity-drip",
+        "between": [
+          "L-cavity",
+          "L-drip"
+        ],
+        "kind": "open",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-wall-sep",
+        "between": [
+          "L-wall",
+          "L-sep"
+        ],
+        "kind": "sealed",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-seat-clad",
+        "between": [
+          "L-seat",
+          "L-clad"
+        ],
+        "kind": "open",
+        "water_path": "holds"
+      },
+      {
+        "id": "J-base-drain",
+        "between": [
+          "L-base",
+          "L-drain"
+        ],
+        "kind": "open",
+        "water_path": "admits"
+      },
+      {
+        "id": "J-drain-ground",
+        "between": [
+          "L-drain",
+          "L-ground"
+        ],
+        "kind": "open",
+        "water_path": "admits"
+      }
     ]
   },
   "materials": [
     {
-      "id": "M-larch", "library_id": "mat.larch-board", "used_in": ["L-overhang"],
+      "id": "M-larch",
+      "library_id": "mat.larch-board",
+      "used_in": [
+        "L-overhang"
+      ],
       "properties": {
-        "absorption": { "value": "moderate", "confidence": "qualitative", "evidence_ref": "ev.larch-board" },
-        "drying_rate": { "value": "moderate", "confidence": "qualitative", "evidence_ref": "ev.larch-board" },
-        "surface_texture": { "value": "textured", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": false, "confidence": "illustrative" }
+        "absorption": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "textured",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.larch.weathering"
+        },
+        "decay_risk": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.larch.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 30,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-oak", "library_id": "mat.oak-seat", "used_in": ["L-seat"],
+      "id": "M-oak",
+      "library_id": "mat.oak-seat",
+      "used_in": [
+        "L-seat"
+      ],
       "properties": {
-        "absorption": { "value": "low", "confidence": "qualitative", "evidence_ref": "ev.oak-seat" },
-        "drying_rate": { "value": "moderate", "confidence": "qualitative", "evidence_ref": "ev.oak-seat" },
-        "surface_texture": { "value": "smooth", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": false, "confidence": "illustrative" }
+        "absorption": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.oak.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 25,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-lime", "library_id": "mat.lime-render", "used_in": ["L-clad"],
+      "id": "M-lime",
+      "library_id": "mat.lime-render",
+      "used_in": [
+        "L-clad"
+      ],
       "properties": {
-        "absorption": { "value": "high", "confidence": "qualitative", "evidence_ref": "ev.lime-render" },
-        "drying_rate": { "value": "fast", "confidence": "qualitative", "evidence_ref": "ev.lime-render" },
-        "surface_texture": { "value": "porous", "confidence": "qualitative", "evidence_ref": "ev.lime-render" },
-        "receptive_to_growth": { "value": true, "confidence": "qualitative", "evidence_ref": "ev.lime-render" }
+        "absorption": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.absorption"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.drying"
+        },
+        "surface_texture": {
+          "value": "porous",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.porosity"
+        },
+        "receptive_to_growth": {
+          "value": true,
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.bioreceptivity"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.weathering"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 30,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-dpc", "library_id": "mat.bitumen-dpc", "used_in": ["L-sep"],
+      "id": "M-cavity",
+      "library_id": "mat.rainscreen-cavity-19",
+      "used_in": [
+        "L-cavity"
+      ],
       "properties": {
-        "absorption": { "value": "low", "confidence": "qualitative", "evidence_ref": "ev.bitumen-dpc" },
-        "drying_rate": { "value": "slow", "confidence": "illustrative" },
-        "surface_texture": { "value": "smooth", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": false, "confidence": "illustrative" }
+        "absorption": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-concrete", "library_id": "mat.concrete-plinth", "used_in": ["L-base"],
+      "id": "M-flashing",
+      "library_id": "mat.metal-base-flashing",
+      "used_in": [
+        "L-drip"
+      ],
       "properties": {
-        "absorption": { "value": "moderate", "confidence": "qualitative", "evidence_ref": "ev.concrete-plinth" },
-        "drying_rate": { "value": "slow", "confidence": "qualitative", "evidence_ref": "ev.concrete-plinth" },
-        "surface_texture": { "value": "textured", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": false, "confidence": "illustrative" }
+        "absorption": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 40,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-gravel", "library_id": "mat.gravel-drainage", "used_in": ["L-drain"],
+      "id": "M-fir",
+      "library_id": "mat.douglas-fir-frame",
+      "used_in": [
+        "L-wall"
+      ],
       "properties": {
-        "absorption": { "value": "low", "confidence": "qualitative", "evidence_ref": "ev.gravel-drainage" },
-        "drying_rate": { "value": "fast", "confidence": "qualitative", "evidence_ref": "ev.gravel-drainage" },
-        "surface_texture": { "value": "porous", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": false, "confidence": "illustrative" }
+        "absorption": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "textured",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.douglas-fir.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
+        }
       }
     },
     {
-      "id": "M-soil", "library_id": "mat.topsoil", "used_in": ["L-ground"],
+      "id": "M-dpc",
+      "library_id": "mat.bitumen-dpc",
+      "used_in": [
+        "L-sep"
+      ],
       "properties": {
-        "absorption": { "value": "high", "confidence": "qualitative", "evidence_ref": "ev.topsoil" },
-        "drying_rate": { "value": "slow", "confidence": "qualitative", "evidence_ref": "ev.topsoil" },
-        "surface_texture": { "value": "porous", "confidence": "illustrative" },
-        "receptive_to_growth": { "value": true, "confidence": "illustrative" }
+        "absorption": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.dpc-bitumen.properties"
+        },
+        "drying_rate": {
+          "value": "slow",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "qualitative",
+          "evidence_ref": "ev.dpc.service-life"
+        }
+      }
+    },
+    {
+      "id": "M-concrete",
+      "library_id": "mat.concrete-plinth",
+      "used_in": [
+        "L-base"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.concrete.sorptivity"
+        },
+        "drying_rate": {
+          "value": "slow",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "textured",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.concrete.freeze-thaw"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.concrete.thermal"
+        },
+        "service_life_yr": {
+          "value": 75,
+          "confidence": "illustrative"
+        }
+      }
+    },
+    {
+      "id": "M-gravel",
+      "library_id": "mat.gravel-drainage",
+      "used_in": [
+        "L-drain"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.gravel.capillary-rise"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.gravel.drying-bioreceptivity"
+        },
+        "surface_texture": {
+          "value": "porous",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
+        }
+      }
+    },
+    {
+      "id": "M-soil",
+      "library_id": "mat.topsoil",
+      "used_in": [
+        "L-ground"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.topsoil.water-holding"
+        },
+        "drying_rate": {
+          "value": "slow",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "porous",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": true,
+          "confidence": "qualitative",
+          "evidence_ref": "ev.topsoil.bioreceptivity"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
+        }
       }
     }
   ],
   "explanation": {
-    "strategy": "A deep overhang and raised plinth keep the render out of the splash zone, while the porous lime face is left to weather and host growth.",
+    "strategy": "A deep overhang and raised plinth keep the render out of the splash zone, a drained cavity lets it dry from behind, and the porous lime face is left to weather and host growth.",
     "why_elements": {
       "L-overhang": "Sheds rain away from the wall head.",
-      "L-seat": "Sitting edge, detached from the render so it can be replaced.",
-      "L-clad": "Receptive porous surface for moss and lichen.",
-      "L-sep": "Stops rising damp between plinth and render.",
-      "L-base": "Raises the wall above ground splash.",
-      "L-drain": "Takes run-off away from the wall foot.",
+      "L-seat": "Sitting edge, held clear of the render so it can be replaced.",
+      "L-clad": "Porous lime render left to weather and host moss and lichen.",
+      "L-cavity": "Drained, ventilated gap behind the render, required in Vancouver.",
+      "L-drip": "Base flashing that throws cavity water clear of the plinth.",
+      "L-wall": "Timber frame and sheathing carrying the rainscreen.",
+      "L-sep": "Stops moisture rising from the concrete into the frame.",
+      "L-base": "Lifts the wall 200 mm out of the splash zone.",
+      "L-drain": "Takes run-off away from the wall foot and limits splash.",
       "L-ground": "Planted soil beyond the drainage strip."
     }
   },
-  "scenario_runs": []
+  "runs": []
 }

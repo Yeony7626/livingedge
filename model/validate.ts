@@ -4,9 +4,11 @@ import type { DetailModel } from "./schema";
 
 const Confidence = z.enum(["calculated", "qualitative", "illustrative"]);
 const Level = z.enum(["low", "moderate", "high"]);
+const KEY_YEARS = [0, 5, 15, 30] as const;
+const KeyYear = z.union([z.literal(0), z.literal(5), z.literal(15), z.literal(30)]);
 
-const tagged = <T extends z.ZodTypeAny>(value: T) =>
-  z.strictObject({ value, confidence: Confidence, evidence_ref: z.string().min(1).optional() });
+const tagged = <T extends z.ZodTypeAny, C extends z.ZodTypeAny = typeof Confidence>(value: T, confidence?: C) =>
+  z.strictObject({ value, confidence: (confidence ?? Confidence) as C, evidence_ref: z.string().min(1).optional() });
 
 // Non-negotiable 2: a material property needs an evidence_ref unless tagged illustrative.
 const evidenced = <T extends z.ZodTypeAny>(value: T) =>
@@ -15,23 +17,29 @@ const evidenced = <T extends z.ZodTypeAny>(value: T) =>
     path: ["evidence_ref"],
   });
 
-const Point = z.tuple([z.number(), z.number()]);
+// Non-negotiable 6: decades values are never calculated.
+const NotCalculated = z.enum(["qualitative", "illustrative"], {
+  errorMap: () => ({ message: "decades values are qualitative or illustrative, never calculated" }),
+});
+const decade = <T extends z.ZodTypeAny>(value: T) => tagged(value, NotCalculated);
+
 // Assumption values are any JSON value but must be present.
 const Json = z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.any()), z.record(z.any())]);
+const Point = z.tuple([z.number(), z.number()]);
 const WaterPath = z.enum(["sheds", "holds", "admits"]);
+const UseIntensity = z.enum(["rare", "daily", "heavy"]);
+const Maintenance = z.enum(["none", "occasional", "regular"]);
 
-const ScenarioInput = z.strictObject({
+const StormRun = z.strictObject({
   id: z.string(),
-  kind: z.enum(["event", "long_term"]),
-  rain_intensity: z.enum(["light", "moderate", "heavy"]),
-  duration_h: z.number().nonnegative(),
-  drying_h: z.number().nonnegative(),
-  wind: z.enum(["calm", "moderate", "strong"]),
-});
-
-const ScenarioRun = z.strictObject({
-  id: z.string(),
-  scenario: ScenarioInput,
+  kind: z.literal("storm"),
+  at_year: KeyYear,
+  input: z.strictObject({
+    rain_intensity: z.enum(["light", "moderate", "heavy"]),
+    duration_h: z.number().nonnegative(),
+    drying_h: z.number().nonnegative(),
+    wind: z.enum(["calm", "moderate", "strong"]),
+  }),
   model_version: z.number().int(),
   frames: z.array(
     z.strictObject({
@@ -40,7 +48,36 @@ const ScenarioRun = z.strictObject({
       water_paths: z.array(z.strictObject({ from: z.string(), to: z.string(), kind: WaterPath })),
     }),
   ),
-  growth_favourability: z.record(tagged(Level)),
+  summary: z.string(),
+});
+
+const LayerState = z.strictObject({
+  moisture_regime: decade(z.enum(["dry", "intermittent", "persistent"])),
+  growth_stage: decade(z.enum(["clean", "biofilm", "algae", "moss", "lichen", "plants"])),
+  wear: decade(Level),
+  condition: decade(z.enum(["sound", "weathered", "degraded", "replace"])),
+});
+
+const DecadesRun = z.strictObject({
+  id: z.string(),
+  kind: z.literal("decades"),
+  drivers: z.strictObject({ orientation_deg: z.number(), use_intensity: UseIntensity, maintenance: Maintenance }),
+  model_version: z.number().int(),
+  keyframes: z
+    .array(
+      z.strictObject({
+        year: KeyYear,
+        layers: z.record(LayerState),
+        ground: z.strictObject({
+          drainage_silt: decade(Level),
+          root_reach: decade(z.enum(["none", "approaching", "at_base"])),
+          soil_splash: decade(Level),
+        }),
+      }),
+    )
+    .refine((k) => k.map((f) => f.year).join() === KEY_YEARS.join(), {
+      message: "keyframes must be exactly the years 0, 5, 15, 30, in order",
+    }),
   summary: z.string(),
 });
 
@@ -56,13 +93,25 @@ export const DetailModelSchema: z.ZodType<DetailModel> = z.strictObject({
   }),
   environment: z.strictObject({
     location: z.string().optional(),
-    orientation_deg: tagged(z.number()).optional(),
+    climate_id: z.string().min(1),
+    orientation_deg: tagged(z.number().min(0).lt(360)),
     rain_exposure: tagged(Level),
+    wind_exposure: tagged(Level),
     humidity: tagged(Level),
+  }),
+  ground: z.strictObject({
+    soil_library_id: z.string().min(1),
+    soil_type: tagged(z.enum(["clay", "silt", "sand", "gravel", "unknown"])),
+    planting: z.strictObject({
+      kind: z.enum(["none", "groundcover", "shrub", "tree"]),
+      distance_mm: z.number().nonnegative(),
+    }),
   }),
   human_use: z.strictObject({
     sitting: z.boolean(),
     touching: z.boolean(),
+    use_intensity: UseIntensity,
+    maintenance: Maintenance,
     maintenance_actions: z.array(z.enum(["clean", "replace_component", "redirect_water"])),
   }),
   assumptions: z.array(
@@ -81,12 +130,14 @@ export const DetailModelSchema: z.ZodType<DetailModel> = z.strictObject({
       expression: z.string(),
       origin: z.enum(["user", "library", "default"]),
       must_preserve: z.boolean(),
+      evidence_ref: z.string().min(1).optional(),
     }),
   ),
   geometry: z.strictObject({
     ground_clearance_mm: tagged(z.number().nonnegative()),
     overhang_mm: tagged(z.number().nonnegative()),
     wall_height_mm: tagged(z.number().positive()),
+    extrusion_mm: z.number().positive(),
     ledges: z.array(z.strictObject({ id: z.string(), depth_mm: z.number(), height_mm: z.number(), slope_deg: z.number() })),
     recesses: z.array(z.strictObject({ id: z.string(), depth_mm: z.number(), height_mm: z.number() })),
     seat: z.strictObject({ height_mm: z.number(), depth_mm: z.number(), layer_id: z.string() }).optional(),
@@ -97,9 +148,10 @@ export const DetailModelSchema: z.ZodType<DetailModel> = z.strictObject({
       z.strictObject({
         id: z.string().min(1),
         library_id: z.string().min(1),
-        role: z.enum(["ground", "drainage", "separation", "base", "cladding", "overhang", "seat"]),
+        role: z.enum(["ground", "drainage", "footing", "base", "separation", "wall", "cavity", "cladding", "drip", "overhang", "seat"]),
         thickness_mm: tagged(z.number().positive()),
         order: z.number().int().nonnegative(),
+        build_step: z.number().int().positive(),
         replaceable: z.boolean(),
       }),
     ),
@@ -122,9 +174,14 @@ export const DetailModelSchema: z.ZodType<DetailModel> = z.strictObject({
         drying_rate: evidenced(z.enum(["slow", "moderate", "fast"])),
         surface_texture: evidenced(z.enum(["smooth", "textured", "porous"])),
         receptive_to_growth: evidenced(z.boolean()),
+        freeze_thaw_susceptibility: evidenced(Level),
+        uv_weathering: evidenced(Level),
+        decay_risk: evidenced(Level),
+        thermal_mass: evidenced(Level),
+        service_life_yr: evidenced(z.number().positive()),
       }),
     }),
   ),
   explanation: z.strictObject({ strategy: z.string(), why_elements: z.record(z.string()) }),
-  scenario_runs: z.array(ScenarioRun),
+  runs: z.array(z.discriminatedUnion("kind", [DecadesRun, StormRun])),
 });

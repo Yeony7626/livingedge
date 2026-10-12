@@ -4,13 +4,22 @@
   "created_at": "2026-01-01T00:00:00.000Z",
   "intention": {
     "character": "open timber pavilion with a sitting edge",
-    "ecological_ambition": "moss and lichen growth on selected outer surfaces",
-    "material_expression": "porous lime render over a concrete plinth, larch overhang, oak seat"
+    "ecological_ambition": "moss and lichen on selected outer surfaces; planted ground kept off the wall foot",
+    "material_expression": "porous lime render on a ventilated rainscreen, concrete plinth, larch overhang, oak seat"
   },
   "environment": {
-    "location": "temperate maritime",
+    "location": "Vancouver, BC",
+    "climate_id": "vancouver",
+    "orientation_deg": {
+      "value": 0,
+      "confidence": "illustrative"
+    },
     "rain_exposure": {
       "value": "high",
+      "confidence": "qualitative"
+    },
+    "wind_exposure": {
+      "value": "moderate",
       "confidence": "qualitative"
     },
     "humidity": {
@@ -18,14 +27,34 @@
       "confidence": "qualitative"
     }
   },
+  "ground": {
+    "soil_library_id": "mat.topsoil",
+    "soil_type": {
+      "value": "unknown",
+      "confidence": "illustrative"
+    },
+    "planting": {
+      "kind": "groundcover",
+      "distance_mm": 300
+    }
+  },
   "human_use": {
     "sitting": true,
     "touching": true,
+    "use_intensity": "daily",
+    "maintenance": "occasional",
     "maintenance_actions": [
       "replace_component"
     ]
   },
   "assumptions": [
+    {
+      "field": "environment.orientation_deg",
+      "value": 0,
+      "source": "default",
+      "editable": true,
+      "note": "north-facing edge, the slowest to dry"
+    },
     {
       "field": "geometry.wall_height_mm",
       "value": 3000,
@@ -35,33 +64,33 @@
     },
     {
       "field": "geometry.ground_clearance_mm",
-      "value": 150,
+      "value": 200,
       "source": "default",
       "editable": true,
-      "note": "splash-zone clearance above finished ground"
+      "note": "Vancouver minimum for moisture-sensitive cladding"
     },
     {
-      "field": "environment.humidity",
-      "value": "high",
-      "source": "inferred",
-      "editable": true,
-      "note": "inferred from rainy climate"
+      "field": "ground.soil_type",
+      "value": "unknown",
+      "source": "default",
+      "editable": true
     }
   ],
   "open_questions": [
-    "Which façade orientation faces the prevailing rain?"
+    "Which way does the prevailing rain come from on this site?"
   ],
   "constraints": [
     {
-      "rule": "ground_clearance_mm >= 150",
-      "expression": "geometry.ground_clearance_mm >= 150",
+      "rule": "cladding at least 200 mm above finished ground",
+      "expression": "geometry.ground_clearance_mm >= 200",
       "origin": "library",
-      "must_preserve": true
+      "must_preserve": true,
+      "evidence_ref": "req.cladding-clearance-to-grade"
     }
   ],
   "geometry": {
     "ground_clearance_mm": {
-      "value": 150,
+      "value": 200,
       "confidence": "illustrative"
     },
     "overhang_mm": {
@@ -72,6 +101,7 @@
       "value": 3000,
       "confidence": "illustrative"
     },
+    "extrusion_mm": 1500,
     "ledges": [],
     "recesses": [],
     "seat": {
@@ -109,11 +139,11 @@
             0
           ],
           [
-            0,
+            -10,
             0
           ],
           [
-            0,
+            -10,
             -400
           ],
           [
@@ -126,19 +156,19 @@
         "layer_id": "L-base",
         "polygon": [
           [
-            0,
-            150
+            -10,
+            190
           ],
           [
             200,
-            150
+            190
           ],
           [
             200,
             -400
           ],
           [
-            0,
+            -10,
             -400
           ]
         ]
@@ -148,19 +178,82 @@
         "polygon": [
           [
             0,
-            153
+            193
           ],
           [
-            200,
-            153
+            150,
+            193
           ],
           [
-            200,
-            150
+            150,
+            190
           ],
           [
             0,
-            150
+            190
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-wall",
+        "polygon": [
+          [
+            0,
+            3000
+          ],
+          [
+            150,
+            3000
+          ],
+          [
+            150,
+            193
+          ],
+          [
+            0,
+            193
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-drip",
+        "polygon": [
+          [
+            -55,
+            200
+          ],
+          [
+            0,
+            200
+          ],
+          [
+            0,
+            195
+          ],
+          [
+            -55,
+            195
+          ]
+        ]
+      },
+      {
+        "layer_id": "L-cavity",
+        "polygon": [
+          [
+            -19,
+            3000
+          ],
+          [
+            0,
+            3000
+          ],
+          [
+            0,
+            200
+          ],
+          [
+            -19,
+            200
           ]
         ]
       },
@@ -168,20 +261,20 @@
         "layer_id": "L-clad",
         "polygon": [
           [
-            -25,
+            -44,
             3000
           ],
           [
-            0,
+            -19,
             3000
           ],
           [
-            0,
-            153
+            -19,
+            200
           ],
           [
-            -25,
-            153
+            -44,
+            200
           ]
         ]
       },
@@ -189,19 +282,19 @@
         "layer_id": "L-overhang",
         "polygon": [
           [
-            -25,
+            -44,
             3050
           ],
           [
-            200,
+            150,
             3050
           ],
           [
-            200,
+            150,
             3000
           ],
           [
-            -25,
+            -44,
             3000
           ]
         ]
@@ -210,19 +303,19 @@
         "layer_id": "L-seat",
         "polygon": [
           [
-            -425,
+            -444,
             450
           ],
           [
-            -25,
+            -44,
             450
           ],
           [
-            -25,
+            -44,
             405
           ],
           [
-            -425,
+            -444,
             405
           ]
         ]
@@ -240,6 +333,7 @@
           "confidence": "illustrative"
         },
         "order": 0,
+        "build_step": 8,
         "replaceable": true
       },
       {
@@ -251,6 +345,7 @@
           "confidence": "illustrative"
         },
         "order": 1,
+        "build_step": 9,
         "replaceable": true
       },
       {
@@ -262,7 +357,44 @@
           "confidence": "illustrative"
         },
         "order": 2,
+        "build_step": 7,
         "replaceable": true
+      },
+      {
+        "id": "L-cavity",
+        "library_id": "mat.rainscreen-cavity-19",
+        "role": "cavity",
+        "thickness_mm": {
+          "value": 19,
+          "confidence": "illustrative"
+        },
+        "order": 3,
+        "build_step": 6,
+        "replaceable": false
+      },
+      {
+        "id": "L-drip",
+        "library_id": "mat.metal-base-flashing",
+        "role": "drip",
+        "thickness_mm": {
+          "value": 1,
+          "confidence": "illustrative"
+        },
+        "order": 4,
+        "build_step": 5,
+        "replaceable": true
+      },
+      {
+        "id": "L-wall",
+        "library_id": "mat.douglas-fir-frame",
+        "role": "wall",
+        "thickness_mm": {
+          "value": 150,
+          "confidence": "illustrative"
+        },
+        "order": 5,
+        "build_step": 4,
+        "replaceable": false
       },
       {
         "id": "L-sep",
@@ -272,7 +404,8 @@
           "value": 3,
           "confidence": "illustrative"
         },
-        "order": 3,
+        "order": 6,
+        "build_step": 3,
         "replaceable": false
       },
       {
@@ -280,10 +413,11 @@
         "library_id": "mat.concrete-plinth",
         "role": "base",
         "thickness_mm": {
-          "value": 200,
+          "value": 210,
           "confidence": "illustrative"
         },
-        "order": 4,
+        "order": 7,
+        "build_step": 1,
         "replaceable": false
       },
       {
@@ -291,10 +425,11 @@
         "library_id": "mat.gravel-drainage",
         "role": "drainage",
         "thickness_mm": {
-          "value": 300,
+          "value": 290,
           "confidence": "illustrative"
         },
-        "order": 5,
+        "order": 8,
+        "build_step": 2,
         "replaceable": true
       },
       {
@@ -305,7 +440,8 @@
           "value": 400,
           "confidence": "illustrative"
         },
-        "order": 6,
+        "order": 9,
+        "build_step": 10,
         "replaceable": false
       }
     ],
@@ -320,12 +456,30 @@
         "water_path": "sheds"
       },
       {
-        "id": "J-clad-sep",
+        "id": "J-clad-drip",
         "between": [
           "L-clad",
+          "L-drip"
+        ],
+        "kind": "overlap",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-cavity-drip",
+        "between": [
+          "L-cavity",
+          "L-drip"
+        ],
+        "kind": "open",
+        "water_path": "sheds"
+      },
+      {
+        "id": "J-wall-sep",
+        "between": [
+          "L-wall",
           "L-sep"
         ],
-        "kind": "drip",
+        "kind": "sealed",
         "water_path": "sheds"
       },
       {
@@ -367,13 +521,11 @@
       "properties": {
         "absorption": {
           "value": "moderate",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.larch-board"
+          "confidence": "illustrative"
         },
         "drying_rate": {
           "value": "moderate",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.larch-board"
+          "confidence": "illustrative"
         },
         "surface_texture": {
           "value": "textured",
@@ -381,6 +533,28 @@
         },
         "receptive_to_growth": {
           "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.larch.weathering"
+        },
+        "decay_risk": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.larch.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 30,
           "confidence": "illustrative"
         }
       }
@@ -394,13 +568,11 @@
       "properties": {
         "absorption": {
           "value": "low",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.oak-seat"
+          "confidence": "illustrative"
         },
         "drying_rate": {
           "value": "moderate",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.oak-seat"
+          "confidence": "illustrative"
         },
         "surface_texture": {
           "value": "smooth",
@@ -408,6 +580,27 @@
         },
         "receptive_to_growth": {
           "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.oak.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 25,
           "confidence": "illustrative"
         }
       }
@@ -422,22 +615,179 @@
         "absorption": {
           "value": "high",
           "confidence": "qualitative",
-          "evidence_ref": "ev.lime-render"
+          "evidence_ref": "ev.lime-render.absorption"
         },
         "drying_rate": {
           "value": "fast",
           "confidence": "qualitative",
-          "evidence_ref": "ev.lime-render"
+          "evidence_ref": "ev.lime-render.drying"
         },
         "surface_texture": {
           "value": "porous",
           "confidence": "qualitative",
-          "evidence_ref": "ev.lime-render"
+          "evidence_ref": "ev.lime-render.porosity"
         },
         "receptive_to_growth": {
           "value": true,
           "confidence": "qualitative",
-          "evidence_ref": "ev.lime-render"
+          "evidence_ref": "ev.lime-render.bioreceptivity"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.lime-render.weathering"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 30,
+          "confidence": "illustrative"
+        }
+      }
+    },
+    {
+      "id": "M-cavity",
+      "library_id": "mat.rainscreen-cavity-19",
+      "used_in": [
+        "L-cavity"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
+        }
+      }
+    },
+    {
+      "id": "M-flashing",
+      "library_id": "mat.metal-base-flashing",
+      "used_in": [
+        "L-drip"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "fast",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "smooth",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 40,
+          "confidence": "illustrative"
+        }
+      }
+    },
+    {
+      "id": "M-fir",
+      "library_id": "mat.douglas-fir-frame",
+      "used_in": [
+        "L-wall"
+      ],
+      "properties": {
+        "absorption": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "drying_rate": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "surface_texture": {
+          "value": "textured",
+          "confidence": "illustrative"
+        },
+        "receptive_to_growth": {
+          "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "moderate",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.douglas-fir.durability-class"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "illustrative"
         }
       }
     },
@@ -451,7 +801,7 @@
         "absorption": {
           "value": "low",
           "confidence": "qualitative",
-          "evidence_ref": "ev.bitumen-dpc"
+          "evidence_ref": "ev.dpc-bitumen.properties"
         },
         "drying_rate": {
           "value": "slow",
@@ -464,6 +814,27 @@
         "receptive_to_growth": {
           "value": false,
           "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
+          "confidence": "qualitative",
+          "evidence_ref": "ev.dpc.service-life"
         }
       }
     },
@@ -477,12 +848,11 @@
         "absorption": {
           "value": "moderate",
           "confidence": "qualitative",
-          "evidence_ref": "ev.concrete-plinth"
+          "evidence_ref": "ev.concrete.sorptivity"
         },
         "drying_rate": {
           "value": "slow",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.concrete-plinth"
+          "confidence": "illustrative"
         },
         "surface_texture": {
           "value": "textured",
@@ -490,6 +860,28 @@
         },
         "receptive_to_growth": {
           "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.concrete.freeze-thaw"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "high",
+          "confidence": "qualitative",
+          "evidence_ref": "ev.concrete.thermal"
+        },
+        "service_life_yr": {
+          "value": 75,
           "confidence": "illustrative"
         }
       }
@@ -504,12 +896,12 @@
         "absorption": {
           "value": "low",
           "confidence": "qualitative",
-          "evidence_ref": "ev.gravel-drainage"
+          "evidence_ref": "ev.gravel.capillary-rise"
         },
         "drying_rate": {
           "value": "fast",
           "confidence": "qualitative",
-          "evidence_ref": "ev.gravel-drainage"
+          "evidence_ref": "ev.gravel.drying-bioreceptivity"
         },
         "surface_texture": {
           "value": "porous",
@@ -517,6 +909,26 @@
         },
         "receptive_to_growth": {
           "value": false,
+          "confidence": "illustrative"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
           "confidence": "illustrative"
         }
       }
@@ -531,12 +943,11 @@
         "absorption": {
           "value": "high",
           "confidence": "qualitative",
-          "evidence_ref": "ev.topsoil"
+          "evidence_ref": "ev.topsoil.water-holding"
         },
         "drying_rate": {
           "value": "slow",
-          "confidence": "qualitative",
-          "evidence_ref": "ev.topsoil"
+          "confidence": "illustrative"
         },
         "surface_texture": {
           "value": "porous",
@@ -544,22 +955,46 @@
         },
         "receptive_to_growth": {
           "value": true,
+          "confidence": "qualitative",
+          "evidence_ref": "ev.topsoil.bioreceptivity"
+        },
+        "freeze_thaw_susceptibility": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "uv_weathering": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "decay_risk": {
+          "value": "low",
+          "confidence": "illustrative"
+        },
+        "thermal_mass": {
+          "value": "moderate",
+          "confidence": "illustrative"
+        },
+        "service_life_yr": {
+          "value": 50,
           "confidence": "illustrative"
         }
       }
     }
   ],
   "explanation": {
-    "strategy": "A flush wall head with no overhang leaves the render fully exposed to rain; the raised plinth still keeps it out of the splash zone.",
+    "strategy": "A flush wall head leaves the render fully exposed to rain; the raised plinth and drained cavity still protect its base.",
     "why_elements": {
-      "L-overhang": "Wall-head cap flush with the render face; no projection.",
-      "L-seat": "Sitting edge, detached from the render so it can be replaced.",
-      "L-clad": "Receptive porous surface for moss and lichen.",
-      "L-sep": "Stops rising damp between plinth and render.",
-      "L-base": "Raises the wall above ground splash.",
-      "L-drain": "Takes run-off away from the wall foot.",
+      "L-overhang": "Sheds rain away from the wall head.",
+      "L-seat": "Sitting edge, held clear of the render so it can be replaced.",
+      "L-clad": "Porous lime render left to weather and host moss and lichen.",
+      "L-cavity": "Drained, ventilated gap behind the render, required in Vancouver.",
+      "L-drip": "Base flashing that throws cavity water clear of the plinth.",
+      "L-wall": "Timber frame and sheathing carrying the rainscreen.",
+      "L-sep": "Stops moisture rising from the concrete into the frame.",
+      "L-base": "Lifts the wall 200 mm out of the splash zone.",
+      "L-drain": "Takes run-off away from the wall foot and limits splash.",
       "L-ground": "Planted soil beyond the drainage strip."
     }
   },
-  "scenario_runs": []
+  "runs": []
 }

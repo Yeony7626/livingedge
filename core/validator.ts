@@ -1,4 +1,5 @@
-import type { Constraint, DetailModel, Library, ValidationError } from "../model/schema";
+import type { Constraint, DetailModel } from "../model/schema";
+import type { Library, ValidationError } from "../model/types";
 import { DetailModelSchema } from "../model/validate";
 
 export function validate(model: unknown): { ok: true; model: DetailModel } | { ok: false; errors: ValidationError[] } {
@@ -25,6 +26,10 @@ function referenceErrors(m: DetailModel): ValidationError[] {
   m.materials.forEach((mat, i) => mat.used_in.forEach((id, k) => ref(`materials.${i}.used_in.${k}`, id)));
   m.geometry.section.forEach((s, i) => ref(`geometry.section.${i}.layer_id`, s.layer_id));
   if (m.geometry.seat) ref("geometry.seat.layer_id", m.geometry.seat.layer_id);
+  m.runs.forEach((r, i) => {
+    if (r.kind === "decades") r.keyframes.forEach((k, j) => Object.keys(k.layers).forEach((id) => ref(`runs.${i}.keyframes.${j}.layers.${id}`, id)));
+    else r.frames.forEach((f, j) => Object.keys(f.wetness).forEach((id) => ref(`runs.${i}.frames.${j}.wetness.${id}`, id)));
+  });
   m.constraints.forEach((c, i) => {
     if (!parseExpression(c.expression)) {
       errors.push({ path: `constraints.${i}.expression`, message: `unparseable expression '${c.expression}'` });

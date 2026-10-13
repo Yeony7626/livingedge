@@ -1,0 +1,850 @@
+{
+  "req.vbbl-governs-vancouver": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.part9-scope": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cladding-route-9-27-or-part5": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.two-planes-residential": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.capillary-break-trigger": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.capillary-break-exceptions": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.capillary-break-configuration": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cavity-interruptions-and-top": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cladding-clearance-to-grade": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cladding-clearance-to-roof": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.stucco-clearance-to-grade": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.foundation-above-grade": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.wood-structural-decay-treatment": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.wood-treatment-use-category": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.boron-treated-limits": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.wood-on-concrete-separation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.wood-ends-into-concrete": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.flashing-locations": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.flashing-over-openings-overhang": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.flashing-geometry": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.flashing-material-min": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.sill-flashing": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.sheathing-membrane": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.furring-size": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cladding-fasteners": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.sealant-cladding-change": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.masonry-veneer-base": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.dampproofing-foundation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.foundation-drainage": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.surface-grading": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.downspout-discharge": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.part5-deflection-features": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.part5-rainscreen-note": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.part5-surface-water": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.concrete-plinth-strength": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.guard-raised-surface": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.seating-no-code": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.vancouver-climate-data": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "req.cob-rainscreen-bulletin": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.bioreceptivity.definition": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.bioreceptivity.stone-review": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.timber.decay-mc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.timber.decay-mc-usda": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.timber.weathering-erosion": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.timber.weathering-erosion-wrc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.timber.dark-coating-heat": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.clearance.bcbc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.general.rainscreen.vancouver": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.porosity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.vapour": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.drying": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.lime-render.application-limits": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cement-render.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cement-render.cracking-trapping": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cement-render.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cement-render.surface": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-plaster.erosion": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-plaster.stabilisation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-plaster.exterior-use": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-plaster.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-brick.sorptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-brick.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-brick.saturation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-brick.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.clay-brick.service-life": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.terracotta.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.terracotta.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.terracotta.absorption-range": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.terracotta.frost-mechanism": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.terracotta.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.sorptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.sorptivity-factors": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.carbonation-ph": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.bioreceptivity-ph": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.bioreceptivity-roughness": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.concrete.thermal": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.granite.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.sandstone.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.sandstone.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.stone.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.sandstone.biocrust": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.granite.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.fibre-cement.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.fibre-cement.ageing": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.fibre-cement.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.fibre-cement.clearance": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.fibre-cement.service-life": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.gravel.capillary-break": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.gravel.perimeter-strip": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.gravel.capillary-rise": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.gravel.drying-bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.topsoil.water-holding": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.topsoil.ksat": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.topsoil.capillary-rise": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.topsoil.splash": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.topsoil.bioreceptivity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.dpc-bitumen.scope": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.dpc-bitumen.properties": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.dpc-poly.properties": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.dpc.service-life": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.wrc.durability-class": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.wrc.durability-aus": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.wrc.second-growth": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.wrc.weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.wrc.absorption-drying": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.douglas-fir.durability-class": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.douglas-fir.durability-us": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.larch.durability-class": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.larch.durability-glulam": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.larch.weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.oak.durability-class": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.oak.durability-variability": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.oak.corrosion": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.oak.resistance-us": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.tmt.emc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.tmt.durability-mechanism": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.tmt.weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.tmt.durability-class": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.charred-timber.decay": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.charred-timber.weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.charred-timber.medium-term": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.hempcrete.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.hempcrete.rain-render": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.hempcrete.moisture-buffer": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.hempcrete.render-guidance": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.hempcrete.render-weathering": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.bioreceptive-concrete.mix": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.bioreceptive-concrete.mpc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.bioreceptive-concrete.ph": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.bioreceptive-concrete.moss-outdoor": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.mycelium.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.mycelium.decay": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.mycelium.service-life": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cork.absorption": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cork.vapour": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.cork.service-life": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.overhang-field-rdh-2003": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.overhang-field-ge-2017": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.overhang-survey-1996": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.overhang-bsd013": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.overhang-code-quarter-rule": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wdr-semi-empirical": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wdr-bsd013-lowrise": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wdr-height-gradient": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wdr-pattern-review": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.iso15927-3": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.splash-clearance-code": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.splash-clearance-bsd": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.splash-zone-de": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.splash-gravel-vs-hard": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.drip-edge-lab": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.flashing-code": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.capillary-break-code": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.capillary-gap-physics": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wood-concrete-separation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.foundation-drain": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.backfill-grade": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.dampproofing": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.rainscreen-performance": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.cavity-depth-ventilation": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.seasonal-drying-monitor": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.orientation-drying": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.orientation-model-caveat": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.repaint-cycle-bc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.cladding-maintenance-bc": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.assembly.wood-weathering-erosion": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.rain-annual-monthly": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.rain-days": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.rain-1991-2020": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.design-rain-code": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.wind": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.wdr-direction": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.wdr-direction-bch": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.humidity": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.freeze-thaw": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.temperature": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.sunshine": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.climate.coastal-character": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.01": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.02": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.03": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.04": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.05": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.06": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.07": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.08": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.09": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.10": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.11": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.12": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.13": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.14": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.15": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.16": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.17": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.18": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.19": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.20": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.21": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.22": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.23": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.24": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.25": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.26": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.27": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.28": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.29": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  },
+  "ev.eco.30": {
+    "decision": "approve",
+    "note": "approved in chat, all entries, 2026-10-12"
+  }
+}

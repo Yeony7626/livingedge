@@ -1,0 +1,370 @@
+{
+  "unverified": [
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U1. BCBC 2024 and NBC 2020 text.** I could not read the BCBC 2024 PDF: it is 16 MB and over the fetch limit, and no free HTML version exists on bcpublications. VBBL 2025 is stated to align with BCBC 2024, but I did not compare clause by clause. To confirm, read BCBC 2024 Div. B 9.27.2.2, 9.27.2.4, 9.27.3.8 and 9.3.2.9 from the gov.bc.ca PDF."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U2. Which provisions are Vancouver-only.** Two provisions look Vancouver-specific: VBBL 9.27.2.2.(4) (two planes for residential walls) and 5.6.1.2.(3) (flashings, drips and overhangs). This needs a side-by-side check with NBC 2020 / BCBC 2024. It matters only if the tool later covers other BC municipalities."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U3. How \"finished ground\" is defined and measured.** The search found BC Building Code Appeal Board decision #1114, \"Finished Ground Level\", at https://www2.gov.bc.ca/gov/content/industry/construction-industry/building-codes-standards/building-code-appeal-board/building-code-appeal-board-decisions/bcab-1114, but I did not read it. Also needed: whether paving, decking or gravel strips count as finished ground for the 200 mm and 150 mm rules."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U4. Clearances for non-moisture-sensitive or treated cladding.** 9.27.2.4 applies only to cladding \"adversely affected by moisture\". Whether treated wood, fibre-cement, metal or masonry may come closer than 200 mm is not stated. Manufacturer instructions (for example fibre-cement) probably set their own minimums; not researched."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U5. Termite clauses.** I could not find any designation of Vancouver as a locality \"where termites are known to occur\". The tool currently assumes 9.3.2.9.(1)–(2) do not apply; this needs confirmation."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U6. Wording of 9.27.5.3 (furring), 9.27.5.5/9.27.5.7 (fasteners) and 9.14.3–9.14.5 values in the 2025 edition.** These articles exist in 2025 but their exact text was read only in VBBL 2019. Confirm in VBBL25-V2."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U7. CSA A23.1 exposure classes** (e.g. C-1, C-2, F-1, F-2) for a reinforced concrete plinth or seat in the splash zone, and the full CSA O80 Use Category tables. Both standards are paywalled and were not read. Part 9 avoids exposure classes for unreinforced concrete."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U8. 9.23.2.4 \"Connections to Preservative-Treated Wood\".** I saw the heading in VBBL 2025 but did not read the text. It probably governs fastener and connector compatibility with treated sole plates and seat framing."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**U9. Book II (Plumbing) Art. 2.4.2.5 and 2.4.10.4,** referenced for foundation drain and roof/balcony drainage connections. Not read."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**ASTM C615 granite absorption maximum 0.4%** and **ASTM C616 sandstone (type I) maximum 8%**. The 8% figure was seen only in a Scribd compilation; the 0.4% figure was not found."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**CSA A23.1 F-1 / F-2 air content** (about 5–8% / 4–7%, depending on aggregate size). The values were garbled in the source."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Wood Handbook (FPL GTR-190 / 2021) figures**: the \"about 6 mm per century\" softwood erosion figure and the species decay-resistance table. The handbook PDF could not be fetched. The 6 mm/century figure appears secondhand in an MDPI *Coatings* 11(2):126 paper attributed to European softwoods."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**WRC thujaplicin and tropolone extractive basis of durability**. Stated by suppliers; the primary chemistry papers (e.g. DeBell et al. 1999, Nault 1988) were cited but not read."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**The Materials & Design 2020 mycelium review** is probably Jones, M. et al., \"Engineered mycelium composite construction materials from fungal biorefineries: A critical review\", *Materials & Design* 187, 108397. The authors and title are not confirmed from a fetched page."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Walker, Pavia & Mitchell (2014)**: probably *Construction and Building Materials* vol. 61, pp. 340–348. Volume and pages were not confirmed."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Limewash recoat interval** (commonly said to be every few years in exposed positions). No source gave years."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Concrete as high thermal mass, slow to warm and dry**. No source was found that links this to edge drying."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Gravel and drain rock drying fast, with low bioreceptivity**. Intuitive, but no source."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Western larch (*Larix occidentalis*) durability**. Only European larch EN 350 data was found. US secondary tables rate western larch \"moderately resistant\" like Douglas fir."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Fibre-cement cladding (James Hardie) moisture and mould behaviour and its Canadian installation clearances**. Product PDFs (BRANZ appraisal, HardieBacker) could not be parsed."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Clay brick and terracotta bioreceptivity in Pacific Northwest climates**. Assumed similar to porous fired clay; no field study was found."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**1996 survey overhang percentages** (\"nearly 90% at 0 mm, 25% at ~600 mm\"). The bands 0, 1–300, 301–600 and >600 mm are reported as appearing in a 2023 BCBEC/RDH presentation chart (https://bcbec.com/wp-content/uploads/2023/12/1-DR-Worst-to-Best.pdf). The original PDF (https://www.aivc.org/sites/default/files/airbase_11608.pdf, 68 pp.) has no machine-readable text layer."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Structure magazine estimate:** a 2 ft overhang may reduce the likelihood of moisture intrusion by over 50% (https://structuremag.org/wp-content/uploads/C-GuestColumn-Lockyear-Apr121.pdf). Not read."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Finch, Wang & Wong:** *Using Overhangs to Reduce Building Facade Exposure to Rain* (RDH / FPInnovations). The quantified field results were not obtained; only the landing page was read. The report link points to bchousing.org. This is likely the best quantitative overhang source for Vancouver mid-rises."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**CWC / FPInnovations ground-contact stake tests** (Maple Ridge BC and Petawawa ON, installed 2004–05):\n- Reported in summaries: moderate-to-high decay after 5 years even for western redcedar and yellow cypress heartwood; untreated durable heartwood not recommended for long-term ground contact.\n- Page returned 403: https://cwc.ca/why-build-with-wood/durability/durability-research-and-development"
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**BRE 10-year untreated post trial:** most untreated posts lasted under 5 years (https://www.pbctoday.co.uk/news/?p=152945). Not read."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Wang & Morris (2008):** recalculated Scheffer climate index and decay hazard map for North America (https://woodpreservation.ca/wp-content/uploads/2021/09/wang29.pdf). A Vancouver value was not found. The Scheffer formula was not verified, so I did not compute an index from the ECCC data."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**BC Housing Maintenance Matters No. 4:** sealants may need replacing about every 10 years. Seen in a search summary only."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**BC Housing renewals guide:** roofing membranes typically replaced every 20–25 years. Seen in a search summary only."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**UK Approved Document C:** DPC at least 150 mm above adjoining ground to resist splash-back. Quoted only via forums and trade sites; the gov.uk FAQ PDF text was not extractable."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**German WTA Merkblatt 4-9:** plinth must be splash-proof to 30 cm above ground. Seen only via a renovation handbook in a search summary. The Caparol zoning in 2a was read directly."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Tariku & Ge (BCIT exposure facility):** rainscreen-wall plywood dried faster in spring and wetted faster in autumn than plywood in conventional walls. The repository returned 503."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**NRC intent statement for 9.27.2.4:** limits splash, soak and pool against lower cladding (https://codes-guides.nrc.ca/IA/05NBC/nbc05ei005443.html). Search summary only."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Hygrothermal-model orientation caveat** (hygIRC vs WUFI, Vancouver): see ev.assembly.orientation-model-caveat. Search summary only."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Stucco cracking:** drivers are shrinkage, thermal movement, sheathing gaps, poor moist-curing and crack concentration at opening corners, with panels of no more than 144 sq ft (≈13 m²) between control joints per PCA/ASTM-type guidance. Seen only in trade-press summaries (Sika technical bulletin; Walls & Ceilings). No coastal BC stucco ageing study was found."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Wood erosion vs exposure angle** (Williams et al., Part III): the direction of the angle effect could not be confirmed from the summary."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Comparison studies of wind-driven-rain models:** ISO and Straube–Burnett errors of 2–5× versus CFD at about 20–25%. Search summary of Heriot-Watt / TU Eindhoven records."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Carbonation thresholds.** A review on concrete biofouling, seen only as a search excerpt from a HAL (École des Mines de Saint-Étienne) document, reportedly says fresh concrete at pH about 11–13 resists colonisation and fouling begins near pH 9–10 after carbonation. The full citation was not obtained (HAL blocked access)."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**pH counter-evidence.** A field experiment on UK and Singapore seawalls, titled \"Little evidence that lowering the pH of concrete supports greater…\" (Macquarie University record), reportedly found no significant pH effect. It is marine, and only the title and search excerpt were seen."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Guillitte's original paper.** The volume and pages of Guillitte (1995), *Sci. Total Environ.* 167, 215–220, come from secondary listings. The exact title appears in two forms (\"…building ecology studies\" vs \"…building materials ecology studies\")."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Armstrong lichenometry review.** The journal and year were not confirmed; only the Aston accepted manuscript was read. The Innes (1983) \"8-year minimum\" figure was seen only in a search summary; the review text reads \"a minimum period of exposure\"."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Mycelium review authors.** The 2020 *Materials & Design* critical review is believed to be by Jones, M., Mautner, A., Luenco, S., Bismarck, A., John, S. Not confirmed."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Fraunhofer/Hochschule Coburg study.** One year of outdoor exposure reportedly found orientation (north/west vs south/east) significantly changed microbial community composition on facades. Only a search excerpt was seen; Fraunhofer's repository blocked access."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Krus & Sedlbauer (2006) and related Fraunhofer papers.** These reportedly cover night-time radiative cooling and condensation as the driver of algae on insulated renders. Seen only in search excerpts."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Mineral vs organic renders.** A Czech fluorometry/WUFI study reportedly found higher algal resistance on mineral than organic render systems. Only a search excerpt was seen."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**NBC structural-wood clearance.** NBC 9.3.2.9 reportedly requires 450 mm clearance for structural wood above ground, or termite measures, where termites are known. Seen via a BC Building Code Appeal Board decision excerpt; it is relevant only where termites are present."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Termites in BC.** Native subterranean and dampwood termites are reportedly present on BC's south coast. A Canadian Forestry Service bulletin and the CWC page were seen only as excerpts (CWC returned 403). Sources disagree on how much dampwood termites matter in buildings."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Rain garden setbacks elsewhere.** Metro Vancouver (GVRD 2005) reportedly put rain gardens at least 3 m downslope of foundations that have footing drains. Seen only on a poster excerpt."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Permeable pavement clogging.** Field and lab studies reportedly found:\n- pedestrian permeable pavements kept high infiltration while vehicular ones clogged severely;\n- vacuum cleaning restores much of the lost infiltration;\n- a University of Toronto study showed maintenance can restore post-construction infiltration.\nAuthors and journals were not confirmed."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Planting setback rules of thumb.** Extension-style rules (e.g. shrubs at least half their mature spread from the wall; evergreens at least 10 ft) come from non-authoritative or unconfirmed pages and are not used."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Roof moss.** Claims that moss forms mats more readily on timber shingles than on tiles, and that it is not normally harmful to tiles, come only from manufacturer and secondary pages."
+    }
+  ],
+  "gaps": [
+    {
+      "file": "01-codes-standards.md",
+      "text": "**No numeric slope for grade away from the building.** VBBL 9.14.6.1 and 5.7.1.2 are performance-only. A fall value (for example x% over y m) must come from guides such as BC Housing or CMHC (not yet sourced) and be labelled as guidance."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**No exposure or splash-zone classification.** The code has no rain exposure categories by orientation, height or overhang ratio, and no splash height beyond the 200 mm cladding clearance. BC Housing / HPO building envelope guides are probable secondary sources."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**No minimum overhang.** The only overhang-based rule is the eave-height to overhang ratio for flashing over openings (9.27.3.8.(3)). Part 5 Note A-5.6.1.2.(3) is qualitative."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**No requirement on drainage strips or gravel beds at the wall base,** and none on planting or soil against the wall beyond the clearances."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**Hard landscaping against the wall.** Clearance rules where paving, decks or patios meet the wall (and how to measure from them) are not covered; see U3."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**No by-law requirement for the DPC/separation between a concrete plinth and the wall assembly beyond 9.23.2.3.** That clause asks only for 0.05 mm polyethylene or Type S roll roofing, and only below 150 mm. Detailing practice (for example a sill gasket plus membrane) needs guide evidence."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**Thermal and energy rules at the plinth** (VBBL Part 10 / 9.36 insulation continuity, below-grade wall RSI) were not researched."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**Zoning and City rainwater management.** Projection of overhangs and seats into setbacks, and on-site rainwater rules, were not researched. They likely constrain overhang depth and downspout discharge."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**Lime, clay and natural renders and other non-listed claddings** fall to Part 5 under 9.27.1.1.(6). There is no prescriptive baseline for them; they need professional-design flags."
+    },
+    {
+      "file": "01-codes-standards.md",
+      "text": "**Fire separation (spatial separation, 9.10.14/9.10.15)** for combustible cladding near property lines was not researched. It may limit timber cladding choices on narrow lots."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Field drying rates.** No source gives drying times or rates for any edge material in a wet maritime climate. Drying levels (slow, moderate, fast) are currently inferred from porosity and vapour data. A WUFI or hygrothermal property database (Fraunhofer IBP, or NRC Canada material property sets) would be the right next source."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Vancouver-specific exposure.** Freeze–thaw cycle counts, the wind-driven rain index and moss/algae growth rates for Vancouver were not researched in this layer. They are needed to translate lab freeze–thaw results into \"some freeze–thaw\" risk."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Service life and maintenance cycles.** Only proxies were found: warranties, Australian durability classes, vendor anecdotes and a BRANZ membrane appraisal. Candidate sources include the BC Housing / HPO maintenance guides, BRE digests and the RICS/BCIS life expectancy tables."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Bioreceptivity of timber, terracotta, fibre cement and granite** (moss, algae and lichen on cladding). Not covered; the bioreceptivity literature found is stone- and cementitious-focused."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Thermal behaviour relevant to drying.** Only one coating-colour study (spruce, Norway) and a supplier light reflectance value (LRV) guide (South Pacific Timber NZ) were found. No thermal-mass and drying evidence was found."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Clay plaster and cork in exterior wet climates.** The evidence is weak or manufacturer-only. Consider dropping exterior clay plaster from the Vancouver base zone, or allowing it only under a deep overhang, tagged illustrative."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**Primary PDFs unread.** Several key PDFs (FPL weathering, the woodpreservation.ca \"Weathering of Wood\" guide, the Amorim TDS, the BRANZ Hardie appraisal, Canada Brick) could not be text-extracted in this environment. Re-reading them would upgrade several [snippet] entries."
+    },
+    {
+      "file": "02-material-properties.md",
+      "text": "**EN 350 revision.** prEN 350 is in development, with a ballot listed for August 2026. The class values above may change."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Splash-back height measurements** at a wall base versus ground surface (soil, gravel, paving) and drip-line distance. Only code minimums (200 mm), a German zoning convention (300 mm) and anecdotes were found. Gravel-versus-paving coefficients must stay **illustrative**."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Overhang effect at the wall base of low-rise buildings.** All Vancouver field data are 3–6 storey, gauges are placed high, and no splash is included. The ratio rule in 2a is extrapolated."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Silting or clogging rates of drainage gravel and gravel strips.** No residential field data were found. Highway geocomposite drains performed for at least 5 years in soils with up to 43% fines (TRB record, not read). Rules must be illustrative."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Service lives of edge components:** sealants, base flashings, DPC membranes, renders, gravel-strip renewal and treated timber in Vancouver. BC Housing bulletins give maintenance intervals but few lives. CSA S478:19 has design-service-life categories but is paywalled."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Freeze–thaw damage rates** for concrete plinths, render or masonry in Vancouver. Only air-cycle counts (ECCC) were found, with no damage functions."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Timber seat wear from human use** (abrasion, splinters) and **the effect of cleaning on surface growth**. Only general weathering erosion and BC Housing cleaning intervals were found."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Solar irradiance on vertical façades by orientation for Vancouver.** Only horizontal sunshine hours were found. A future pass could use NRCan/CWEC weather files or NBC Appendix C if they contain this."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Wind direction during rain at YVR** (rain-conditioned wind rose). ECCC normals give all-weather direction only, and the sources conflict between east (RDH) and south (BC Housing). Hourly ECCC data with an ISO 15927-3 analysis would resolve this."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**Short-duration rainfall intensities (IDF) for YVR** beyond the code's 15-minute value; ECCC IDF files were not retrieved."
+    },
+    {
+      "file": "03-assembly-climate.md",
+      "text": "**City of Vancouver Bulletin 2009-009** (rainscreen design and inspection for one- and two-family dwellings): blocked (403). It likely contains base-of-wall details and the inspection sequence."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**No Vancouver or Pacific Northwest field data on facade colonisation.** No source quantifies how fast renders, concrete, brick or timber at grade green up in Vancouver's wet-winter climate. All timing bands are illustrative. Suggest searching UBC, BCIT Building Science Centre of Excellence and RDH Building Science field reports."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Field timescales generally.** Only the lichen lag (ev.eco.15) and biocide durability (ev.eco.07, .08) give real-world time anchors. The Manso et al. (2015) exposure duration was not found in the abstract and needs the full text."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**North-face effect.** It is supported qualitatively (ev.eco.08, .09; Sanmartín on aspect). No measured orientation comparison of coverage on facades was read in full."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Drainage gravel ageing and silting.** No measured data were found for residential gravel strips or perforated foundation drains. Clogging mechanisms (fines migration, organic debris, roots at joints) are plausible and partly supported (ev.eco.25), but any rule here is **illustrative**. Permeable-pavement literature is the closest proxy (see Unverified)."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Vancouver soils.** No source was found describing whether typical Vancouver building soils are shrinkable. Clay-specific setback rules (ev.eco.26, .27) should apply only when the user marks the soil as clay, and should be tagged as UK/Ottawa-derived."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Planting strips and wall-base moisture.** No measured study was found on how soil moisture at the wall foot varies with planting type, mulch or gravel. The rules rest on extension and municipal guidance (ev.eco.24, .28)."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Wear from sitting or touching building materials.** The only evidence comes from climbing on natural rock (ev.eco.18). No study of seats, handrails or plinths was found."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Bioreceptive panels and green walls at the base.** Evidence is limited to greenhouse and one-year outdoor prototypes (ev.eco.13, .14). Nothing covers splash and soil contact at the base, or performance at 15 or 30 years."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Hemp-lime and mycelium in the exterior splash zone.** No field evidence (ev.eco.12, .29, .30)."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Carpenter ant thresholds.** Moisture thresholds conflict (ev.eco.23). No PNW-specific quantitative data were found."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**Historic Environment Scotland.** The INFORM guide \"Biological growth on masonry\" (attributed in a secondary bibliography to Eklund & Young, 2013) and TAN 10 were located only as catalogue listings. Their text was not read; they are worth obtaining."
+    },
+    {
+      "file": "04-ecology.md",
+      "text": "**NHBC 4.2 full text.** It is behind a login, so its water-demand categories and distance tables were not verified."
+    }
+  ]
+}

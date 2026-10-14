@@ -1,1 +1,11 @@
 node_modules/
+
+# other project (Richards Laboratories) kept out of this repo
+Richards_*
+references/
+# large / local
+*.3dmbak
+.playwright-mcp/
+.codex/
+.sketch/**/.impeccable/
+.impeccable/

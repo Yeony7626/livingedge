@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Living Edge Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">
+<style>
+/* Tokens: drafting paper and ink, one signal colour; living and water only inside analysis modes (direction s1). */
+:root { --bg:#F2F1EC; --panel:#FAFAF7; --fg:#1B1B1A; --mute:#6B6A65; --line:#55534e; --canvas:#F2F1EC; --rule:#DCD9D1; --accent:#E0482B;
+  --signal:#E0482B; --living:#6E8B4E; --water:#2F6FB0; --chip:#ECEAE3; --sans:"Geist", ui-sans-serif, system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#9A9892; --line:#2C2C2A; --canvas:#161615; --rule:#2C2C2A; --chip:#232321; } }
+:root[data-theme="dark"] { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#9A9892; --line:#2C2C2A; --canvas:#161615; --rule:#2C2C2A; --chip:#232321; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 var(--sans); min-height:100dvh; height:100dvh; display:grid; grid-template-rows:56px 1fr; }
+/* Header: brand, detail, one segmented mode control */
+header { display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:18px; padding:0 18px; border-bottom:1px solid var(--rule); background:var(--panel); }
+.brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; }
+.brand i { width:14px; height:14px; border:1.5px solid var(--fg); border-radius:2px; box-shadow:inset 0 -5px 0 var(--fg); display:inline-block; }
+.crumb { display:flex; align-items:center; gap:8px; color:var(--mute); white-space:nowrap; overflow:hidden; min-width:0; }
+.crumb b { color:var(--fg); font-weight:500; }
+.chip { font:500 11px/1 var(--mono); padding:4px 8px; border-radius:999px; background:var(--chip); color:var(--mute); }
+.tabs { display:flex; padding:3px; gap:2px; background:var(--chip); border-radius:999px; }
+.tabs button { border:0; background:transparent; padding:6px 14px; border-radius:999px; color:var(--mute); font-weight:500; }
+.tabs button[aria-selected="true"] { background:var(--panel); color:var(--fg); box-shadow:0 1px 2px rgb(27 27 26 / .12); }
+#theme { border:1px solid var(--rule); background:transparent; border-radius:999px; padding:6px 12px; color:var(--mute); }
+button { font:inherit; border:1px solid var(--rule); background:var(--panel); color:var(--fg); border-radius:999px; padding:5px 12px; cursor:pointer; transition:background .2s, color .2s, transform .1s; }
+button:hover { background:var(--chip); }
+button:active { transform:translateY(1px); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+main { display:grid; grid-template-columns:minmax(0,1fr) 340px; min-height:0; }
+.stage { position:relative; min-height:0; background:var(--canvas); overflow:hidden; }
+#section, #three { position:absolute; inset:0; width:100%; height:100%; }
+#section { cursor:grab; touch-action:none; }
+/* Floating result card: the current mode's headline number */
+.hud { position:absolute; left:18px; top:16px; background:var(--panel); border:1px solid var(--rule); border-radius:12px; padding:10px 14px 9px; min-width:150px; pointer-events:none; z-index:2; }
+.hud .num { font:300 44px/1 "Barlow Condensed", var(--sans); letter-spacing:-.01em; font-variant-numeric:tabular-nums; }
+.hud .lab { font:500 11px/1.3 var(--mono); color:var(--mute); margin-top:4px; max-width:240px; }
+.hud.fail .num, .hud.fail .lab { color:var(--signal); }
+.stage.draft-on .hud { display:none; }
+/* Panel: groups separated by space and one hairline, no boxed cards */
+aside { border-left:1px solid var(--rule); background:var(--panel); overflow:auto; padding:6px 18px 18px; }
+aside > section { padding:14px 0; border-bottom:1px solid var(--rule); }
+aside h2 { font:500 11px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--mute); margin:0 0 10px; }
+.row { display:flex; flex-wrap:wrap; gap:6px; }
+.row button { font-size:13px; padding:4px 11px; }
+label { display:inline-flex; align-items:center; gap:7px; margin:0 12px 6px 0; }
+.sw { width:10px; height:10px; border-radius:2px; display:inline-block; }
+input[type=range] { width:100%; accent-color:var(--fg); }
+#wout { font:500 12px var(--mono); color:var(--mute); }
+#info h3 { margin:0 0 8px; font-size:14px; font-weight:600; line-height:1.35; }
+#info dl { display:grid; grid-template-columns:auto 1fr; gap:3px 12px; margin:0 0 8px; font-size:13px; }
+#info dt { color:var(--mute); }
+#info dd { margin:0; }
+#info code { font:12px var(--mono); }
+#info p { font-size:13px; margin:0 0 6px; }
+#info .src, .hint { color:var(--mute); font-size:13px; }
+#carbon .big { font:300 36px/1 "Barlow Condensed", var(--sans); }
+#carbon .big small { font:400 12px/1.4 var(--sans); color:var(--mute); display:block; margin:4px 0 10px; }
+.bar { display:grid; grid-template-columns:118px 1fr 32px; gap:8px; align-items:center; font-size:12px; margin-top:4px; }
+.bar span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--mute); }
+.bar i { height:6px; background:var(--fg); opacity:.7; border-radius:3px; }
+.bar b { font:500 12px var(--mono); text-align:right; }
+.note { color:var(--mute); font-size:12px; margin:14px 0 0; }
+label.blk { display:flex; flex-direction:column; align-items:stretch; margin:0 0 10px; gap:4px; color:var(--mute); font-size:12px; }
+label.blk select { font:inherit; font-size:13px; color:var(--fg); background:var(--bg); border:1px solid var(--rule); border-radius:8px; padding:6px 8px; }
+.modes label { display:flex; margin:3px 0; font-size:13px; }
+#th-run { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+#thermal-out .big { font:300 40px/1 "Barlow Condensed", var(--sans); margin-top:12px; }
+#thermal-out .big small { display:block; font:400 12px/1.45 var(--sans); color:var(--mute); margin-top:6px; }
+table.t { width:100%; border-collapse:collapse; margin-top:12px; font-size:12px; }
+table.t th, table.t td { border-bottom:1px solid var(--rule); padding:5px 4px; text-align:left; vertical-align:top; }
+table.t tr:last-child th, table.t tr:last-child td { border-bottom:0; }
+table.t th { color:var(--mute); font-weight:500; }
+#legend { position:absolute; right:18px; top:16px; width:250px; background:var(--panel); border:1px solid var(--rule); border-radius:12px; padding:10px 12px; font-size:12px; z-index:2; }
+#legend .lg { height:10px; border-radius:3px; }
+#legend .vleg { display:grid; grid-template-columns:14px 1fr; gap:4px 10px; }
+#legend .vleg .steps { display:flex; flex-direction:column; height:170px; border:1px solid var(--rule); }
+#legend .vleg .steps i { flex:1; }
+#legend .vleg .marks { position:relative; height:170px; font:500 11px var(--mono); color:var(--mute); }
+#legend .vleg .marks span { position:absolute; left:0; transform:translateY(-50%); white-space:nowrap; }
+#legend .vleg .marks .sp { left:58px; color:var(--fg); }
+#legend .lcap { font:500 11px/1.45 var(--mono); color:var(--mute); margin:8px 0 0; }
+#legend .lgl { display:flex; justify-content:space-between; color:var(--mute); margin-top:4px; font-family:var(--mono); font-size:11px; }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+@media (max-width: 860px) { body { grid-template-rows:auto 1fr; } header { grid-template-columns:auto minmax(0,1fr); padding:10px 12px; row-gap:10px; } .tabs { grid-column:1 / -1; justify-self:start; } #theme { display:none; }
+  main { grid-template-columns:1fr; grid-template-rows:62dvh auto; } aside { border-left:0; border-top:1px solid var(--rule); } }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<header>
+  <div class="brand"><i aria-hidden="true"></i>The Living Edge</div>
+  <div class="crumb"><b id="title">Detail 02</b><span>Sliding wall to garden, Vancouver</span><span class="chip">v3</span><span class="chip" id="partcount"></span></div>
+  <nav class="tabs" role="tablist" aria-label="Mode"><button data-tab="draft" role="tab" type="button" aria-selected="true">Draft</button><button data-tab="section" role="tab" type="button">Layers</button><button data-tab="3d" role="tab" type="button">3D</button><button data-tab="thermal" role="tab" type="button">Thermal</button></nav>
+  <button id="theme" type="button">Dark</button>
+</header>
+<main>
+  <div class="stage"><svg id="section" preserveAspectRatio="xMidYMid meet" aria-label="Section drawing"></svg><div id="three" hidden></div><div id="legend" hidden></div><div id="draft" hidden style="position:absolute;inset:0;cursor:grab"></div>
+    <div class="hud" id="hud" aria-live="polite"><div class="num" id="hud-num">0</div><div class="lab" id="hud-lab">kgCO₂e per m of opening, A1 to A3</div></div></div>
+  <aside>
+    <section id="thermal-ui" hidden><h2>Thermal screening</h2>
+      <label class="blk">Case <select id="th-case"></select></label>
+      <label class="blk">Boundary conditions <select id="th-bc"></select></label>
+      <label class="blk">Mesh <select id="th-dx"><option value="5">5 mm, fast</option><option value="2.5">2.5 mm, finer</option></select></label>
+      <div class="row" style="margin:4px 0 12px"><button id="th-run" type="button">Run analysis</button></div>
+      <div class="modes"><label><input type="radio" name="th-mode" value="flood" checked> Colour-flooded isotherms</label><label><input type="radio" name="th-mode" value="lines"> Isotherms</label>
+        <label><input type="radio" name="th-mode" value="vectors"> Heat-flux vectors</label><label><input type="radio" name="th-mode" value="fluxflood"> Colour-flooded flux</label></div>
+      <div id="thermal-out"><p class="hint">Pick a case and run it. Results follow THERM's layout: isotherms, flux, U-factor tags and surface temperatures.</p></div>
+    </section>
+    <section class="for-section"><h2>Cut</h2><input id="w" type="range" step="10" aria-label="Section position along the wall"><div class="row" style="justify-content:space-between;margin:4px 0 8px"><span id="wout"></span></div><div class="row" id="cuts"></div></section>
+    <section class="for-section"><h2>View</h2><div class="row" id="views"></div></section>
+    <section class="for-section"><h2>Layers</h2><div id="layers"></div><label style="margin-top:4px"><input id="finish" type="checkbox"> Finish colours</label></section>
+    <section><h2>Part</h2><div id="info"><p class="hint">Click a part to see what it is, why it is there and where it comes from.</p></div></section>
+    <section><h2>Embodied carbon</h2><div id="carbon"></div></section>
+    <p class="note">Drawn live from the same part list Rhino builds (163 parts). Rhino is used offline only, for QA and renders.</p>
+  </aside>
+</main>
+<script>window.DETAIL = {"spec":{"L":1800,"root":"Detail02","opening_mm":4800,"parts":[{"id":"beam","name":"Engineered reinforced grade beam, rectangular, one pour (Part 4)","role":"concrete","mat":"concrete-f2-40scm","junction":"T","src":["R2 N5","12 foundation","14 §3.3 #1"],"poly":[[-20,-530],[240.4,-530],[240.4,-193],[-20,-193]],"note":"Part 4 engineered foundation (R2 ruling on VBBL 9.15.4.6). Underside −530: frost margin 74, drain cover 152 (R2 N5). Sill support level ±1 mm over 4.8 m.","runs":[[-1200,1800]],"step":1},{"id":"beam-rebar","name":"Beam reinforcement (about 9 kg/m)","role":"metal","mat":"rebar-eaf-pnw","junction":"T","src":["R4"],"type":"virtual","m3PerMetre":0.0011464968152866241,"step":1},{"id":"dampproof","name":"Water-based damp-proofing on the beam face (EPS-compatible)","role":"water","mat":"membrane-poly","junction":"T","src":["07 E6"],"type":"sheet","t":1,"path":[[-20.5,-195],[-20.5,-530]],"runs":[[-1200,1800]],"step":1},{"id":"beam-insul","name":"Graphite EPS Type 3 75 on the beam face, full depth","role":"thermal","mat":"graphite-eps","junction":"T","src":["11 T2","R2 P4","R2 N5"],"poly":[[-97,-530],[-22,-530],[-22,-193],[-97,-193]],"runs":[[-1200,1800]],"step":1},{"id":"course","name":"Machined structural PU course (Armatherm 500-080 class), top cut to the 6 % fall — no mortar, no wedge","role":"thermal","mat":"pu-structural-160","junction":"T","src":["14 §3.3 #3","R1 N2","R4 N6"],"poly":[[-20,-193],[240.4,-193],[240.4,-66.4],[-20,-82]],"runs":[[0,1800]],"note":"Bedded on PU adhesive; drillable only below the pan line. Engineer to confirm long-term stress under the track (1.45 MPa grade).","step":1},{"id":"pan-skirt","name":"Self-adhered skirt under the pan, down the course face, lapped 100 over the damp-proofing","role":"water","mat":"membrane-poly","junction":"T","src":["R1 F1","R2 3"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[239.55,-66.20092165898618],[-20.25,-81.75],[-20.25,-193.5],[-21.25,-194.5],[-21.25,-293]],"step":1},{"id":"dam-angle","name":"316 stainless dam angle, cast in before the pour (stage 1), top −5","role":"water","mat":"stainless","junction":"T","src":["14 §3.3 #4","R1 N6","R2 N3"],"type":"sheet","t":1,"runs":[[0,1800]],"path":[[240.9,-5],[240.9,-110]],"note":"Interior water-barrier top −5 (5 mm sealant over): every exterior overflow crest is lower (notch −20, weir −95).","step":1},{"id":"pan","name":"316 welded sill pan 0.8, measured to the framed opening (stage 2), floor 6 %, nose into the channel","role":"water","mat":"stainless","junction":"T","src":["14 §3.3 #9","R1 N6","11 T6"],"type":"sheet","t":0.8,"runs":[[0,1800]],"path":[[239.55,-65.53092165898617],[-20,-81.08],[-38,-82.16],[-38,-103]],"embeds":["pan-back"],"note":"End dams 150 up the jambs, welded; jamb membranes lap ≥ 100 over them. Back upturn butyl-lapped to the dam angle (−60 → −25). No fastener through the pan floor (R2 N8).","step":6},{"id":"pan-back","name":"Pan back upturn (welded), butyl-lapped to the dam angle −60 → −25","role":"water","mat":"stainless","junction":"T","src":["14 §3.3 #9"],"type":"sheet","t":0.8,"runs":[[0,1800]],"path":[[240,-25],[240,-65.90396313364056]],"step":6},{"id":"stone","name":"Clear stone 100, gas-permeable layer and capillary break","role":"drainage","mat":"aggregate","junction":"F","src":["12 build-up"],"poly":[[240.4,-300],[2500,-300],[2500,-200.25],[240.4,-200.25]],"note":"Radon rough-in per VBBL 9.13.4.3 (outside the slice). Never linked to the perimeter drain.","runs":[[-1200,1800]],"step":2},{"id":"eps-1","name":"Graphite EPS Type 2, 50 (layer 1)","role":"thermal","mat":"graphite-eps","junction":"F","src":["12 build-up"],"poly":[[241.4,-200.25],[2500,-200.25],[2500,-150.25],[241.4,-150.25]],"runs":[[-1200,1800]],"step":2},{"id":"eps-2","name":"Graphite EPS Type 2, 50 (layer 2, joints staggered)","role":"thermal","mat":"graphite-eps","junction":"F","src":["12 build-up"],"poly":[[241.4,-150.25],[2500,-150.25],[2500,-100.25],[241.4,-100.25]],"runs":[[-1200,1800]],"step":2},{"id":"soilgas","name":"0.25 mm soil-gas / air barrier under the slab, turned up the stem (jamb) or the dam angle (opening)","role":"air","mat":"ldpe-film","junction":"F","src":["14 §3.3 #5","12 sealing"],"type":"sheet","t":0.25,"path":[[2500,-100.125],[241.4,-100.125]],"runs":[[-1200,1800]],"step":2},{"id":"soilgas-up","name":"Soil-gas poly up the dam angle's interior face, butyl 85","role":"air","mat":"ldpe-film","junction":"F","src":["14 §3.3 #5"],"type":"sheet","t":0.25,"runs":[[0,1800]],"path":[[241.525,-100],[241.525,-15]],"step":2},{"id":"slot-edge","name":"Expanded cork slab-edge strip 25","role":"thermal","mat":"cork","junction":"F","src":["14 §3.3 #6","R1 F4"],"poly":[[241.65,-100],[266.65,-100],[266.65,-8],[241.65,-8]],"runs":[[0,1800]],"step":2},{"id":"slab","name":"Low-carbon concrete slab 100, ground finish; mineral floor ≥ 610 from the sill; floor heating within 1 m","role":"concrete","mat":"concrete-lowcarbon","junction":"F","src":["12 build-up","11 T20","14 §8"],"poly":[[267,-100],[2500,-100],[2500,0],[267,0]],"runs":[[-1200,1800]],"step":3},{"id":"sill-bearer","name":"Purenit bearer 9–18 (550 kg/m³, λ 0.096), screw ground, drainage grooves underneath","role":"thermal","mat":"pu-structural","junction":"D","src":["14 §3.3 #11","R1 N2"],"poly":[[98,-54.5],[236,-54.5],[236,-65.34359447004609],[98,-73.61087557603688]],"runs":[[0,1800]],"note":"On discrete 2–3 mm PU/epoxy pads at the fixing points; 5 x 3 grooves at 150 o.c. drain outward. Frame screws stop in the bearer (screw ≤ block + bearer − 3).","step":6},{"id":"sill-block","name":"ENERsign primus sill block (timber / insulation composite), set dry","role":"frame","mat":"softwood-lumber","nocarbon":true,"junction":"D","src":["14 §3.1","ENS-K03"],"poly":[[100,-54.5],[234,-54.5],[234,-1],[183,-1],[183,-19],[100,-19]],"runs":[[0,1800]],"cuts":["track"],"step":7},{"id":"sill-nosing","kEq":0.3,"name":"Drained aluminium sill nosing with PVC break, lip −12, 1:8.4 to the track","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §3.1"],"poly":[[91,-12],[183,-1],[183,-19],[100,-19],[100,-21],[91,-21]],"runs":[[0,1800]],"step":7},{"id":"track","kEq":0.3,"name":"Thermally broken running track, top at FFL","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §3.1"],"poly":[[183,-15],[233,-15],[233,0],[183,0]],"runs":[[0,1800]],"step":7},{"id":"track-rail","kEq":0.3,"name":"Running rail, top +5","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §3.1"],"poly":[[205,0],[215,0],[215,5],[205,5]],"runs":[[165,1800]],"step":7},{"id":"sill-foil","name":"EPDM air-seal foil 1.0: block face to pan upturn (bonds 34 / 22)","role":"air","mat":"epdm","junction":"D","src":["14 §3.3 #15","R1 N2","R1 N13"],"type":"sheet","t":1,"runs":[[0,1800]],"path":[[234.5,-2],[234.5,-36],[239.1,-36],[239.1,-58]],"step":7},{"id":"back-fill","name":"Cork backer, loose-fit, removable","role":"thermal","mat":"cork","junction":"D","src":["14 §3.3 #16"],"poly":[[235,-35.5],[238.6,-35.5],[238.6,-4],[235,-4]],"runs":[[0,1800]],"step":7},{"id":"sill-cover","name":"4 mm 316 floor plate over the slot, removable for the 30-year track renewal","role":"metal","mat":"stainless","junction":"D","src":["14 §3.3 #17","R1 P7"],"poly":[[235,-4],[262,-4],[262,0],[235,0]],"runs":[[0,1800]],"step":7},{"id":"edge-seal","name":"Tin-free MS sealant joint 5, plate to slab","role":"air","mat":"butyl-sealant","junction":"F","src":["14 §3.3 #17","R4 4.8"],"poly":[[262,-8],[267,-8],[267,0],[262,0]],"runs":[[0,1800]],"step":7},{"id":"tray-ledge","name":"316 angle clips 40x40x3, 50 long at 300 o.c., screwed to the bearer face","role":"metal","mat":"stainless","junction":"D","src":["14 §3.3 #18"],"type":"sheet","t":3,"runs":[[150,200],[450,500],[750,800],[1050,1100],[1350,1400],[1650,1700]],"path":[[83.5,-40.5],[96.5,-40.5],[96.5,-70]],"step":7},{"id":"slot-screen","name":"Perforated 316 dirt screen under the 6 mm slot","role":"metal","mat":"stainless","junction":"D","src":["14 §3.3 #20","11 T16"],"poly":[[85,-46],[95,-46],[95,-45],[85,-45]],"runs":[[0,1800]],"step":7},{"id":"landing-tray","name":"316 tray 1.5, folded edges, perforated over the channel, lift-out lengths ≤ 1 m","role":"metal","mat":"stainless","junction":"T","src":["14 §3.3 #19","R1 P8"],"type":"sheet","t":1.5,"runs":[[0,1800]],"path":[[-170.75,-8],[-170.75,-38.25],[84.25,-38.25],[84.25,-8]],"step":11},{"id":"tray-slips","name":"Granite paver slips 30 in the tray, top −7 (one ground with the landing)","role":"ground","mat":"reclaimed-stone","junction":"T","src":["14 §3.3 #19","R5 P1"],"poly":[[-170,-37.5],[83.5,-37.5],[83.5,-7],[-170,-7]],"runs":[[0,1800]],"step":11},{"id":"channel","name":"Polymer-concrete trench channel, 316 edge rail, house wall top −92 (pan nose drains in)","role":"drainage","mat":"polymer-concrete","junction":"T","src":["11 T16","R1 N3","R2 N3","14 §3.3 #10"],"poly":[[-171.5,-39],[-171.5,-130],[-21.5,-130],[-21.5,-92],[-31.5,-92],[-31.5,-120],[-159.5,-120],[-159.5,-39]],"runs":[[0,1800]],"cuts":["channel-drop"],"note":"Opening width, 316 end caps flush with the reveal liners (R5 N3). Invert −95 → −120 toward the jamb-A outlet (0.5 %, not drawn); silt-box weir −95; bottom outlet to its own solid pipe (R2 N2, N3).","step":6},{"id":"tray-stools","name":"316 stools on the pan over the channel house wall, carrying the tray","role":"metal","mat":"stainless","junction":"T","src":["14 §3.3 #19"],"poly":[[-31.5,-81.3689400921659],[-26.5,-81.069400921659],[-26.5,-39],[-31.5,-39]],"runs":[[150,200],[450,500],[750,800],[1050,1100],[1350,1400],[1650,1700]],"note":"Bonded on the pan floor over the channel house wall; nothing fixed through the pan.","step":6},{"id":"haunch","name":"Concrete haunch under the channel, on the beam insulation and the drain stone","role":"concrete","mat":"concrete-lowcarbon","junction":"T","src":["R1 table","R2 9"],"poly":[[-171.5,-193],[-22,-193],[-22,-130],[-171.5,-130]],"runs":[[0,1800]],"cuts":["channel-drop"],"step":6},{"id":"sash","kEq":0.12,"name":"Sliding sash bottom rail (aluminium-clad spruce), grooved over the running rail","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §3.1","ENS-K03"],"poly":[[147,1],[205,1],[205,5],[215,5],[215,1],[259,1],[259,101],[147,101]],"runs":[[165,1800]],"step":7},{"id":"glass-1","name":"Outer lite 6 mm HS/FT, CSA A460 dot markers on #1 (≤ 50 x 50), low-e #2","role":"cladding","mat":"igu-triple","junction":"D","src":["14 §5","R4 N2","R3 F11"],"poly":[[168.6,101],[174.6,101],[174.6,2572],[168.6,2572]],"runs":[[165,1800]],"note":"6/14 Ar/4/14 Ar/8.76 = 46.8 in the 48 rebate; Ug ≈ 0.55–0.6; ≈ 47 kg/m², sash ≈ 310 kg (≤ 400 kg drive). Dry-glazed for the year-30 IGU change.","step":7},{"id":"glass-2","name":"Centre lite 4 mm","role":"cladding","mat":"igu-triple","junction":"D","src":["14 §5","R4 N2","R3 F11"],"poly":[[188.6,101],[192.6,101],[192.6,2572],[188.6,2572]],"runs":[[165,1800]],"step":7},{"id":"glass-3","name":"Inner lite 8.76 laminated, low-e #5","role":"cladding","mat":"igu-triple","junction":"D","src":["14 §5","R4 N2","R3 F11"],"poly":[[206.6,101],[215.35999999999999,101],[215.35999999999999,2572],[206.6,2572]],"runs":[[165,1800]],"step":7},{"id":"sash-top","kEq":0.12,"name":"Sash top rail + bead (77 + 23)","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §4"],"poly":[[147,2572],[259,2572],[259,2672],[147,2672]],"runs":[[165,1800]],"step":7},{"id":"head-frame","kEq":0.12,"name":"Head frame member 42; 16 lift / guide clearance to the sash below","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §4"],"poly":[[0,2688],[259,2688],[259,2730],[0,2730]],"runs":[[0,1800]],"step":7},{"id":"head-frame-leg","kEq":0.12,"name":"Head frame exterior guide leg + gasket to the sash face (closes the 16 mm lift clearance)","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §4","ENS-K03"],"poly":[[120,2600],[147,2600],[147,2688],[120,2688]],"runs":[[165,1800]],"step":7},{"id":"door-jamb-a","kEq":0.12,"name":"Jamb frame + sash stile, sightline 165 (U_f 0.86, f_Rsi 0.71)","role":"frame","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §4"],"axis":"x","x":[0,259],"poly":[[0,0],[165,0],[165,2688],[0,2688]],"step":7},{"id":"door-unit","name":"Door unit A1–A3 excluding glass: wood-Al frame, lift-slide hardware, SIEGENIA drive (carrier)","role":"frame","mat":"door-unit-woodalu","junction":"D","src":["14 §7"],"type":"virtual","m3PerMetre":0.075,"note":"≈ 27 kgCO2e/m² of opening × 2.785 m (frame 15 + hardware 5 + drive 7, mid values, INFERRED); no product EPD — require EN 15804+A2 in the tender.","step":7},{"id":"drive","kEq":0.5,"name":"SIEGENIA DRIVE axxent HSA slide drive, room side on the frame head (≈ 45), jam protection by current limit, manual key","role":"metal","mat":"aluminium","nocarbon":true,"junction":"D","src":["14 §6","R3 N3"],"poly":[[200,2730],[259,2730],[259,2780],[200,2780]],"runs":[[0,1800]],"note":"Dedicated 120 V circuit to the fixed-panel jamb; push buttons 900–1100 on both faces (B651 5.2.7.1); exterior button cable in a sealed grommet above the pan end dam.","step":7},{"id":"head-gap-fill","name":"Stone-wool strip in the 12 head gap (no foam)","role":"thermal","mat":"comfortbatt","junction":"H","src":["13 FB10","11 H6"],"poly":[[25,2730],[200,2730],[200,2742],[25,2742]],"runs":[[0,1800]],"step":7},{"id":"head-ground","name":"D.Fir fixing ground 38, shimmed level ±1 mm, screwed to the glulam soffit after dead load","role":"frame","mat":"softwood-lumber","junction":"H","src":["13 FB4","R1 N5"],"poly":[[25,2742],[200,2742],[200,2780],[25,2780]],"runs":[[0,1800]],"step":4},{"id":"glulam","name":"Glulam header DF-L 24f-E 215 x 684, flush, joists hung (≤ 3 mm incl. creep: engineer)","role":"frame","mat":"glulam","junction":"H","src":["13 §3","11 H1"],"poly":[[25,2780],[240,2780],[240,3464],[25,3464]],"runs":[[-145,1800]],"note":"Stacked-stud / built-up header rejected: 30–40 mm deflection at this span (13 §3.2). Bears 114 on 3 jacks + 2 kings per side.","step":4},{"id":"head-tape-ext","name":"Vapour-open window tape: frame face, loop over the gap, up the ground and glulam face (WRB laps over)","role":"air","mat":"membrane-poly","junction":"H","src":["13 FB11","R1 F5"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[-0.25,2705],[-0.25,2730.25],[24.75,2730.25],[24.75,2800]],"step":7},{"id":"head-tape-int","name":"Interior airtight tape (vapour-retarding), frame to glulam, 10 mm loop","role":"air","mat":"membrane-poly","junction":"H","src":["13 FB12","11 H7"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[259.25,2700],[259.25,2780.25],[240.25,2780.25]],"step":7},{"id":"head-block","name":"Stone-wool board 30 in front of the frame head (P9: interior head f_Rsi 0.67 → ≈ 0.91)","role":"thermal","mat":"comfortboard-80","junction":"H","src":["13 FB13","R1 P9"],"poly":[[-30,2690],[-0.5,2690],[-0.5,2730.5],[24,2730.5],[24,2758],[-30,2758]],"runs":[[0,1800]],"step":8},{"id":"head-cant","name":"PT head cant, 6 % outward","role":"frame","mat":"softwood-pt","junction":"H","src":["13 FB14","VBBL 9.27.3.8(4)"],"poly":[[-150,2758],[24,2758],[24,2792],[-150,2781.56]],"runs":[[0,1800]],"step":8},{"id":"head-subflash","name":"Self-adhered head sub-flash, WRB lapped over it ≥ 75 (inboard piece)","role":"water","mat":"membrane-poly","junction":"H","src":["13 FB15","R1 N4"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[23.75,2860],[23.75,2792.235],[-124.5,2783.34]],"cuts":["canopy-pad"],"step":8},{"id":"head-drip","name":"Charcoal 24 ga drip (outboard piece only: no steel touches the header), kick 10 past the liner","role":"water","mat":"steel-prefinished","junction":"H","src":["13 FB16","R1 N4","R5 N5"],"type":"sheet","t":0.61,"runs":[[0,1800]],"path":[[-125,2783.365],[-150.45,2781.8379999999997],[-150.45,2754],[-160,2750]],"step":8},{"id":"cassette","kEq":1,"name":"ZIP screen cassette 160 x 118 in the head reveal, charcoal, 6 % solar mesh (west; zone reserved east)","role":"metal","mat":"aluminium","fill":0.25,"junction":"H","src":["13 FB30","13 §4.4","R5 N4"],"poly":[[-150,2608],[-32,2608],[-32,2758],[-150,2758]],"runs":[[0,1800]],"note":"4.8 m needs a 140/180-class system (Renson Fixscreen 150 evo class, WK3). Guides inside the liners; bottom bar to the tray. Doubles as the insect screen when the wall is open.","step":8},{"id":"wrb","name":"Vapour-permeable self-adhered WRB / primary air barrier, folded loop over the floor-line gap","role":"air","mat":"membrane-poly","junction":"H","src":["13 FB9"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[24.25,2742.5],[24.25,3700]],"step":5},{"id":"wf-band","name":"Wood-fibre board 80 over the glulam and upper wall (joints offset from the sheathing gap)","role":"thermal","mat":"woodfibre-board","junction":"H","src":["13 FB17","09 W1"],"poly":[[-56,2787.7],[23.5,2792.47],[23.5,3700],[-56,3700]],"runs":[[0,1500]],"cuts":["canopy-pad","canopy-plate"],"step":8},{"id":"canopy-pad","per":"opening","name":"Structural thermal-break pad 15 (Armatherm FRR class) under each bracket","role":"thermal","mat":"pu-structural","junction":"H","src":["13 FB18"],"poly":[[9,2800],[24,2800],[24,3100],[9,3100]],"runs":[[220,380]],"step":8},{"id":"canopy-plate","per":"opening","name":"HDG back plate 10, 4 x Ø10 screws into the glulam (Part 4)","role":"metal","mat":"steel-section","junction":"H","src":["13 FB18"],"poly":[[-1,2800],[9,2800],[9,3100],[-1,3100]],"runs":[[220,380]],"step":8},{"id":"canopy-knife","per":"opening","name":"HDG knife plate 10, 120 → 90 deep","role":"metal","mat":"steel-section","junction":"H","src":["13 FB19"],"poly":[[-1,2819],[-740,2819],[-740,2909],[-1,2939]],"runs":[[295,305]],"embeds":["canopy-frame","canopy-ledger","wf-band"],"step":8},{"id":"canopy-ledger","name":"PT ledger 38 x 184 on the head cant, slotted at the knife plates","role":"frame","mat":"softwood-pt","junction":"H","src":["13 FB20"],"poly":[[-94,2785.42],[-56,2787.7],[-56,2958.4],[-94,2958.4]],"runs":[[-150,1800]],"step":8},{"id":"canopy-frame","name":"PT outriggers either side of each knife plate + purlins at 400","role":"frame","mat":"softwood-pt","fill":0.25,"junction":"H","src":["13 FB21"],"poly":[[-94,2819],[-750,2819],[-750,2932.78],[-94,2945.9]],"runs":[[-150,1800]],"step":8},{"id":"canopy-deck","name":"Plywood deck 12.5 + self-adhered membrane","role":"frame","mat":"plywood","junction":"H","src":["13 FB22"],"poly":[[-94,2945.9],[-750,2932.78],[-750,2945.28],[-94,2958.4]],"runs":[[-150,1800]],"step":8},{"id":"canopy-cap","name":"Charcoal 24 ga flat-lock cap, upstand 100+ behind the strapping, hemmed drip at the tip","role":"water","mat":"steel-prefinished","junction":"H","src":["13 FB22","13 FB23","06 B15"],"type":"sheet","t":0.6,"runs":[[-150,1800]],"path":[[-56.3,3080],[-56.3,2958.7000000000003],[-94,2958.7000000000003],[-757.3,2945.434],[-757.3,2950]],"note":"Through-insulation sub-flash on a 6 % bevel in a horizontal WF joint at ≈ 2976, lapped under the WRB (FB23, not drawn).","step":8},{"id":"canopy-soffit","name":"Honey cedar soffit 19 (sheltered)","role":"cladding","mat":"cedar-soffit","junction":"H","src":["13 FB24","R5 palette"],"poly":[[-750,2800],[-94,2800],[-94,2819],[-750,2819]],"runs":[[-150,1800]],"step":8},{"id":"canopy-fascia","name":"Charcoal fascia (caps the picture frame)","role":"metal","mat":"steel-prefinished","junction":"H","src":["13 FB24"],"poly":[[-757,2795],[-750,2795],[-750,2945.0280000000002],[-757,2945.0280000000002]],"runs":[[-150,1800]],"step":8},{"id":"strap-band","name":"PT strapping 19 x 64 (cavity), from above the cap upstand","role":"frame","mat":"softwood-pt","junction":"H","src":["13 FB26","09 W1"],"poly":[[-75,3080],[-56,3080],[-56,3700],[-75,3700]],"runs":[[47,111],[447,511],[847,911],[1247,1311]],"step":9},{"id":"band-screen","name":"Black stainless insect screen ≤ 2 mm across the cavity bottom over the canopy","role":"metal","mat":"stainless","junction":"H","src":["13 FB27","08 L"],"type":"sheet","t":0.5,"runs":[[0,1400]],"path":[[-56.6,2985.25],[-74.75,2985.25]],"step":9},{"id":"cedar-band","name":"WRC channel siding 19, first course 2975 (≈ 15 above the cap)","role":"cladding","mat":"cedar-siding","junction":"H","src":["13 FB28","09 W1"],"poly":[[-94,2975],[-75,2975],[-75,3700],[-94,3700]],"runs":[[0,1300]],"step":9},{"id":"joists","name":"302 I-joists at 400 on face-mount hangers to the glulam","role":"frame","mat":"softwood-lumber","fill":0.35,"junction":"U","src":["13 FB5"],"poly":[[240,3162],[2500,3162],[2500,3464],[240,3464]],"runs":[[60,98],[460,498],[860,898],[1260,1298],[1660,1698]],"step":4},{"id":"joists-jz","per":"opening","name":"I-joists over the jamb wall (bearing on the top plates)","role":"frame","mat":"softwood-lumber","fill":0.35,"junction":"U","src":["13 FB5"],"poly":[[177.5,3162],[2500,3162],[2500,3464],[177.5,3464]],"runs":[[-1140,-1102],[-740,-702],[-340,-302]],"step":4},{"id":"ceiling","name":"Gypsum ceiling 12.7 on the joists (glulam face exposed)","role":"frame","mat":"gypsum","junction":"U","src":["13 4.1"],"poly":[[240,3149.3],[2500,3149.3],[2500,3162],[240,3162]],"runs":[[-145,1800]],"step":10},{"id":"ceiling-jz","per":"opening","name":"Gypsum ceiling (jamb zone)","role":"frame","mat":"gypsum","junction":"U","src":["13 4.1"],"poly":[[190.2,3149.3],[2500,3149.3],[2500,3162],[190.2,3162]],"runs":[[-1200,-145]],"step":10},{"id":"subfloor","name":"Subfloor 19 T&G, glued and screwed over joists and glulam","role":"frame","mat":"plywood","junction":"U","src":["13 FB6"],"poly":[[37.5,3464],[2500,3464],[2500,3483],[37.5,3483]],"runs":[[-1200,1800]],"step":4},{"id":"upper-plate","name":"LSL bottom plate 38 x 140","role":"frame","mat":"softwood-lumber","junction":"U","src":["13 FB7"],"poly":[[37.5,3483],[177.5,3483],[177.5,3521],[37.5,3521]],"runs":[[-1200,1800]],"step":4},{"id":"upper-core","name":"Upper wall 2x6 at 400 + dense-pack cellulose (6 mil poly inside)","role":"thermal","mat":"cellulose-dense","junction":"U","src":["09 W1","13 FB7"],"poly":[[37.5,3521],[177.5,3521],[177.5,3700],[37.5,3700]],"runs":[[-1200,1600]],"step":4},{"id":"upper-gyp","name":"Gypsum 12.7 (upper wall)","role":"frame","mat":"gypsum","junction":"U","src":["09 W1"],"poly":[[177.5,3483],[190.2,3483],[190.2,3700],[177.5,3700]],"runs":[[-1200,1700]],"step":10},{"id":"upper-ply","name":"Plywood sheathing 12.5, 3 mm gap above the glulam (shrinkage)","role":"frame","mat":"plywood","junction":"U","src":["13 FB8"],"poly":[[24.9,3467],[37.5,3467],[37.5,3700],[24.9,3700]],"runs":[[0,1600]],"step":4},{"id":"jamb-stem","per":"opening","name":"Concrete stem on the beam to +300, interior face at the gypsum line","role":"concrete","mat":"concrete-f2-40scm","junction":"Z","src":["09 §9.1","06 A.1"],"poly":[[37,-193],[240.4,-193],[240.4,-100],[190.2,-100],[190.2,300],[37,300]],"runs":[[-1200,0]],"step":1},{"id":"slab-jz","per":"opening","name":"Slab inside the jamb wall","role":"concrete","mat":"concrete-lowcarbon","junction":"F","src":["12 build-up"],"poly":[[190.2,-100],[267,-100],[267,0],[190.2,0]],"runs":[[-1200,0]],"step":3},{"id":"plinth-insul","per":"opening","name":"Plinth graphite EPS 100 on the stem, top cut to 6 %","role":"thermal","mat":"graphite-eps","junction":"Z","src":["09 §9.1"],"poly":[[-63,-193],[36.5,-193],[36.5,299.9],[23.9,299.9],[23.9,300.634],[-63,295.42]],"runs":[[-1200,-1]],"step":1},{"id":"jamb-parge","per":"opening","name":"Charcoal mineral parge 12 (RGB 78,78,76), to 186 below grade","role":"concrete","mat":"parge-charcoal","junction":"Z","src":["09 §9.1","R5 N3"],"poly":[[-75,-193],[-63,-193],[-63,295.42],[-75,294.7]],"runs":[[-1200,-1]],"step":1},{"id":"sill-transition","per":"opening","name":"Self-adhered transition membrane: sheathing face over the sill joint, 75 onto the stem","role":"water","mat":"membrane-poly","junction":"Z","src":["09 §9.1"],"type":"sheet","t":0.5,"runs":[[-1200,-1]],"path":[[24.75,380],[24.75,300.25],[36.75,300.25],[36.75,225]],"step":1},{"id":"base-flashing","per":"opening","name":"Stainless base flashing: upstand to +360, 6 % over the plinth, drip at −107 (13 past the cedar)","role":"water","mat":"stainless","junction":"Z","src":["09 §9.1","06 A11"],"type":"sheet","t":0.6,"runs":[[-1200,-56]],"path":[[24.2,360],[24.2,300.952],[-107,293.08],[-107,285.08]],"step":5},{"id":"base-flashing-r","per":"opening","name":"Base flashing behind the liner cheek, end dam turned up inside the liner","role":"water","mat":"stainless","junction":"Z","src":["09 §9.1","R5 N5"],"type":"sheet","t":0.6,"runs":[[-56,-1]],"path":[[24.2,360],[24.2,300.952],[-93.9,293.866]],"step":5},{"id":"sill-plate","per":"opening","name":"PT sill 38 x 140 on gasket + EPDM sill membrane","role":"frame","mat":"softwood-pt","junction":"Z","src":["09 §9.1"],"poly":[[37.5,300],[177.5,300],[177.5,341],[37.5,341]],"runs":[[-1200,0]],"step":4},{"id":"jamb-posts","per":"opening","name":"3 jacks + 2 kings carrying the glulam","role":"frame","mat":"softwood-lumber","fill":0.9,"junction":"Z","src":["13 FB1"],"poly":[[37.5,341],[177.5,341],[177.5,2780],[37.5,2780]],"runs":[[-145,0]],"step":4},{"id":"jamb-core","per":"opening","name":"Jamb wall 2x6 at 400 + dense-pack cellulose, plates and rim to the floor","role":"thermal","mat":"cellulose-dense","junction":"Z","src":["09 W1"],"poly":[[37.5,341],[177.5,341],[177.5,3464],[37.5,3464]],"runs":[[-1200,-145]],"step":4},{"id":"jamb-ply","per":"opening","name":"Plywood sheathing 12.5 (bottom at the sill underside, never on concrete)","role":"frame","mat":"plywood","junction":"Z","src":["09 §9.1","06 A10"],"poly":[[25,300.5],[37.5,300.5],[37.5,3464],[25,3464]],"runs":[[-1200,-145]],"step":4},{"id":"jamb-ply-p","per":"opening","name":"Plywood sheathing on the posts","role":"frame","mat":"plywood","junction":"Z","src":["09 §9.1"],"poly":[[25,300.5],[37.5,300.5],[37.5,2780],[25,2780]],"runs":[[-145,-1]],"step":4},{"id":"jamb-gyp","per":"opening","name":"Gypsum 12.7 on the jamb wall (poly behind), above the 300 concrete curb","role":"frame","mat":"gypsum","junction":"Z","src":["09 W1"],"poly":[[177.5,300],[190.2,300],[190.2,3149],[177.5,3149]],"runs":[[-1200,-145]],"step":10},{"id":"jamb-gyp-p","per":"opening","name":"Gypsum 12.7 on the posts, to the exposed glulam","role":"frame","mat":"gypsum","junction":"Z","src":["09 W1"],"poly":[[177.5,300],[190.2,300],[190.2,2780],[177.5,2780]],"runs":[[-145,0]],"step":10},{"id":"jamb-wrb","per":"opening","name":"Breather membrane, shingle-lapped over the flashing upstand ≥ 50","role":"air","mat":"membrane-poly","junction":"Z","src":["09 §9.1","VBBL 9.27.3.8"],"type":"sheet","t":0.5,"runs":[[-1200,-1]],"path":[[23.65,310],[23.65,3700]],"step":5},{"id":"jamb-cg-strip","per":"opening","name":"Cellular-glass strip 80 x 50 on the flashing (keeps the wood fibre out of splash)","role":"thermal","mat":"cellular-glass","junction":"Z","src":["09 §9.1"],"poly":[[-56,296.44],[23.4,301.204],[23.4,355],[-56,355]],"runs":[[-1200,-1]],"step":8},{"id":"jamb-wf","per":"opening","name":"Wood-fibre board 80 (jamb wall)","role":"thermal","mat":"woodfibre-board","junction":"Z","src":["09 W1"],"poly":[[-56,355],[23.4,355],[23.4,3700],[-56,3700]],"runs":[[-1200,-1]],"step":8},{"id":"jamb-strap","per":"opening","name":"PT strapping 19 x 64, bottom 10 above the flashing","role":"frame","mat":"softwood-pt","junction":"Z","src":["09 §9.1","R5 N5"],"poly":[[-75,312],[-56,312],[-56,3700],[-75,3700]],"runs":[[-1153,-1089],[-753,-689],[-353,-289]],"step":9},{"id":"jamb-strap-r","per":"opening","name":"PT strapping 19 x 64, bottom 10 above the flashing (beside the reveal, below the canopy)","role":"frame","mat":"softwood-pt","junction":"Z","src":["09 §9.1"],"poly":[[-75,312],[-56,312],[-56,2780],[-75,2780]],"runs":[[-130,-66]],"step":9},{"id":"jamb-strap-u","per":"opening","name":"PT strapping 19 x 64, bottom 10 above the flashing (beside the reveal, above the canopy)","role":"frame","mat":"softwood-pt","junction":"Z","src":["09 §9.1"],"poly":[[-75,3080],[-56,3080],[-56,3700],[-75,3700]],"runs":[[-130,-66]],"step":9},{"id":"jamb-cedar","per":"opening","name":"WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner","role":"cladding","mat":"cedar-siding","junction":"Z","src":["09 §9.1","R5 N5"],"poly":[[-94,305],[-75,305],[-75,3700],[-94,3700]],"runs":[[-1200,-150]],"step":9},{"id":"jamb-cedar-r","per":"opening","name":"WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner (beside the reveal, below the canopy)","role":"cladding","mat":"cedar-siding","junction":"Z","src":["09 §9.1"],"poly":[[-94,305],[-75,305],[-75,2780],[-94,2780]],"runs":[[-150,-1]],"step":9},{"id":"jamb-cedar-u","per":"opening","name":"WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner (beside the reveal, above the canopy)","role":"cladding","mat":"cedar-siding","junction":"Z","src":["09 §9.1"],"poly":[[-94,2975],[-75,2975],[-75,3700],[-94,3700]],"runs":[[-150,-1]],"step":9},{"id":"jamb-screen","per":"opening","name":"Black stainless insect screen at the cavity base","role":"metal","mat":"stainless","junction":"Z","src":["06 A13"],"type":"sheet","t":0.5,"runs":[[-1200,-1]],"path":[[-56,311.75],[-75,311.75]],"step":9},{"id":"liner-jamb-a","name":"Charcoal PVDF reveal liner, jamb A, x 0 → −150","role":"metal","mat":"steel-prefinished","junction":"Z","src":["13 FB29","R5 P3"],"axis":"x","x":[-94,0],"poly":[[-1,5],[0,5],[0,2754],[-1,2754]],"step":9},{"id":"liner-frame-a","name":"Liner outer cheek, 56 proud of the cedar (hollow)","role":"metal","mat":"steel-prefinished","fill":0.05,"junction":"Z","src":["13 FB29"],"axis":"x","x":[-150,-94],"poly":[[-56,5],[0,5],[0,2754],[-56,2754]],"step":9},{"id":"downspout","per":"opening","name":"Charcoal downspout from the roof above, on the jamb-A cedar","role":"water","mat":"steel-prefinished","junction":"J","src":["R5 P2","R3 P1"],"type":"rod","axis":"y","x":-144,"w":[-450],"d":100,"di":96,"from":640,"to":3700,"embeds":["spout"],"step":9},{"id":"spout","per":"opening","name":"Spout throwing roof water into the basin (≈ 600 off the wall)","role":"water","mat":"steel-prefinished","junction":"J","src":["10 §3.6","R5 P2"],"type":"rod","axis":"x","w":[-450],"y":600,"dy":60,"d":100,"di":96,"from":-760,"to":-144,"step":9},{"id":"liner","name":"1.0 mm HDPE liner between 407 g/m² geotextiles; underdrain trench; cut-off at 1.89 m","role":"water","mat":"hdpe","junction":"M","src":["08b M","R2 N2","R2 N4","R4"],"type":"sheet","t":2,"path":[[-1886.5,-145.56666666666666],[-1886.5,-326.5834722125785],[-1699.5740915058698,-323.468040404343],[-1669.5740915058698,-292.968040404343],[-172.5,-268.01680554591184],[-172.5,-67.03333333333333]],"runs":[[0,1800]],"note":"Never pierced by surface water: the channel drains by its own solid pipe and the rill starts at jamb A outside the liner. w-end upturns wrap the channel end caps; the underdrain leaves through one welded boot in the w = 0 upturn (R2 N2, N4, N10).","step":11},{"id":"pavers-lined","name":"Reclaimed granite planks 60 (150 wide, random 300–900, coursed parallel to the glass), joints 6, BPN ≥ 55","role":"ground","mat":"reclaimed-stone","junction":"M","src":["08b M12","R5 P1","R4 P3"],"poly":[[-171.5,-7],[-1887.5,-35.599999999999994],[-1887.5,-95.6],[-171.5,-67]],"runs":[[0,1800]],"step":11},{"id":"bedding-lined","name":"No. 8 open-graded bedding 50","role":"drainage","mat":"aggregate","junction":"M","src":["08 H"],"poly":[[-173.5,-67.03333333333333],[-1885.5,-95.56666666666666],[-1885.5,-145.56666666666666],[-173.5,-117.03333333333333]],"runs":[[0,1800]],"step":11},{"id":"base-lined","name":"No. 57 open-graded base 150 on the liner","role":"drainage","mat":"aggregate","junction":"M","src":["08 H"],"poly":[[-173.5,-117.03333333333333],[-1885.5,-145.56666666666666],[-1885.5,-325.56666666666666],[-1700,-322.475],[-1670,-291.975],[-173.5,-267.03333333333336]],"runs":[[0,1800]],"cuts":["underdrain"],"step":11},{"id":"underdrain","name":"Perforated HDPE underdrain 100 in the liner trench, 0.5 % to jamb A, cleanout at the high end","role":"drainage","mat":"hdpe","junction":"M","src":["R2 N4","08b M"],"type":"rod","axis":"w","x":-1785,"y":-266.89166666666665,"dy":9,"d":110,"di":102,"from":0,"to":1800,"embeds":["jz-base","underdrain-out"],"note":"R2 asked 1 %; 0.5 % fits the 30 mm trench over a 4.9 m run (INFERRED minimum for a perforated subdrain).","step":11},{"id":"underdrain-out","per":"opening","name":"Solid HDPE outlet from the underdrain to its own storm-sump inlet with a backwater valve","role":"drainage","mat":"hdpe","junction":"M","src":["R2 N4","Book II 2.4.5.3 via 08b"],"type":"rod","axis":"w","x":-1785,"y":-272.89166666666665,"dy":6,"d":110,"di":100,"from":-1200,"to":0,"embeds":["base-lined"],"step":11},{"id":"perim-rock","name":"Clear crushed drain stone envelope (19 mm, ≤ 10 % passing 4 mm)","role":"drainage","mat":"aggregate","junction":"E","src":["R2 2","R2 N5","07 E9"],"poly":[[-97,-530],[-97,-193],[-171.5,-193],[-171.5,-269.00027775849037],[-400,-272.80833333333334],[-400,-530]],"runs":[[0,1800]],"cuts":["perim-drain","channel-drop","channel-pipe"],"step":0},{"id":"perim-rock-jz","per":"opening","name":"Drain stone envelope in front of the jamb wall","role":"drainage","mat":"aggregate","junction":"E","src":["R2 N5","07 E9"],"poly":[[-97,-530],[-97,-285.7583333333333],[-400,-290.80833333333334],[-400,-530]],"runs":[[-1200,0]],"cuts":["perim-drain","channel-pipe"],"step":0},{"id":"perim-geotextile","name":"Nonwoven geotextile wrapping the drain envelope","role":"drainage","mat":"geotextile-pp","junction":"E","src":["07 E9"],"type":"sheet","t":0.5,"runs":[[0,1800]],"path":[[-400.25,-272.8183333333333],[-400.25,-530.25],[-97,-530.25]],"step":0},{"id":"perim-geotextile-jz","per":"opening","name":"Nonwoven geotextile wrapping the drain envelope (jamb)","role":"drainage","mat":"geotextile-pp","junction":"E","src":["07 E9"],"type":"sheet","t":0.5,"runs":[[-1200,0]],"path":[[-400.25,-290.81666666666666],[-400.25,-530.25],[-97,-530.25]],"step":0},{"id":"perim-drain","name":"Perforated HDPE drain 100 at the footing base (invert −526, cover 152), own solid outlet to the storm sump","role":"drainage","mat":"hdpe","junction":"E","src":["R2 2","R2 N5","VBBL 9.14.2.1","07 E8"],"type":"rod","axis":"w","x":-185,"y":-475,"d":110,"di":102,"from":-1200,"to":1800,"note":"Cleanouts at the corners; storm sump ≥ 750 deep with separate inlets for this drain and the underdrain (9.14.5 via 07 E10). Never linked to the channel, underdrain or sub-slab stone.","step":0},{"id":"channel-drop","per":"opening","name":"Channel bottom outlet, solid HDPE 63 (jointless through the envelope)","role":"drainage","mat":"hdpe","junction":"T","src":["R2 N2","R2 N3"],"type":"rod","axis":"y","x":-134.25,"w":[75],"d":63,"di":57,"from":-330,"to":-120,"embeds":["channel-pipe"],"step":0},{"id":"channel-pipe","per":"opening","name":"Solid HDPE 63 from the channel to its own storm-sump inlet, 1 % (R2 N3 second outlet)","role":"drainage","mat":"hdpe","junction":"T","src":["R2 N2","R2 N3","08 J12"],"type":"rod","axis":"w","x":-134.25,"y":-343.065,"dy":13.065,"d":63,"di":57,"from":-1200,"to":106.5,"note":"Channel catchment is the landing strip and glass wash only (roof water goes to the basin); 63 mm is INFERRED adequate — confirm with the channel maker.","step":0},{"id":"jz-pavers","per":"opening","name":"Reclaimed granite planks 80 in front of jamb A","role":"ground","mat":"reclaimed-stone","junction":"P","src":["R5 P1"],"poly":[[-75,-5.391666666666667],[-1887.5,-35.599999999999994],[-1887.5,-115.6],[-75,-85.39166666666667]],"runs":[[-1200,0]],"cuts":["basin-void","rill-walls","rill-floor","rill-void","clapper"],"step":11},{"id":"jz-bedding","per":"opening","name":"No. 8 bedding 50 (jamb)","role":"drainage","mat":"aggregate","junction":"P","src":["08 H"],"poly":[[-75,-85.39166666666667],[-1887.5,-115.6],[-1887.5,-165.6],[-75,-135.39166666666668]],"runs":[[-1200,0]],"cuts":["basin-void","rill-walls","rill-floor","rill-void","clapper"],"step":11},{"id":"jz-base","per":"opening","name":"No. 57 base 150 (jamb), drains into the envelope","role":"drainage","mat":"aggregate","junction":"P","src":["08 H"],"poly":[[-75,-135.39166666666668],[-1887.5,-165.6],[-1887.5,-315.6],[-97,-285.7583333333333],[-97,-193],[-75,-193]],"runs":[[-1200,0]],"cuts":["basin-void","rill-walls","rill-floor","rill-void","clapper","channel-pipe","underdrain-out"],"step":11},{"id":"liner-edge-curb","name":"Reclaimed granite curbstone on edge 150, at the liner cut-off","role":"ground","mat":"reclaimed-stone","junction":"M","src":["R3 F7","R5 N8"],"poly":[[-1887.5,-35.599999999999994],[-2043.5,-38.2],[-2043.5,-338.2],[-1887.5,-335.6]],"cuts":["rill-walls","rill-floor","rill-void","clapper"],"runs":[[-1200,1800]],"step":9},{"id":"root-barrier-liner","name":"Ribbed HDPE root barrier, top cast 20 into the curb, to −700","role":"planting","mat":"hdpe","junction":"M","src":["08b M16","R3 F7"],"type":"sheet","t":2,"path":[[-1965.5,-316.9],[-1965.5,-700]],"embeds":["liner-edge-curb"],"runs":[[-1200,1800]],"step":11},{"id":"pavers-t","name":"Reclaimed granite planks 80, coursed parallel to the glass","role":"ground","mat":"reclaimed-stone","junction":"P","src":["R4 P3","R5 P1","08 H7"],"poly":[[-2043.5,-38.2],[-3291.5,-59],[-3291.5,-139],[-2043.5,-118.2]],"cuts":["rill-walls","rill-floor","rill-void","clapper"],"runs":[[-1200,1800]],"step":12},{"id":"bedding-t","name":"No. 8 bedding 50","role":"drainage","mat":"aggregate","junction":"P","src":["08 H"],"poly":[[-2043.5,-118.2],[-3291.5,-139],[-3291.5,-189],[-2043.5,-168.2]],"cuts":["rill-walls","rill-floor","rill-void","clapper"],"runs":[[-1200,1800]],"step":12},{"id":"base-t","name":"No. 57 base 150 on compacted subgrade (infiltrating beyond 1.9 m)","role":"drainage","mat":"aggregate","junction":"P","src":["08 H"],"poly":[[-2043.5,-168.2],[-3291.5,-189],[-3291.5,-339],[-2043.5,-318.2]],"cuts":["rill-walls","rill-floor","rill-void","clapper"],"runs":[[-1200,1800]],"step":12},{"id":"edge-restraint","name":"Reclaimed granite curbstone on edge 150 (path edge)","role":"ground","mat":"reclaimed-stone","junction":"P","src":["R5 N8","08 H"],"poly":[[-3291.5,-59],[-3441.5,-59],[-3441.5,-359],[-3291.5,-359]],"runs":[[-1200,1800]],"cuts":["rill-walls","rill-floor","rill-void","clapper"],"step":12},{"id":"root-barrier-edge","name":"Ribbed HDPE root barrier under the path edge, top cast 20 into the curbstone, to −700","role":"planting","mat":"hdpe","junction":"P","src":["R3 F7","08 I2"],"type":"sheet","t":2,"path":[[-3366.5,-339],[-3366.5,-700]],"runs":[[-1200,1800]],"embeds":["edge-restraint"],"step":12},{"id":"basin-shell","per":"opening","name":"Reclaimed granite basin under the spout, sump floor −350 (silt settles here; removable bucket)","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R2 N2","R5 P2","R3 P1","08b M9"],"poly":[[-500,-12.475],[-500,-410],[-1100,-410],[-1100,-22.475],[-1040,-21.475],[-1040,-350],[-560,-350],[-560,-13.475]],"runs":[[-690,-210]],"cuts":[{"type":"rod","axis":"x","w":[-450],"ys":[-105],"d":80,"from":-1110,"to":-1030}],"note":"Inlet: the downspout from the roof above, spouting from the jamb-A wall. Overflow over the rim onto paving that falls away from the wall.","step":12},{"id":"basin-ends","per":"opening","name":"Basin end walls","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R5 P2"],"poly":[[-500,-12.475],[-1100,-22.475],[-1100,-410],[-500,-410]],"runs":[[-750,-690],[-210,-150]],"step":12},{"id":"basin-void","void":true,"poly":[[-1100,-410],[-500,-410],[-500,5],[-1100,5]],"runs":[[-750,-150]],"step":12},{"id":"basin-cobbles","per":"opening","name":"Cobbles 100–150 filling the basin (splash and silt trap)","role":"drainage","mat":"aggregate","junction":"J","src":["10 §3.6","R5 P2"],"poly":[[-560,-53.475],[-1040,-61.475],[-1040,-350],[-560,-350]],"runs":[[-690,-210]],"step":12},{"id":"rill-floor","per":"opening","name":"Rill floor, stone-faced precast U-trough 50 (sealed, gasketed joints)","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R2 N1","R2 N2","R3 P1"],"poly":[[-1100,-145],[-3441.5,-168.415],[-3441.5,-218.415],[-1100,-195]],"runs":[[-585,-315]],"step":12},{"id":"rill-walls","per":"opening","name":"Rill walls, flush with the paving (open water, moss patina)","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R3 P1","R5 P2"],"poly":[[-1100,-22.475],[-1731.5,-33],[-1731.5,-113],[-2979.5,-133.8],[-2979.5,-53.8],[-3291.5,-59],[-3441.5,-59],[-3441.5,-168.415],[-1100,-145]],"runs":[[-585,-535],[-365,-315]],"step":12},{"id":"rill-void","void":true,"poly":[[-1100,-17.475],[-3291.5,-54],[-3441.5,-54],[-3441.5,-168.415],[-1100,-145]],"runs":[[-535,-365]],"step":12},{"id":"clapper","per":"opening","name":"Granite clapper slab 80 over the rill, flush (B651 8.2.4)","role":"ground","mat":"reclaimed-stone","junction":"J","src":["R3 P1","08 J16"],"poly":[[-1731.5,-33],[-2979.5,-53.8],[-2979.5,-133.8],[-1731.5,-113]],"runs":[[-600,-300]],"step":12},{"id":"runnel-void","void":true,"poly":[[-3441.5,-104],[-5150,-117],[-5407.186170212767,-202.72872340425573],[-5407.186170212767,-207.72872340425533],[-3441.5,-168.415]],"runs":[[-535,-365]],"step":13},{"id":"runnel-floor","per":"opening","name":"Runnel floor 50, 2 %, granite lip at the garden (67 above the crest)","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R2 N1","R3 N1","08 J11"],"poly":[[-3441.5,-168.415],[-5407.186170212767,-207.72872340425533],[-5407.186170212767,-257.72872340425533],[-3441.5,-218.415]],"runs":[[-585,-315]],"step":13},{"id":"runnel-walls","per":"opening","name":"Runnel walls, top at the bed and slope surface","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R2 N1"],"poly":[[-3441.5,-109],[-5150,-122],[-5407.186170212767,-207.72872340425533],[-3441.5,-168.415]],"runs":[[-585,-535],[-365,-315]],"step":13},{"id":"runnel-strip","per":"opening","name":"Compacted 19 mm crushed-rock strip 300 under the runnel, to the bed subgrade (no settlement)","role":"drainage","mat":"aggregate","junction":"J","src":["R2 N1"],"poly":[[-3441.5,-218.415],[-5150,-252.58499999999998],[-5150,-647],[-3441.5,-634]],"runs":[[-600,-300]],"step":13},{"id":"bed-mulch","name":"Wood-chip mulch 75, leaf litter left","role":"ground","mat":"soil","junction":"I","src":["08 I"],"poly":[[-3441.5,-109],[-5150,-122],[-5150,-197],[-3441.5,-184]],"cuts":["runnel-walls","runnel-floor","runnel-strip","runnel-void"],"runs":[[-1200,1800]],"step":13},{"id":"bed-soil","name":"Planting bed medium 450","role":"ground","mat":"soil-imported","junction":"I","src":["08 I"],"poly":[[-3441.5,-184],[-5150,-197],[-5150,-647],[-3441.5,-634]],"cuts":["runnel-walls","runnel-floor","runnel-strip","runnel-void"],"runs":[[-1200,1800]],"step":13},{"id":"tree-pit","per":"opening","name":"Tree pit 1.0 x 1.0 m in plan, 1 m deep, floor falling 2 % to the garden, base scarified 300","role":"ground","mat":"soil-imported","junction":"I","src":["R3 F8","R3 N6","R2 N9","08 I1"],"poly":[[-3900,-637.4887328065555],[-4900,-645.097746561311],[-4900,-1120],[-3900,-1100]],"runs":[[400,1400]],"step":13},{"id":"pit-link","per":"opening","name":"Clear-stone link in geotextile from the pit floor to the garden rock (no pipe)","role":"drainage","mat":"aggregate","junction":"I","src":["R3 N6"],"poly":[[-5150,-1140],[-4900,-1140],[-4900,-1080],[-5150,-1080]],"runs":[[400,1400]],"step":13},{"id":"forebay-dip","void":true,"poly":[[-5407.186170212767,-207.72872340425573],[-6007.186170212767,-407.72872340425573],[-6007.186170212767,-507.72872340425573],[-5407.186170212767,-307.72872340425573]],"runs":[[-700,-200]],"step":13},{"id":"rg-apron","per":"opening","name":"Cobble forebay 100 below the lip (the lip drops a sheet onto it; sediment collects here)","role":"drainage","mat":"reclaimed-stone","junction":"J","src":["R3 P2","08 J11"],"poly":[[-5407.186170212767,-307.72872340425573],[-6007.186170212767,-507.72872340425573],[-6007.186170212767,-607.7287234042558],[-5407.186170212767,-407.72872340425573]],"runs":[[-700,-200]],"step":13},{"id":"rg-mulch","name":"Stone mulch 75 on the garden floor","role":"ground","mat":"aggregate","junction":"J","src":["08 J","R3 F5"],"poly":[[-6209,-475],[-7009,-475],[-7009,-550],[-6209,-550]],"runs":[[-1200,1800]],"step":13},{"id":"rg-medium","name":"Bioretention medium 450 (≥ 70 mm/h), planted 3:1 slopes","role":"ground","mat":"soil-imported","junction":"J","src":["08 J"],"poly":[[-5150,-122],[-6209,-475],[-6209,-550],[-7009,-550],[-7009,-475],[-7909,-175],[-7909,-1000],[-5150,-1000]],"cuts":["forebay-dip","rg-apron","runnel-walls","runnel-floor","runnel-void"],"runs":[[-1200,1800]],"step":13},{"id":"rg-choker","name":"Choker layer 100","role":"drainage","mat":"aggregate","junction":"J","src":["08 J"],"poly":[[-7909,-1100],[-5150,-1100],[-5150,-1000],[-7909,-1000]],"runs":[[-1200,1800]],"step":13},{"id":"rg-rock","name":"Clear rock reservoir 300","role":"drainage","mat":"aggregate","junction":"J","src":["08 J"],"poly":[[-7909,-1400],[-5150,-1400],[-5150,-1100],[-7909,-1100]],"cuts":["rg-subdrain"],"runs":[[-1200,1800]],"step":13},{"id":"rg-subdrain","name":"Perforated HDPE subdrain 150 near the top of the rock","role":"drainage","mat":"hdpe","junction":"J","src":["R3 F3","R2 N4"],"type":"rod","axis":"w","x":-6609,"y":-1185,"d":160,"di":150,"from":-1200,"to":1800,"step":13},{"id":"rg-riser","per":"opening","name":"HDPE overflow riser 200, beehive grate at the crest, sealed base below the subdrain","role":"drainage","mat":"hdpe","junction":"J","src":["08 J","R3 F5","R2 N4","VBBL Book II 2.4.2.5"],"type":"rod","axis":"y","x":-6609,"w":[900],"d":210,"di":200,"from":-1305,"to":-275,"embeds":["rg-medium","rg-choker","rg-rock","rg-mulch","rg-subdrain"],"note":"Outlet to the tank / storm at invert ≤ PONDB − 785 with a backflow flap; 1 m spillway notch in the far rim at crest + 45 (outside this slice).","step":13},{"id":"subgrade","name":"Compacted subgrade / native soil (landing)","role":"ground","mat":"soil","junction":"E","src":["07 E1","08 H"],"poly":[[240.4,-530],[-97,-530],[-97,-530.5],[-400.5,-530.5],[-400.5,-272.8183333333333],[-1669.1481830117393,-293.961080808686],[-1699.1481830117393,-324.461080808686],[-1887.5,-327.60027775849034],[-1887.5,-1700],[240.4,-1700]],"runs":[[0,1800]],"step":0},{"id":"subgrade-jz","per":"opening","name":"Compacted subgrade (jamb ground)","role":"ground","mat":"soil","junction":"E","src":["07 E1"],"poly":[[240.4,-530],[-97,-530],[-97,-530.5],[-400.5,-530.5],[-400.5,-290.81666666666666],[-1887.5,-315.6],[-1887.5,-1700],[240.4,-1700]],"runs":[[-1200,0]],"cuts":["basin-void","underdrain-out"],"step":0},{"id":"subgrade-far","name":"Native soil beyond the cut-off","role":"ground","mat":"soil","junction":"E","src":["07 E1","08 H"],"poly":[[-1887.5,-335.6],[-2043.5,-338.2],[-2043.5,-318.2],[-3291.5,-339],[-3291.5,-359],[-3441.5,-359],[-3441.5,-634],[-5150,-647],[-5150,-1400],[-7909,-1400],[-7909,-175],[-8000,-165],[-8000,-1700],[-1887.5,-1700]],"cuts":["tree-pit","pit-link","root-barrier-liner","root-barrier-edge"],"runs":[[-1200,1800]],"step":0},{"id":"interior-subgrade","name":"Compacted subgrade under the slab","role":"ground","mat":"soil","junction":"F","src":["12"],"poly":[[240.4,-530],[240.4,-1700],[2500,-1700],[2500,-300],[240.4,-300]],"runs":[[-1200,1800]],"step":0},{"id":"person-inside","name":"Occupant standing inside (proxy)","role":"furniture","mat":"","junction":"K","src":["08 K"],"type":"rod","axis":"y","x":1100,"w":[700],"d":360,"from":0,"to":1700,"step":14},{"id":"person-wheelchair","name":"Wheelchair user on the landing, eye 1250 (proxy, R3 F21)","role":"furniture","mat":"","junction":"K","src":["08 K12","R3 F21"],"type":"rod","axis":"y","x":-1000,"w":[1000],"d":700,"from":-22.808333333333334,"to":1229.1916666666666,"embeds":["pavers-lined"],"step":14},{"id":"person-terrace","name":"Person on the terrace (proxy)","role":"furniture","mat":"","junction":"K","src":["08 K"],"type":"rod","axis":"y","x":-2650,"w":[1300],"d":360,"from":-50.30833333333333,"to":1651.6916666666666,"embeds":["pavers-t"],"step":14},{"id":"tree","name":"Small tree in the 1 m tree pit, 1.3 m from the runnel (proxy)","role":"planting","mat":"vegetation","junction":"I","src":["08 I","R3 F8"],"type":"revolve","x":-4400,"w":[900],"profile":[[0,-191.29323968393328],[75,-191.29323968393328],[75,1783.7067603160667],[1300,2483.7067603160667],[1200,3483.7067603160667],[0,4183.706760316067]],"embeds":["bed-mulch","bed-soil"],"step":14},{"id":"bed-plant-1","name":"Salal and sword fern understorey (proxy, R3 F6)","role":"planting","mat":"vegetation","junction":"I","src":["R3 F6","08 L1"],"type":"revolve","x":-3800,"w":[200],"profile":[[0,-131.7278314310799],[300,38.27216856892011],[350,488.2721685689201],[0,688.27216856892]],"embeds":["bed-mulch"],"step":13},{"id":"bed-plant-2","name":"Red-flowering currant (early bloom) (proxy, R3 F6)","role":"planting","mat":"vegetation","junction":"I","src":["R3 F6","08 L1"],"type":"revolve","x":-4950,"w":[1550],"profile":[[0,-140.4781972490489],[300,29.521802750951124],[350,479.5218027509511],[0,679.5218027509511]],"embeds":["bed-mulch"],"step":13},{"id":"rg-plant-1","name":"Slough sedge (wet slope) (proxy)","role":"planting","mat":"vegetation","junction":"J","src":["R3 F6","R3 N7"],"type":"revolve","x":-5800,"w":[1200],"profile":[[0,-358.66666666666663],[250,-238.66666666666663],[300,161.33333333333337],[0,361.33333333333337]],"embeds":["rg-mulch","rg-medium"],"step":13},{"id":"rg-plant-2","name":"Common rush (garden floor) (proxy)","role":"planting","mat":"vegetation","junction":"J","src":["R3 F6","R3 N7"],"type":"revolve","x":-6600,"w":[300],"profile":[[0,-495],[250,-375],[300,25],[0,225]],"embeds":["rg-mulch","rg-medium"],"step":13},{"id":"rg-plant-3","name":"Pacific ninebark (upper far slope) (proxy)","role":"planting","mat":"vegetation","junction":"J","src":["R3 F6","R3 N7"],"type":"revolve","x":-7700,"w":[1200],"profile":[[0,-264.66666666666663],[250,-144.66666666666666],[300,255.33333333333334],[0,455.33333333333337]],"embeds":["rg-mulch","rg-medium"],"step":13}],"views":[{"id":"T-threshold","x":[-200,300],"y":[-210,130]},{"id":"H-head","x":[-800,300],"y":[2550,3650]},{"id":"F-floor","x":[-200,700],"y":[-560,120]},{"id":"M-landing","x":[-2200,100],"y":[-600,200]},{"id":"C-water-corner","x":[-3600,0],"y":[-700,900]},{"id":"Z-jamb-base","x":[-250,300],"y":[-260,500]},{"id":"I-bed-tree","x":[-5400,-3000],"y":[-1200,4400]},{"id":"J-rain-garden","x":[-8000,-4800],"y":[-1500,300]},{"id":"S-section","x":[-8000,2500],"y":[-1700,3800]}],"assemblies":[{"name":"Floor (slab on 100 graphite EPS)","target":2.45,"films":[0.16],"layers":[{"mat":"concrete-lowcarbon","t":100},{"mat":"graphite-eps","t":100}]},{"name":"Floor band (glulam 215 + WF 80; vented cladding excluded)","target":3.85,"films":[0.12,0.12],"layers":[{"mat":"glulam","t":215},{"mat":"woodfibre-board","t":80}]},{"name":"Wall W1 (ply + 2x6 cellulose, 23 % framing + WF 80)","target":3.85,"films":[0.12,0.12],"layers":[{"mat":"gypsum","t":12.7},{"mat":"cellulose-dense","t":140,"framing":{"mat":"softwood-lumber","frac":0.23}},{"mat":"plywood","t":12.5},{"mat":"woodfibre-board","t":80}]}],"zones":{"D":{"label":"door unit (frame, glass, drive)","elev_m":2.785},"T":{"label":"threshold"},"H":{"label":"floor-band head + canopy"},"F":{"label":"floor","depth_m":2.24},"M":{"label":"lined landing","depth_m":1.72},"P":{"label":"granite terrace + jamb ground","depth_m":1.4},"I":{"label":"planting bed","depth_m":1.75},"J":{"label":"water corner + rain garden"},"E":{"label":"subgrade / drains"},"Z":{"label":"jamb A wall (W1) base"},"U":{"label":"upper floor and wall"}},"stages":["Excavate, subgrade and drains","Grade beam, stem and foundation insulation","Under-slab stone, insulation, soil-gas barrier","Slab pour","Framing: jamb wall, glulam header, floor and upper wall","Air and water barriers","Channel, welded pan and warm sill","Lift-and-slide door, glass and drive","Exterior insulation, head flashing, screen and canopy","Strapping, cedar and the charcoal frame","Interior finishes","Landing: liner, underdrain, granite and tray","Terrace and water corner","Planting bed, runnel and rain garden","Planting and people"],"flows":[{"id":"glass","label":"Rain on the glass → sill → trench channel → its own pipe","w":900,"path":[[168,2500],[168,101],[147,101],[100,-12],[88,-12],[88,-45],[-38,-82.15834101382488],[-38,-103],[-96,-118],[-134,-125],[-134,-330]]},{"id":"canopy","label":"Upper wall and canopy → drip at the tip → granite landing → liner → underdrain","w":900,"path":[[-84,3650],[-84,2990],[-60,2970],[-757,2945.64],[-757,-16.758333333333333],[-1200,-24.141666666666666],[-1300,-145.80833333333334],[-1600,-270.80833333333334],[-1785,-266.89166666666665]]},{"id":"corner","label":"Roof above → downspout → spout → basin → rill → runnel → lip → rain garden","w":-450,"beyond":true,"path":[[-144,3650],[-144,650],[-760,640],[-800,-145],[-1100,-145],[-3441.5,-168.415],[-5407.186170212767,-207.72872340425533],[-5707.186170212767,-407.7287234042557],[-6509,-475]]}],"ageing":{"years":[0,5,15,30],"rgb":{"cedar-siding":[[170,160,145],[156,152,144],[150,147,140],[140,138,133]],"cedar-soffit":[[182,136,96],[176,132,94],[172,128,90],[168,126,90]],"steel-prefinished":[[52,54,56],[54,56,58],[56,58,60],[56,58,60]],"aluminium":[[52,54,56],[54,56,58],[60,62,64],[52,54,56]],"parge-charcoal":[[78,78,76],[74,76,72],[78,78,76],[76,77,74]],"reclaimed-stone":[[140,138,132],[132,132,126],[126,126,120],[126,126,120]],"stainless":[[150,152,154],[150,152,154],[148,150,152],[148,150,152]]},"grow":{"tree":[0.47,0.7,1.16,1.4],"shrub":[0.34,0.68,1,1],"bed-plant":[0.4,1,1,1],"rg-plant":[0.35,1,1,1]},"notes":[["Granite crisp, cedar warm, honey soffit. Tree ≈ 2 m, rain-garden plugs under 30 % cover.","Threshold 12 mm, drive commissioned."],["Cedar field silvered; a splash band darkens the courses over the canopy cap. Algae line under the canopy drip.","Tree ≈ 3 m; bed in full cover, bloom March–October. Forebay sediment ≈ 15 mm."],["Even mid-silver cedar; powder-coated door chalks lighter than the PVDF liners. ZIP fabric and motor replaced.","Tree ≈ 5 m shades the west glass late afternoon. Rain-garden sediment ≈ 45 mm, drain-down 12–24 h."],["Cedar 140,138,133 with 1–3 mm erosion; liners and cap renewed with the cladding. Track renewed via the 316 floor plate.","Tree ≈ 6 m mature. Sediment ≈ 90 mm: strip the top 50–100 and replant. Granite relaid, not replaced."]],"src":["R5 lap 3 §1","R3 lap 3 §5","10 §2.1","13 §4.4","14 §8"]}},"mats":{"concrete-lowcarbon":{"density":2400,"a1a3":0.0463,"k":1.7,"src":"09 CLF-G Lafarge 25 MPa 56 d 111 kg/m3 [S2]; k [I]"},"graphite-eps":{"density":20,"a1a3":2.39,"k":0.0307,"src":"09 CLF-G 1.47/RSI [S2]; Neopor R-4.7/in, 20 kg/m3 [I]"},"comfortboard-80":{"density":128,"a1a3":1.057,"k":0.0343,"src":"09 E-RW 4.64/RSI, RSI 0.74 per 25.4 mm, 128 kg/m3 [S]"},"comfortbatt":{"density":40,"a1a3":1.02,"k":0.035,"src":"09 E-RW 1.43/RSI [S]; 40 kg/m3, k [I]"},"cellulose-dense":{"density":56,"a1a3":0.513,"biogenic":-1.83,"k":0.039,"src":"09 CLF-G CIMA 1.12/RSI [S2]; OEK biogenic -82.47/m3 at 45 kg/m3 [S2]; 56 kg/m3 dense-pack, k [I]"},"woodfibre-board":{"density":169,"a1a3":0.449,"biogenic":-1.66,"k":0.042,"src":"09 E-GTX GUTEX 75.8 / -280 per m3 at 169 kg/m3 [S]; k mid of 0.037-0.047 [I]"},"plywood":{"density":484,"a1a3":0.453,"biogenic":-1.77,"k":0.12,"src":"09 E-PLY 219.32 kg/m3 at 484 [S]; biogenic OEK -10.29/m2 at 12 mm [S2/I]"},"softwood-lumber":{"density":471,"a1a3":0.0881,"biogenic":-1.667,"k":0.118,"src":"SOURCED CWC EPD 845 (ASTM, 4 Feb 2025) Table 5 BC: GWP-fossil A1-A3 41.5 kgCO2e/m3; 428 kg od/m3; 785.4 kgCO2/m3 stored (C3/C4); per kg at 471 = 428 od x 1.10 MC [I]. https://cwc.ca/wp-content/uploads/2025/02/CWC-lumber-EPD-2025-Feb-4.pdf; k 0.0085 RSI/mm (09 §0.3)"},"cedar-siding":{"density":370,"a1a3":0.305,"biogenic":-0.85,"k":0.1,"src":"09 E-WRC 1.42 fossil, -3.95 biogenic per m2 at 4.65 kg/m2 [S]; density, k [I]"},"gypsum":{"density":671,"a1a3":0.2795,"k":0.16,"src":"SOURCED Gypsum Association industry EPD 10270 (NSF; 28 Apr 2020-15 Apr 2026, EXPIRED): 5/8 Type X, 277 kgCO2e A1-A3 per 92.9 m2 = 991 kg at 15.9 mm. https://info.nsf.org/Certified/Sustain/ProdCert/EPD10270.pdf; k [I]"},"stainless":{"density":8000,"a1a3":5,"k":16,"src":"INFERRED generic austenitic 304/316 of unstated origin: midpoint of European average 2.8 kgCO2/kg (Outokumpu 2023, S2) and global average 7 kgCO2e/kg (Outokumpu citing CRU/worldstainless 2023-24, S2); range 1.8-7; fabrication excluded. Use stainless-epd when the spec names an EPD-backed mill"},"steel-prefinished":{"density":7850,"a1a3":2.68,"k":50,"src":"09 prefinished coil 2.60-2.75 [S2]"},"aluminium":{"density":2700,"a1a3":6.57,"k":160,"src":"SOURCED Aluminum Association extruded aluminum EPD UL 4786092064.102.1 (2014, extended to 16 Aug 2022, EXPIRED): 6,570 kgCO2e/t A1-A3, D -4,130. https://www.aluminum.org/sites/default/files/2022-04/102.1_AluminumAssocication_EPD_ExtrudedAluminum.pdf; imported extrusions can be 2-3x [I]"},"membrane-poly":{"density":940,"a1a3":2.5,"k":0.4,"src":"generic polyethylene [I]"},"aggregate":{"density":1600,"a1a3":0.005,"k":2,"src":"SOURCED (S2): California Buy Clean crushed aggregate 1.94 kg/t; UEPG EU average 5 kg/t; Holcim UK granite 5.19 kg/t (12 AGG, S*); bulk density [I]; A4 haul often exceeds A1-A3"},"soil":{"density":1500,"a1a3":0,"k":1.5,"src":"not counted"},"glulam":{"density":482,"a1a3":0.2585,"biogenic":-1.698,"k":0.12,"src":"SOURCED Kalesnikoff glulam EPD 296 (ASTM; South Slocan BC; 16 Mar 2022-16 Mar 2027): A1-A3 fossil 124.50 kgCO2e/m3, 481.68 kg/m3 (446 od), 817.67 kgCO2/m3 stored (C3/C4). https://kalesnikoff.com/wp-content/uploads/2022/05/Kalesnikoff-Glulam-EPD-.pdf; k [I]"},"softwood-pt":{"density":520,"a1a3":0.15,"biogenic":-1.51,"k":0.118,"src":"INFERRED: CWC BC lumber 0.088 + MCA/CA treatment and re-drying ~0.06; no treated-wood EPD found; density incl. retention + MC [I]"},"igu-triple":{"density":2500,"a1a3":1.8,"k":1,"src":"INFERRED per kg of glass, triple tempered low-e argon: Pilkington Insulight Triple 4/12/4/12/4 EPD-IES-0002592 47.8 kgCO2e/m2 (2023) and ift 2017 40.4; Saint-Gobain Climatop 4-14-4-14-4 49.6 (S2, One Click LCA) = 1.35-1.65/kg on EU float; + North American float (NGA 1,430 kg/t, S2, expired Dec 2024; Vitro 2023 1,350) and tempering of two lites -> 1.8. Valid for 4/4/4 to 6/4/6; thin-centre triples keep ~6-8 kg/m2 of fixed per-m2 items","rsl":30},"hdpe":{"density":950,"a1a3":2.15,"k":0.45,"src":"SOURCED (proxy) PPI EPD 1045, 4in DR11 HDPE conduit, 1 kg, valid to 24 Jul 2030: GWP 2.15 kgCO2e/kg (A1 1.66, A2 0.137, A3 0.359). Used for geomembrane, root barrier, drain board, corrugated pipe [I]"},"ldpe-film":{"density":920,"a1a3":2.3,"k":0.33,"src":"INFERRED: LDPE resin + film blowing, ~PPI HDPE 2.15 + 0.15"},"geotextile-pp":{"density":910,"a1a3":2.3,"k":0.1,"src":"INFERRED: PP nonwoven; model as mass-equivalent sheet t = (g/m2)/910"},"polymer-concrete":{"density":2300,"a1a3":0.555,"k":1.5,"src":"SOURCED ACO DRAIN Multiline Seal in V150S Type 10.0, IBU EPD-ACO-20250409-CBK1-DE (18 Mar 2026-17 Mar 2031): GWP-fossil A1-A3 18.8 kgCO2e per running metre at 33.9 kg/rm (polymer concrete 89-96 %, galvanised edge rail 4-10 %); density, k [I]"},"cellular-glass":{"density":200,"a1a3":1.44,"k":0.058,"src":"SOURCED FOAMGLAS EU S3 1.438 kgCO2e/kg (09 §3.1, S2); PERINSUL HL 200 kg/m3, lambdaD 0.058 (12 §3.4, PER, S). EU-made; not the North American 22.7/RSI factor"},"soil-imported":{"density":1400,"a1a3":0.005,"k":1.5,"src":"INFERRED: imported growing / bioretention medium (screened soil, sand, compost under cut-off); aggregate-like"},"reclaimed-stone":{"density":2600,"a1a3":0.01,"k":2.5,"src":"INFERRED: salvaged granite setts/slabs or salvaged pavers; cleaning, re-sawing, local haul only (cut-off rule)"},"concrete-f2-40scm":{"density":2400,"a1a3":0.0744,"k":1.7,"src":"SOURCED Concrete BC EPD 348 25 MPa air F-2 GUL+40 % SCM 178.62 kgCO2e/m3 (09 §3.1, S); k [I]"},"rebar-eaf-pnw":{"density":7850,"a1a3":0.53,"k":50,"src":"SOURCED (S2) Nucor Seattle rebar via CLF-G (09 §3.1)"},"pu-structural":{"density":320,"a1a3":4,"k":0.054,"src":"INFERRED 4.0/kg rigid PU. Armatherm 500 EPD EPD-IES-0026744 (EN 15804+A2, USA, 14 Nov 2025 - 14 Nov 2030) exists - paste its A1-A3 value. Grade 500-320: BBA fck 6.3 MPa, lambda 0.054 (S2)"},"cork":{"density":110,"a1a3":0.2,"biogenic":-1.4,"k":0.04,"src":"INFERRED: expanded insulation corkboard; R2 P5; generic EPD values 0.1-0.4 fossil, large biogenic — needs Amorim EPD"},"steel-section":{"density":7850,"a1a3":1.22,"k":50,"src":"S2: Buy Clean California hot-rolled sections GWP limit 1.01 mill gate / 1.22 incl. US-average fabrication (AISC/STI/CRSI/AISI quick guide, 8 Mar 2022) = AISC fabricated hot-rolled sections industry EPD (31 Mar 2021, 5 yr: EXPIRED); US EAF mills (Nucor, SDI, Gerdau). Imported BOF sections 2.0-2.5 [I]"},"epdm":{"density":1150,"a1a3":3,"k":0.25,"src":"S2 (One Click LCA listing): Holcim/Firestone RubberGard 60 mil non-reinforced EPDM, ASTM EPD-900: 4.69 kgCO2e/m2 at 1.37 mm (~1.58 kg/m2) = 3.0/kg; 45 mil 3.48, 90 mil 6.85 /m2. Carlisle Sure-Seal TDS is in the RCABC RPM (S2). FLL root resistance: check the product certificate","rsl":45},"butyl-sealant":{"density":1400,"a1a3":3,"k":0.25,"src":"INFERRED: butyl / MS sealants generic"},"vegetation":{"density":300,"a1a3":0,"k":0.5,"src":"living material, not counted"},"cedar-soffit":{"density":370,"a1a3":0.305,"biogenic":-0.85,"k":0.1,"src":"as cedar-siding (honey-oiled soffit boards, sheltered; only the finish colour differs) [I]"},"pu-structural-160":{"density":160,"a1a3":4,"k":0.0375,"src":"Armatherm 500-080 class: CS 210 psi = 1.45 MPa, lambda 0.26 Btu-in = 0.0375 (US data sheet V3, S2); ~160 kg/m3 (older UK sheet lowest grade: 2.0 MPa, lambda 0.031) [S2/I]. Engineer to confirm long-term stress and creep under the track"},"parge-charcoal":{"density":1800,"a1a3":0.2,"k":0.8,"src":"INFERRED: mineral silicate parge/render coat ~10 mm, cement-lime base; dark pigment (R5 lap 2 N3)"},"door-unit-woodalu":{"density":1000,"a1a3":1,"src":"CARRIER (quantity entered as kgCO2e/1000 per m of opening): research 14 §7 ENERsign primus wood-Al lift-and-slide, A1-A3 excl. glass: frame 10-21 (mid 15) + hardware 3-7.5 (5) + SIEGENIA drive ~7 = 27 kgCO2e/m2 of opening x 2.785 m = 75 kgCO2e per m [I from S*: Nordic wood-Al EPDs 52-63/m2 incl. glass]. No product EPD: require EN 15804+A2 EPD in tender"}}};</script>
+<script type="module">
+// Living Edge detail viewer (prototype). Reads the same part list Rhino builds from (window.DETAIL) and draws it in
+// the browser: a 2D section at any position along the wall, control-layer toggles, part inspection, a 3D edge and
+// live carbon. No Rhino at runtime. Boolean cuts are not computed here: cut targets are drawn first, then voids
+// (in the background colour), then the cutting parts, which reads correctly in section.
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const { spec, mats } = window.DETAIL;
+const L = spec.L;
+const parts = spec.parts;
+const byId = new Map(parts.map((p) => [p.id, p]));
+
+// ---------- geometry helpers (same rules as detail02.mjs / build.py) ----------
+function offsetPath(path, d) {
+  const n = path.slice(1).map((p, i) => {
+    const dx = p[0] - path[i][0], dy = p[1] - path[i][1], l = Math.hypot(dx, dy);
+    return [-dy / l, dx / l];
+  });
+  return path.map((p, i) => {
+    if (i === 0 || i === path.length - 1) {
+      const m = n[Math.min(i, n.length - 1)];
+      return [p[0] + m[0] * d, p[1] + m[1] * d];
+    }
+    const a = n[i - 1], b = n[i], ml = Math.hypot(a[0] + b[0], a[1] + b[1]);
+    const mx = (a[0] + b[0]) / ml, my = (a[1] + b[1]) / ml, k = d / (mx * b[0] + my * b[1]);
+    return [p[0] + mx * k, p[1] + my * k];
+  });
+}
+const sheetPoly = (p) => [...offsetPath(p.path, p.t / 2), ...offsetPath(p.path, -p.t / 2).reverse()];
+const kind = (p) => (p.void ? "void" : p.type ?? (p.axis === "x" ? "prism-x" : "prism"));
+const inRuns = (runs, w) => (runs ?? [[-Infinity, Infinity]]).some(([a, b]) => w >= a && w <= b);
+const chord = (r, dw) => (Math.abs(dw) < r ? Math.sqrt(r * r - dw * dw) : 0);
+
+// Cross-section of one part at plane w: a list of polygons [[x, y], ...] (and circles for pipes along the wall).
+function sectionShapes(p, w) {
+  const k = kind(p);
+  if (k === "virtual") return [];
+  if (k === "prism" || k === "void") return inRuns(p.runs, w) ? [{ poly: p.poly }] : [];
+  if (k === "sheet") return inRuns(p.runs, w) ? [{ poly: sheetPoly(p) }] : [];
+  if (k === "prism-x") {
+    const ys = [];
+    p.poly.forEach(([w0, y0], i) => {
+      const [w1, y1] = p.poly[(i + 1) % p.poly.length];
+      if ((w >= Math.min(w0, w1)) && (w <= Math.max(w0, w1)) && w0 !== w1) ys.push(y0 + ((w - w0) / (w1 - w0)) * (y1 - y0));
+    });
+    if (ys.length < 2) return [];
+    const [a, b] = p.x, y0 = Math.min(...ys), y1 = Math.max(...ys);
+    return [{ poly: [[a, y0], [b, y0], [b, y1], [a, y1]] }];
+  }
+  if (k === "rod") {
+    const r = p.d / 2, ri = (p.di ?? 0) / 2;
+    if (p.axis === "w") {
+      if (w < p.from || w > p.to) return [];
+      const f = (w - p.from) / (p.to - p.from || 1);
+      return (p.at ?? [[p.x, p.y]]).map(([x, y]) => ({ circle: [x, y + (p.dy ?? 0) * f, r, ri] }));
+    }
+    if (p.axis === "y") return p.w.map((wi) => chord(r, w - wi)).filter((c) => c > 0).map((c) => ({ poly: [[p.x - c, p.from], [p.x + c, p.from], [p.x + c, p.to], [p.x - c, p.to]] }));
+    // axis x (screws, sloped drains)
+    const out = [];
+    for (const wi of p.w) {
+      const c = chord(r, w - wi);
+      if (!c) continue;
+      for (const y of p.ys ?? [p.y]) out.push({ poly: [[p.from, y - c], [p.to, y - c + (p.dy ?? 0)], [p.to, y + c + (p.dy ?? 0)], [p.from, y + c]] });
+    }
+    return out;
+  }
+  if (k === "revolve") {
+    const out = [];
+    for (const wi of p.w) {
+      const dw = w - wi;
+      const pts = p.profile.map(([r, y]) => [chord(Math.max(r, 1e-6), dw), y]).filter(([c]) => c > 0);
+      if (pts.length < 2) continue;
+      out.push({ poly: [...pts.map(([c, y]) => [p.x + c, y]), ...pts.reverse().map(([c, y]) => [p.x - c, y])] });
+    }
+    return out;
+  }
+  return [];
+}
+
+// Draw order: cut targets before their cutters; voids drawn just before the cutters.
+function drawOrder() {
+  const after = new Map(parts.map((p) => [p.id, new Set()]));
+  for (const p of parts) for (const c of p.cuts ?? []) if (typeof c === "string" && after.has(c)) after.get(c).add(p.id);
+  const seen = new Set(), out = [];
+  const visit = (id) => {
+    if (seen.has(id)) return;
+    seen.add(id);
+    for (const t of after.get(id)) visit(t);   // targets of this cutter come first
+    out.push(byId.get(id));
+  };
+  parts.forEach((p) => visit(p.id));
+  return out;
+}
+const ORDER = drawOrder();
+
+// ---------- look ----------
+const ROLE = {
+  concrete: "#a5a5a5", ground: "#b59b78", drainage: "#78aac8", water: "#3D6E8F", air: "#2E9E8F", vapour: "#7E5BC2", thermal: "#D9A400",   // control layers; red is kept for the signal colour
+  frame: "#cdaa78", cladding: "#ebe6d7", furniture: "#96643c", metal: "#5a5a5f", planting: "#5f874b",
+};
+const FINISH = {
+  "steel-prefinished": "#343638", aluminium: "#343638", stainless: "#96989a", "polymer-concrete": "#46484a", "igu-triple": "#96afb9",
+  "cedar-siding": "#96928a", "cedar-soffit": "#b68860", glulam: "#c4a076", "softwood-lumber": "#c4a076", "softwood-pt": "#b09670", plywood: "#c8aa82",
+  "concrete-lowcarbon": "#b0ada6", "concrete-f2-40scm": "#b0ada6", "reclaimed-stone": "#8c8a84", aggregate: "#9e998f", soil: "#564232", "soil-imported": "#5c4634",
+  vegetation: "#627e4a", "parge-charcoal": "#4e4e4c", "woodfibre-board": "#967855", hdpe: "#1e1e20", "graphite-eps": "#78787d", gypsum: "#eceae4",
+};
+const CONTROL = ["water", "air", "thermal", "vapour"];
+const state = { w: 900, layers: new Set(), finish: false, selected: null, view: "section" };
+const colourOf = (p) => (state.finish ? FINISH[p.mat] ?? ROLE[p.role] ?? "#ccc" : ROLE[p.role] ?? "#ccc");
+
+// ---------- 2D section (SVG) ----------
+const svg = document.getElementById("section");
+const NS = "http://www.w3.org/2000/svg";
+let vb = { x: -8100, y: -4600, w: 10700, h: 6400 };
+const setVB = () => svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+function fitView(v) {
+  const pad = 0.06, w = v.x[1] - v.x[0], h = v.y[1] - v.y[0];
+  const box = svg.getBoundingClientRect(), ar = box.width / Math.max(box.height, 1) || 1.6;
+  let W = w * (1 + pad * 2), H = h * (1 + pad * 2);
+  if (W / H < ar) W = H * ar; else H = W / ar;
+  vb = { x: (v.x[0] + v.x[1]) / 2 - W / 2, y: -(v.y[0] + v.y[1]) / 2 - H / 2, w: W, h: H };
+  setVB();
+}
+function drawSection() {
+  svg.replaceChildren();
+  const bg = getComputedStyle(document.body).getPropertyValue("--canvas").trim();
+  const dim = state.layers.size > 0;
+  for (const p of ORDER) {
+    for (const s of sectionShapes(p, state.w)) {
+      let el;
+      if (s.circle) {
+        const [x, y, r, ri] = s.circle;
+        el = document.createElementNS(NS, "path");
+        const ring = (rr) => `M ${x - rr} ${-y} a ${rr} ${rr} 0 1 0 ${2 * rr} 0 a ${rr} ${rr} 0 1 0 ${-2 * rr} 0`;
+        el.setAttribute("d", ring(r) + (ri ? " " + ring(ri) : ""));
+        el.setAttribute("fill-rule", "evenodd");
+      } else {
+        el = document.createElementNS(NS, "polygon");
+        el.setAttribute("points", s.poly.map(([x, y]) => `${x},${-y}`).join(" "));
+      }
+      if (p.void) {
+        el.setAttribute("fill", bg);
+        el.setAttribute("stroke", "none");
+      } else {
+        const on = !dim || state.layers.has(p.role);
+        el.setAttribute("fill", colourOf(p));
+        el.setAttribute("fill-opacity", on ? (p.role === "planting" || p.role === "furniture" ? 0.55 : 0.92) : 0.12);
+        el.setAttribute("stroke", on && dim ? ROLE[p.role] : "var(--line)");
+        el.setAttribute("stroke-width", on && dim ? 3 : 0.6);
+        el.setAttribute("vector-effect", "non-scaling-stroke");
+        if (state.selected === p.id) { el.setAttribute("stroke", "var(--accent)"); el.setAttribute("stroke-width", 3); }
+        el.dataset.id = p.id;
+        el.addEventListener("click", (e) => { e.stopPropagation(); select(p.id); });
+        const t = document.createElementNS(NS, "title");
+        t.textContent = p.name;
+        el.appendChild(t);
+      }
+      svg.appendChild(el);
+    }
+  }
+}
+// pan / zoom
+let drag = null;
+svg.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const r = svg.getBoundingClientRect(), f = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+  const mx = vb.x + ((e.clientX - r.left) / r.width) * vb.w, my = vb.y + ((e.clientY - r.top) / r.height) * vb.h;
+  vb = { x: mx - (mx - vb.x) * f, y: my - (my - vb.y) * f, w: vb.w * f, h: vb.h * f };
+  setVB();
+}, { passive: false });
+svg.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, vb: { ...vb } }; });
+window.addEventListener("pointerup", () => (drag = null));
+window.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const r = svg.getBoundingClientRect();
+  vb = { ...drag.vb, x: drag.vb.x - ((e.clientX - drag.x) / r.width) * vb.w, y: drag.vb.y - ((e.clientY - drag.y) / r.height) * vb.h };
+  setVB();
+});
+
+// ---------- inspector ----------
+const info = document.getElementById("info");
+function select(id) {
+  state.selected = id;
+  const p = byId.get(id);
+  const m = mats[p.mat];
+  info.innerHTML = `<h3>${p.name}</h3>
+    <dl><dt>id</dt><dd><code>${p.id}</code></dd><dt>role</dt><dd>${p.role}</dd><dt>junction</dt><dd>${p.junction} ${spec.zones?.[p.junction]?.label ?? ""}</dd>
+    <dt>material</dt><dd>${p.mat || "none"}${m ? `, ${m.a1a3} kgCO₂e/kg` : ""}</dd></dl>
+    ${p.note ? `<p>${p.note}</p>` : ""}
+    <p class="src">Sources: ${(p.src ?? []).join(", ") || "none recorded"}</p>`;
+  if (state.view === "section") drawSection(); else if (state.view === "3d") highlight3D();
+}
+
+// ---------- floating result card: the mode's headline number, rolling to its new value ----------
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let hudVal = 0;
+function setHud(value, label, digits = 0, fail = false) {
+  const el = document.getElementById("hud-num"), from = hudVal, t0 = performance.now(), dur = reduceMotion ? 0 : 650;
+  hudVal = value;
+  document.getElementById("hud-lab").textContent = label;
+  document.getElementById("hud").classList.toggle("fail", fail);
+  const step = (t) => {
+    const k = dur ? Math.min(1, (t - t0) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
+    el.textContent = (from + (value - from) * e).toFixed(digits);
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+// ---------- carbon (same rules as metrics.mjs) ----------
+function carbon() {
+  const polyArea = (pts) => Math.abs(pts.reduce((s, [x, y], i) => { const [x2, y2] = pts[(i + 1) % pts.length]; return s + x * y2 - x2 * y; }, 0)) / 2;
+  const pathLen = (pts) => pts.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0);
+  const runLen = (runs) => (runs ?? [[0, L]]).reduce((s, [a, b]) => s + b - a, 0);
+  const share = (p) => { const r = p.runs ?? [[0, L]]; return r.length === 1 ? 1 : runLen(r) / (r[r.length - 1][1] - r[0][0]); };
+  const slice = (p) => {
+    if (p.type === "rod") {
+      const n = p.axis === "w" ? (p.at ?? [0]).length : p.axis === "y" ? p.w.length : p.w.length * (p.ys ?? [0]).length;
+      const len = p.axis === "x" ? Math.hypot(p.to - p.from, p.dy ?? 0) : p.to - p.from;
+      return ((p.d ** 2 - (p.di ?? 0) ** 2) * Math.PI / 4) * len * n / 1e9;
+    }
+    if (p.axis === "x") return polyArea(p.poly) * (p.x[1] - p.x[0]) / 1e9;
+    return (p.type === "sheet" ? pathLen(p.path) * p.t : polyArea(p.poly)) * runLen(p.runs) / 1e9;
+  };
+  const perM = (p) => {
+    if (p.per === "opening") return slice(p) / ((spec.opening_mm ?? L) / 1000);
+    if (p.type === "rod") {
+      const n = p.axis === "w" ? (p.at ?? [0]).length : p.w.length * (p.ys ?? [0]).length, ring = (p.d ** 2 - (p.di ?? 0) ** 2) * Math.PI / 4;
+      return p.axis === "w" ? ring * 1000 * n / 1e9 : ring * (p.to - p.from) * n * (1000 / L) / 1e9;
+    }
+    if (p.type === "revolve") return null;
+    if (p.axis === "x") return polyArea(p.poly) * (p.x[1] - p.x[0]) * (1000 / L) / 1e9;
+    return (p.type === "sheet" ? pathLen(p.path) * p.t : polyArea(p.poly)) * 1000 * share(p) / 1e9;
+  };
+  const byJ = {};
+  let total = 0;
+  for (const p of parts) {
+    if (p.void || p.nocarbon) continue;
+    const m = mats[p.mat], q = p.m3PerMetre ?? perM(p);
+    if (!m || q == null) continue;
+    const c = q * (p.fill ?? 1) * m.density * m.a1a3;
+    byJ[p.junction] = (byJ[p.junction] ?? 0) + c;
+    total += c;
+  }
+  const rows = Object.entries(byJ).sort((a, b) => b[1] - a[1]);
+  const max = rows[0]?.[1] ?? 1;
+  state.carbonTotal = total;
+  document.getElementById("carbon").innerHTML = `<div class="big">${total.toFixed(0)} <small>kgCO₂e per m of opening (A1–A3)</small></div>` +
+    rows.map(([j, v]) => `<div class="bar"><span>${j} ${spec.zones?.[j]?.label ?? ""}</span><i style="width:${(v / max) * 100}%"></i><b>${v.toFixed(0)}</b></div>`).join("");
+}
+
+// ---------- 3D edge ----------
+let three = null;
+function build3D() {
+  const host = document.getElementById("three");
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  host.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(getComputedStyle(document.body).getPropertyValue("--canvas").trim());
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 200);
+  camera.position.set(-9.5, 4.2, 6.5);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(-1.6, 0.9, 0);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7d6b, 1.6));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.8);
+  sun.position.set(-5, 8, 6);
+  scene.add(sun);
+  const S = 0.001, meshes = [];
+  const mat = (p) => new THREE.MeshStandardMaterial({ color: colourOf(p), roughness: 0.85, transparent: p.mat === "igu-triple", opacity: p.mat === "igu-triple" ? 0.25 : 1, side: THREE.DoubleSide });
+  const shapeOf = (pts) => new THREE.Shape(pts.map(([a, b]) => new THREE.Vector2(a * S, b * S)));
+  for (const p of parts) {
+    const k = kind(p);
+    const geoms = [];
+    if (k === "prism" || k === "sheet") {
+      const pts = k === "sheet" ? sheetPoly(p) : p.poly;
+      for (const [w0, w1] of p.runs ?? []) {
+        const g = new THREE.ExtrudeGeometry(shapeOf(pts), { depth: (w1 - w0) * S, bevelEnabled: false });
+        g.translate(0, 0, w0 * S);
+        geoms.push(g);
+      }
+    } else if (k === "prism-x") {
+      const g = new THREE.ExtrudeGeometry(shapeOf(p.poly), { depth: (p.x[1] - p.x[0]) * S, bevelEnabled: false });
+      g.rotateY(-Math.PI / 2);
+      g.translate(p.x[1] * S, 0, 0);
+      geoms.push(g);
+    } else if (k === "rod") {
+      const r = (p.d / 2) * S;
+      if (p.axis === "w") for (const [x, y] of p.at ?? [[p.x, p.y]]) {
+        const g = new THREE.CylinderGeometry(r, r, (p.to - p.from) * S, 16);
+        g.rotateX(Math.PI / 2);
+        g.translate(x * S, (y + (p.dy ?? 0) / 2) * S, ((p.from + p.to) / 2) * S);
+        geoms.push(g);
+      }
+      else if (p.axis === "y") for (const w of p.w) {
+        const g = new THREE.CylinderGeometry(r, r, (p.to - p.from) * S, 20);
+        g.translate(p.x * S, ((p.from + p.to) / 2) * S, w * S);
+        geoms.push(g);
+      }
+      else for (const w of p.w) for (const y of p.ys ?? [p.y]) {
+        const len = Math.hypot(p.to - p.from, p.dy ?? 0);
+        const g = new THREE.CylinderGeometry(r, r, len * S, 12);
+        g.rotateZ(Math.atan2(p.dy ?? 0, p.to - p.from) - Math.PI / 2);
+        g.translate(((p.from + p.to) / 2) * S, (y + (p.dy ?? 0) / 2) * S, w * S);
+        geoms.push(g);
+      }
+    } else if (k === "revolve") {
+      for (const w of p.w) {
+        const g = new THREE.LatheGeometry(p.profile.map(([r, y]) => new THREE.Vector2(Math.max(r, 0.01) * S, y * S)), 14);
+        g.translate(p.x * S, 0, w * S);
+        geoms.push(g);
+      }
+    }
+    for (const g of geoms) {
+      const m = new THREE.Mesh(g, mat(p));
+      m.userData.id = p.id;
+      scene.add(m);
+      meshes.push(m);
+    }
+  }
+  const ray = new THREE.Raycaster();
+  renderer.domElement.addEventListener("click", (e) => {
+    const r = renderer.domElement.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+    const hit = ray.intersectObjects(meshes.filter((m) => m.visible))[0];
+    if (hit) select(hit.object.userData.id);
+  });
+  const resize = () => {
+    const { clientWidth: w, clientHeight: h } = host;
+    renderer.setSize(w, h);
+    camera.aspect = w / Math.max(h, 1);
+    camera.updateProjectionMatrix();
+  };
+  new ResizeObserver(resize).observe(host);
+  resize();
+  renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+  three = { meshes };
+}
+function highlight3D() {
+  if (!three) return;
+  const dim = state.layers.size > 0;
+  for (const m of three.meshes) {
+    const p = byId.get(m.userData.id);
+    const on = !dim || state.layers.has(p.role);
+    m.visible = !p.void && (on || !dim || p.role === "ground" || p.role === "concrete");
+    m.material.color.set(m.userData.id === state.selected ? "#ff7a00" : colourOf(p));
+    if (p.mat !== "igu-triple") { m.material.transparent = dim && !on; m.material.opacity = dim && !on ? 0.12 : 1; }
+  }
+}
+
+// ---------- controls ----------
+const wInput = document.getElementById("w"), wOut = document.getElementById("wout");
+wInput.min = Math.min(...parts.flatMap((p) => (p.runs ?? []).map((r) => r[0])).filter(Number.isFinite), 0);
+wInput.max = L;
+wInput.value = state.w;
+const setW = (w) => { state.w = +w; wInput.value = w; wOut.textContent = `w = ${(+w).toFixed(0)} mm`; if (state.view === "draft") { DRAFT.w = state.w; drawDraft(); } else drawSection(); };
+wInput.addEventListener("input", (e) => setW(e.target.value));
+for (const [label, w] of [["Opening", 900], ["Water corner", -450], ["Jamb wall", -700]]) {
+  const b = document.createElement("button");
+  b.textContent = label;
+  b.onclick = () => setW(w);
+  document.getElementById("cuts").appendChild(b);
+}
+for (const v of spec.views ?? []) {
+  const b = document.createElement("button");
+  b.textContent = v.id.replace(/^[A-Z]-/, "").replace(/-/g, " ");
+  b.onclick = () => { if (state.view === "draft") { DRAFT.win = { x: v.x, y: v.y }; drawDraft(); } else { showView("section"); fitView(v); } };
+  document.getElementById("views").appendChild(b);
+}
+for (const role of CONTROL) {
+  const l = document.createElement("label");
+  l.innerHTML = `<input type="checkbox"> <span class="sw" style="background:${ROLE[role]}"></span>${role}`;
+  l.querySelector("input").onchange = (e) => { e.target.checked ? state.layers.add(role) : state.layers.delete(role); if (state.view === "section" || state.view === "draft") drawDraft(); else drawSection(); highlight3D(); };
+  document.getElementById("layers").appendChild(l);
+}
+document.getElementById("finish").onchange = (e) => { state.finish = e.target.checked; drawSection(); highlight3D(); };
+function showView(v) {
+  state.view = v;
+  document.querySelectorAll("[data-tab]").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === v));
+  svg.hidden = v === "3d" || v === "draft" || v === "section";
+  document.getElementById("draft").hidden = v !== "draft" && v !== "section";
+  DRAFT.mode = v;
+  document.getElementById("three").hidden = v !== "3d";
+  document.querySelectorAll(".for-section").forEach((el) => (el.hidden = v === "thermal"));
+  document.getElementById("thermal-ui").hidden = v !== "thermal";
+  // 3D: the landing's rendered section-box axo (same engine, same drawing standard), embedded with its own controls
+  if (v === "3d" && !document.getElementById("axo")) document.getElementById("three").innerHTML = '<iframe id="axo" src="landing.html?embed=hero" title="Rendered section-box axo of the threshold to garden" style="border:0;width:100%;height:100%;display:block"></iframe>';
+  document.querySelector(".stage").classList.toggle("draft-on", v === "draft" || v === "section");
+  if (v === "thermal" && th.res) setHud(th.res.fRsi, `lowest interior f_Rsi · ${CASES[th.case].label.toLowerCase()} · limit 0.70`, 2, th.res.fRsi < 0.7);
+  else if (v !== "thermal") setHud(state.carbonTotal ?? 0, "kgCO₂e per m of opening, A1 to A3");
+  if (v === "draft" || v === "section") { DRAFT.w = state.w; drawDraft(); }
+  if (v === "thermal") drawThermal(); else document.getElementById("legend").hidden = true;
+  highlight3D();
+}
+document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => showView(b.dataset.tab)));
+svg.addEventListener("click", () => { state.selected = null; info.innerHTML = '<p class="hint">Click a part to see what it is, why it is there and where it comes from.</p>'; if (state.view === "section") drawSection(); });
+
+setW(state.w);
+fitView(spec.views?.find((v) => v.id === "S-section") ?? { x: [-8000, 2500], y: [-1700, 3800] });
+carbon();
+document.getElementById("partcount").textContent = `${parts.length} parts`;
+setHud(state.carbonTotal, "kgCO₂e per m of opening, A1 to A3");
+document.getElementById("theme").onclick = (e) => {
+  const root = document.documentElement;
+  const dark = root.dataset.theme === "dark" || (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  root.dataset.theme = dark ? "light" : "dark";
+  e.currentTarget.textContent = dark ? "Dark" : "Light";
+  if (state.view === "section") drawSection();
+};
+
+// Thermal screening core (THERM-style), shared by the viewer (thermal.js, inlined) and the landing build (node).
+// 2D steady conduction on a square grid over a crop of the section at plane c.w. Crop edges adiabatic (as THERM cut
+// lines); exterior / interior air through surface film resistances; enclosed air as equivalent cavities.
+// Not a certified THERM run: the same geometry should be exported to THERM for the final check.
+//   order: parts in draw order; mats: material table (k); sectionShapes(p, w): the section of a part at w
+//   c: { w, x: [x0, x1], y: [y0, y1] } in mm; bc: { Te, Ti, Rse, Rsi }; dx: cell size in mm
+function solveCase({ order, mats, sectionShapes, c, bc, dx }) {
+  const kOf = (p) => {
+    if (p.kEq) return p.kEq;
+    const k = mats[p.mat]?.k;
+    if (!(k > 0)) return NaN;
+    return p.fill && p.fill < 1 ? k * p.fill + 0.03 * (1 - p.fill) : k;
+  };
+  const pip = (poly, x, y) => {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const [xi, yi] = poly[i], [xj, yj] = poly[j];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  };
+  const nx = Math.round((c.x[1] - c.x[0]) / dx), ny = Math.round((c.y[1] - c.y[0]) / dx), N = nx * ny;
+  const K = new Float64Array(N).fill(NaN), owner = new Int32Array(N).fill(-1);
+  const cx = (i) => c.x[0] + (i + 0.5) * dx, cy = (j) => c.y[0] + (j + 0.5) * dx;   // j = 0 at the bottom
+  const idx = (i, j) => j * nx + i;
+  const missing = new Set();
+  order.forEach((p, pi) => {
+    const air = p.void || p.role === "planting" || p.role === "furniture";
+    const k = air ? NaN : kOf(p);
+    if (!air && !(k > 0)) { if (p.type !== "virtual") missing.add(p.mat || p.id); return; }
+    for (const s of sectionShapes(p, c.w)) {
+      if (s.circle) {
+        const [x0, y0, r, ri] = s.circle;
+        for (let j = Math.max(0, Math.floor((y0 - r - c.y[0]) / dx)); j <= Math.min(ny - 1, Math.ceil((y0 + r - c.y[0]) / dx)); j++)
+          for (let i = Math.max(0, Math.floor((x0 - r - c.x[0]) / dx)); i <= Math.min(nx - 1, Math.ceil((x0 + r - c.x[0]) / dx)); i++) {
+            const d = Math.hypot(cx(i) - x0, cy(j) - y0);
+            if (d <= r) { K[idx(i, j)] = d < ri ? NaN : k; owner[idx(i, j)] = d < ri ? -1 : pi; }
+          }
+        continue;
+      }
+      if (p.type === "sheet" && p.t < 1.5 * dx && !air) {
+        // Thin sheet: keep its in-plane conductance (k·t) by blending it into the cells along its centreline.
+        for (let s2 = 0; s2 < p.path.length - 1; s2++) {
+          const a = p.path[s2], b = p.path[s2 + 1], len = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.ceil(len / (dx / 3));
+          for (let t = 0; t <= n; t++) {
+            const x = a[0] + ((b[0] - a[0]) * t) / n, y = a[1] + ((b[1] - a[1]) * t) / n;
+            const i = Math.floor((x - c.x[0]) / dx), j = Math.floor((y - c.y[0]) / dx);
+            if (i < 0 || j < 0 || i >= nx || j >= ny) continue;
+            const q = idx(i, j);
+            if (owner[q] === pi) continue;
+            const bg = Number.isNaN(K[q]) ? 0.026 : K[q];
+            K[q] = (k * p.t + bg * (dx - p.t)) / dx;
+            owner[q] = pi;
+          }
+        }
+        continue;
+      }
+      const poly = s.poly, xs = poly.map((v) => v[0]), ys = poly.map((v) => v[1]);
+      for (let j = Math.max(0, Math.floor((Math.min(...ys) - c.y[0]) / dx)); j <= Math.min(ny - 1, Math.ceil((Math.max(...ys) - c.y[0]) / dx)); j++)
+        for (let i = Math.max(0, Math.floor((Math.min(...xs) - c.x[0]) / dx)); i <= Math.min(nx - 1, Math.ceil((Math.max(...xs) - c.x[0]) / dx)); i++)
+          if (pip(poly, cx(i), cy(j))) { K[idx(i, j)] = k; owner[idx(i, j)] = air ? -1 : pi; }
+    }
+  });
+  // Air regions: exterior (touches the left edge, or the top / bottom edge at x < 0), interior (right edge), else cavity.
+  const region = new Int32Array(N);                   // 0 solid, 1 exterior air, 2 interior air, 3 cavity
+  const comp = new Int32Array(N).fill(-1);
+  const cavK = [];
+  for (let s = 0, nComp = 0; s < N; s++) {
+    if (!Number.isNaN(K[s]) || comp[s] >= 0) continue;
+    const stack = [s], cells = [], edgeX = [];
+    comp[s] = nComp;
+    let left = false, right = false, minY = Infinity, maxY = -Infinity, minX = Infinity, maxX = -Infinity;
+    while (stack.length) {
+      const q = stack.pop(), i = q % nx, j = (q / nx) | 0;
+      cells.push(q);
+      if (i === 0) left = true;
+      if (i === nx - 1) right = true;
+      if (j === 0 || j === ny - 1) edgeX.push(cx(i));
+      minY = Math.min(minY, cy(j)); maxY = Math.max(maxY, cy(j)); minX = Math.min(minX, cx(i)); maxX = Math.max(maxX, cx(i));
+      for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const a = i + di, b = j + dj;
+        if (a < 0 || b < 0 || a >= nx || b >= ny) continue;
+        const r = idx(a, b);
+        if (Number.isNaN(K[r]) && comp[r] < 0) { comp[r] = nComp; stack.push(r); }
+      }
+    }
+    const mean = edgeX.length ? edgeX.reduce((u, v) => u + v, 0) / edgeX.length : 0;
+    // narrow gaps cut by the crop (IGU cavities running off the top) stay cavities
+    const kind = left ? 1 : right ? 2 : maxX - minX < 40 ? 3 : edgeX.length ? (mean < 0 ? 1 : 2) : 3;
+    // Enclosed cavities: tall narrow gaps between lites = argon gap (Ug ≈ 0.55 → k_eq ≈ 0.017); others ≈ 0.04.
+    const kc = maxX - minX < 40 && maxY - minY > 150 ? 0.0173 : 0.04;
+    for (const q of cells) { region[q] = kind; if (kind === 3) K[q] = kc; }
+    if (kind === 3) cavK.push(kc);
+    nComp++;
+  }
+  // Unknowns: solid + cavity cells; conductances between neighbours, film conductances to the air.
+  const id = new Int32Array(N).fill(-1);
+  let M = 0;
+  for (let q = 0; q < N; q++) if (region[q] === 0 || region[q] === 3) id[q] = M++;
+  const diag = new Float64Array(M), b = new Float64Array(M), ptr = new Int32Array(M + 1);
+  const nb = [], ng = [], faces = [];
+  for (let q = 0, m = 0; q < N; q++) {
+    if (id[q] < 0) continue;
+    const i = q % nx, j = (q / nx) | 0, k = K[q];
+    ptr[m] = nb.length;
+    for (const [di, dj, side] of [[1, 0, "r"], [-1, 0, "l"], [0, 1, "t"], [0, -1, "b"]]) {
+      const a = i + di, bj = j + dj;
+      if (a < 0 || bj < 0 || a >= nx || bj >= ny) continue;          // adiabatic cut edge
+      const r = idx(a, bj);
+      if (id[r] >= 0) {
+        const G = 1 / (1 / (2 * k) + 1 / (2 * K[r]));
+        nb.push(id[r]); ng.push(G); diag[m] += G;
+      } else {
+        const ext = region[r] === 1, Rs = ext ? bc.Rse : bc.Rsi;
+        const G = 1 / (1 / (2 * k) + Rs / (dx / 1000));
+        diag[m] += G; b[m] += G * (ext ? bc.Te : bc.Ti);
+        faces.push({ q, side, G, ext });
+      }
+    }
+    m++;
+    ptr[m] = nb.length;
+  }
+  // Jacobi-preconditioned conjugate gradient.
+  const T = new Float64Array(M).fill((bc.Te + bc.Ti) / 2);
+  const Ax = (x, out) => { for (let m = 0; m < M; m++) { let s = diag[m] * x[m]; for (let e = ptr[m]; e < ptr[m + 1]; e++) s -= ng[e] * x[nb[e]]; out[m] = s; } };
+  const r = new Float64Array(M), z = new Float64Array(M), p = new Float64Array(M), Ap = new Float64Array(M);
+  Ax(T, Ap);
+  let rz = 0, bn = 0;
+  for (let m = 0; m < M; m++) { r[m] = b[m] - Ap[m]; z[m] = r[m] / diag[m]; p[m] = z[m]; rz += r[m] * z[m]; bn += b[m] * b[m]; }
+  bn = Math.sqrt(bn);
+  let it = 0;
+  for (; it < 20000; it++) {
+    Ax(p, Ap);
+    let pAp = 0;
+    for (let m = 0; m < M; m++) pAp += p[m] * Ap[m];
+    const alpha = rz / pAp;
+    let rn = 0;
+    for (let m = 0; m < M; m++) { T[m] += alpha * p[m]; r[m] -= alpha * Ap[m]; rn += r[m] * r[m]; }
+    if (Math.sqrt(rn) / bn < 1e-9) break;
+    let rz2 = 0;
+    for (let m = 0; m < M; m++) { z[m] = r[m] / diag[m]; rz2 += r[m] * z[m]; }
+    const beta = rz2 / rz;
+    rz = rz2;
+    for (let m = 0; m < M; m++) p[m] = z[m] + beta * p[m];
+  }
+  const Tc = new Float64Array(N).fill(NaN);
+  for (let q = 0; q < N; q++) if (id[q] >= 0) Tc[q] = T[id[q]];
+  // Surface results: heat flow, interior surface temperatures, U-factor tags.
+  let Qi = 0, Qe = 0, tsMin = { T: Infinity };
+  const groups = {};
+  const TAG = { D: "Door frame + glass", F: "Floor / slab edge", H: "Head / floor band", Z: "Jamb wall", U: "Upper floor", T: "Threshold" };
+  for (const f of faces) {
+    const t = Tc[f.q], q = f.G * ((f.ext ? bc.Te : bc.Ti) - t);   // W/m into the cell
+    if (f.ext) { Qe -= q; continue; }
+    Qi += q;
+    const ts = bc.Ti - q * (bc.Rsi / (dx / 1000));
+    const i = f.q % nx, j = (f.q / nx) | 0;
+    const horiz = f.side === "t" || f.side === "b";
+    const fx = cx(i) + (f.side === "r" ? dx / 2 : f.side === "l" ? -dx / 2 : 0), fy = cy(j) + (f.side === "t" ? dx / 2 : f.side === "b" ? -dx / 2 : 0);
+    const part = owner[f.q] >= 0 ? order[owner[f.q]] : null;
+    if (ts < tsMin.T) tsMin = { T: ts, x: fx, y: fy, part: part?.id ?? "cavity" };
+    const tag = part ? TAG[part.junction] ?? "Other" : "Cavity";
+    const g = (groups[tag] ??= { Q: 0, xs: [], ys: [] });
+    g.Q += q;
+    (horiz ? g.xs : g.ys).push(horiz ? fx : fy);
+  }
+  let Tmin = Infinity, Tmax = -Infinity;
+  for (const v of Tc) if (!Number.isNaN(v)) { Tmin = Math.min(Tmin, v); Tmax = Math.max(Tmax, v); }
+  return { c, bc, dx, nx, ny, K, Tc, it, M, Qi, Qe, tsMin, groups, Tmin, Tmax, fRsi: (tsMin.T - bc.Te) / (bc.Ti - bc.Te), missing: [...missing], cavK };
+}
+
+// =====================================================================================================================
+// Thermal (screening, THERM-style results). Inlined after viewer.js in the same module, so it shares its helpers.
+// 2D steady conduction on a square grid over a crop of the section at plane w. Crop edges adiabatic (as THERM cut
+// lines); exterior / interior air through surface film resistances; enclosed air as equivalent cavities.
+// Not a certified THERM run: the same geometry should be exported to THERM for the final check.
+// =====================================================================================================================
+const CASES = {
+  threshold: { label: "Threshold (opening, w 900)", w: 900, x: [-1200, 1800], y: [-1300, 450] },
+  head: { label: "Floor-band head (w 900)", w: 900, x: [-850, 1000], y: [2450, 3700] },
+  jamb: { label: "Jamb wall base (w −700)", w: -700, x: [-1200, 1800], y: [-1300, 900] },
+};
+const BCS = {
+  iso: { label: "ISO 13788 condensation, −7 / 20 °C, Rsi 0.25", Te: -7, Ti: 20, Rse: 0.04, Rsi: 0.25 },
+  nfrc: { label: "NFRC 100 U-factor, −18 / 21 °C, hi 7.7", Te: -18, Ti: 21, Rse: 1 / 26, Rsi: 1 / 7.7 },
+};
+const th = { case: "threshold", bc: "iso", dx: 5, mode: "flood", res: null };
+
+// point in polygon (also used by draft.js)
+function pip(poly, x, y) {
+  let inside = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+// The solver itself lives in thermal-core.mjs (shared with the landing build).
+function solveThermal() {
+  th.res = solveCase({ order: ORDER, mats, sectionShapes, c: CASES[th.case], bc: BCS[th.bc], dx: th.dx });
+}
+
+// Colour map and drawing. A perceptually uniform, greyscale-safe sequential map (inferno, polynomial fit) on the fixed
+// span of the boundary conditions, in 2 degC bands (research 17 §6: rainbow maps are not used).
+function inferno(u) {
+  const c = [[0.0002189, 0.001651, -0.01948], [0.1065134, 0.5639564, 3.9327124], [11.6024931, -3.972854, -15.9423941], [-41.7039961, 17.4363989, 44.3541452], [77.1629357, -33.4023589, -81.8073093], [-71.3194282, 32.6260643, 73.2095199], [25.1311262, -12.242669, -23.070325]];
+  u = Math.min(1, Math.max(0, u));
+  return [0, 1, 2].map((k) => Math.round(255 * Math.min(1, Math.max(0, c.reduceRight((acc, ci) => acc * u + ci[k], 0)))));
+}
+const band2 = (t, bc) => 0.1 + 0.9 * ((Math.floor(t / 2) * 2 + 1 - bc.Te) / (bc.Ti - bc.Te));
+const critT = (bc) => bc.Te + 0.7 * (bc.Ti - bc.Te);   // inside surface temperature at the PHI hygiene line fRsi 0.70
+function fluxAt(R, i, j) {
+  const { nx, ny, Tc, K, dx } = R, T0 = Tc[j * nx + i];
+  if (Number.isNaN(T0)) return null;
+  const g = (a, b) => (a >= 0 && b >= 0 && a < nx && b < ny && !Number.isNaN(Tc[b * nx + a]) ? Tc[b * nx + a] : null);
+  const tr = g(i + 1, j), tl = g(i - 1, j), tt = g(i, j + 1), tb = g(i, j - 1);
+  const gx = tr != null && tl != null ? (tr - tl) / (2 * dx) : tr != null ? (tr - T0) / dx : tl != null ? (T0 - tl) / dx : 0;
+  const gy = tt != null && tb != null ? (tt - tb) / (2 * dx) : tt != null ? (tt - T0) / dx : tb != null ? (T0 - tb) / dx : 0;
+  return [-K[j * nx + i] * gx * 1000, -K[j * nx + i] * gy * 1000];   // W/m²
+}
+function svgPath(d, stroke, opacity, width = 0.8) {
+  const el = document.createElementNS(NS, "path");
+  el.setAttribute("d", d); el.setAttribute("fill", "none"); el.setAttribute("stroke", stroke);
+  el.setAttribute("stroke-opacity", opacity); el.setAttribute("stroke-width", width); el.setAttribute("vector-effect", "non-scaling-stroke");
+  svg.appendChild(el);
+}
+function drawThermal() {
+  svg.replaceChildren();
+  const R = th.res;
+  thermalPanel();
+  if (!R) return;
+  const { c, nx, ny, Tc, bc } = R;
+  const cv = document.createElement("canvas");
+  cv.width = nx; cv.height = ny;
+  const g = cv.getContext("2d"), img = g.createImageData(nx, ny);
+  const fluxMode = th.mode === "fluxflood", plain = th.mode === "lines" || th.mode === "vectors";
+  let fmax = 0;
+  const flux = fluxMode ? new Float64Array(nx * ny) : null;
+  if (flux) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+    const f = fluxAt(R, i, j), m = f ? Math.hypot(f[0], f[1]) : NaN;
+    flux[j * nx + i] = m;
+    if (m > fmax) fmax = m;
+  }
+  for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+    const q = j * nx + i, o = ((ny - 1 - j) * nx + i) * 4, t = Tc[q];
+    if (Number.isNaN(t)) continue;
+    const u = fluxMode ? Math.log10(1 + flux[q]) / Math.log10(1 + fmax) : band2(t, bc);
+    img.data.set([...(plain ? [236, 234, 228] : inferno(u)), 255], o);
+  }
+  g.putImageData(img, 0, 0);
+  const im = document.createElementNS(NS, "image");
+  im.setAttribute("href", cv.toDataURL());
+  im.setAttribute("x", c.x[0]); im.setAttribute("y", -c.y[1]); im.setAttribute("width", c.x[1] - c.x[0]); im.setAttribute("height", c.y[1] - c.y[0]);
+  im.setAttribute("preserveAspectRatio", "none");
+  im.style.imageRendering = "pixelated";
+  svg.appendChild(im);
+  // Everything below is clipped to the solved area: its edges are adiabatic cut lines, framed in grey.
+  const clipId = "thclip";
+  const defs = document.createElementNS(NS, "defs");
+  defs.innerHTML = `<clipPath id="${clipId}"><rect x="${c.x[0]}" y="${-c.y[1]}" width="${c.x[1] - c.x[0]}" height="${c.y[1] - c.y[0]}"/></clipPath>`;
+  svg.appendChild(defs);
+  const frame = document.createElementNS(NS, "rect");
+  Object.entries({ x: c.x[0], y: -c.y[1], width: c.x[1] - c.x[0], height: c.y[1] - c.y[0], fill: "none", stroke: "#8b939c", "stroke-width": 1, "vector-effect": "non-scaling-stroke" }).forEach(([k, v]) => frame.setAttribute(k, v));
+  svg.appendChild(frame);
+  const clipped = document.createElementNS(NS, "g");
+  clipped.setAttribute("clip-path", `url(#${clipId})`);
+  svg.appendChild(clipped);
+  const into = (el) => clipped.appendChild(el);
+  // Part outlines (click to inspect).
+  for (const p of ORDER) {
+    if (p.void || p.role === "planting" || p.role === "furniture") continue;
+    for (const s of sectionShapes(p, c.w)) {
+      if (!s.poly) continue;
+      const el = document.createElementNS(NS, "polygon");
+      el.setAttribute("points", s.poly.map(([x, y]) => `${x},${-y}`).join(" "));
+      el.setAttribute("fill", "transparent"); el.setAttribute("stroke", "#000"); el.setAttribute("stroke-opacity", 0.35);
+      el.setAttribute("stroke-width", 0.6); el.setAttribute("vector-effect", "non-scaling-stroke");
+      el.addEventListener("click", (e) => { e.stopPropagation(); select(p.id); });
+      into(el);
+    }
+  }
+  const X = (i) => c.x[0] + (i + 0.5) * R.dx, Y = (j) => -(c.y[0] + (j + 0.5) * R.dx);
+  // Isotherms (marching squares on the cell centres): 0.5 px every 2 °C, 1 px every 10 °C, and the special isotherms
+  // 0 °C and the fRsi 0.70 temperature as solid light lines.
+  if (th.mode === "flood" || th.mode === "lines") {
+    const v = (i, j) => Tc[j * nx + i];
+    const contour = (level) => {
+      let d = "";
+      for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
+        const a = v(i, j), b2 = v(i + 1, j), cc = v(i + 1, j + 1), dd = v(i, j + 1);
+        if (Number.isNaN(a) || Number.isNaN(b2) || Number.isNaN(cc) || Number.isNaN(dd)) continue;
+        const pts = [];
+        const edge = (t0, t1, x0, y0, x1, y1) => { if ((t0 - level) * (t1 - level) < 0) { const f = (level - t0) / (t1 - t0); pts.push([x0 + (x1 - x0) * f, y0 + (y1 - y0) * f]); } };
+        edge(a, b2, X(i), Y(j), X(i + 1), Y(j));
+        edge(b2, cc, X(i + 1), Y(j), X(i + 1), Y(j + 1));
+        edge(cc, dd, X(i + 1), Y(j + 1), X(i), Y(j + 1));
+        edge(dd, a, X(i), Y(j + 1), X(i), Y(j));
+        if (pts.length >= 2) d += `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}L${pts[1][0].toFixed(1)} ${pts[1][1].toFixed(1)}`;
+        if (pts.length === 4) d += `M${pts[2][0].toFixed(1)} ${pts[2][1].toFixed(1)}L${pts[3][0].toFixed(1)} ${pts[3][1].toFixed(1)}`;
+      }
+      return d;
+    };
+    let fine = "", major = "";
+    for (let level = Math.ceil(bc.Te / 2) * 2; level <= bc.Ti; level += 2) { const d = contour(level); if (level % 10 === 0) major += d; else fine += d; }
+    const ink = th.mode === "lines" ? "#1E1E1E" : "#111";
+    svgPath(fine, ink, th.mode === "lines" ? 0.8 : 0.4, 0.5); into(svg.lastChild);
+    svgPath(major, ink, th.mode === "lines" ? 0.95 : 0.6, 1); into(svg.lastChild);
+    const special = th.mode === "lines" ? "#1E1E1E" : "#f6f5f0", c0 = contour(0), cc = contour(critT(bc));
+    svgPath(c0, special, 1, 0.75); into(svg.lastChild);
+    svgPath(cc, special, 1, 1.5); into(svg.lastChild);
+    // labels at the first point of each special isotherm (model mm, y down in the svg)
+    const lab = (d, text) => { const m = /M(-?[\d.]+) (-?[\d.]+)/.exec(d); if (!m) return; const el = document.createElementNS(NS, "text"); el.textContent = text;
+      Object.entries({ x: +m[1] + 6, y: +m[2] - 6, "font-size": (c.x[1] - c.x[0]) / 95, fill: special, "font-family": "Geist Mono, monospace", "paint-order": "stroke", stroke: th.mode === "lines" ? "#F4F2EC" : "#111", "stroke-width": (c.x[1] - c.x[0]) / 600 }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); };
+    lab(cc, `${critT(bc).toFixed(1)} °C · fRsi 0.70`);
+    lab(c0, "0 °C");
+  }
+  // Heat-flux vectors (length on a log scale).
+  if (th.mode === "vectors") {
+    const step = Math.max(2, Math.round(nx / 70)), vs = [];
+    let maxm = 0, d = "";
+    for (let j = 0; j < ny; j += step) for (let i = 0; i < nx; i += step) {
+      const f = fluxAt(R, i, j);
+      if (!f) continue;
+      const m = Math.hypot(f[0], f[1]);
+      if (m > 1e-6) { vs.push([i, j, f, m]); maxm = Math.max(maxm, m); }
+    }
+    const Lmax = step * R.dx * 0.9;
+    for (const [i, j, [fx, fy], m] of vs) {
+      const L = (Lmax * Math.log10(1 + m)) / Math.log10(1 + maxm), ux = fx / m, uy = fy / m;
+      const x0 = X(i), y0 = -Y(j), x1 = x0 + ux * L, y1 = y0 + uy * L, h = L * 0.3;
+      d += `M${x0} ${-y0}L${x1} ${-y1}M${x1} ${-y1}L${x1 - ux * h - uy * h * 0.6} ${-(y1 - uy * h + ux * h * 0.6)}M${x1} ${-y1}L${x1 - ux * h + uy * h * 0.6} ${-(y1 - uy * h - ux * h * 0.6)}`;
+    }
+    svgPath(d, "#1f4fbf", 0.9, 1);
+    into(svg.lastChild);
+  }
+  { const el = document.createElementNS(NS, "text"); el.textContent = "EXTERIOR AIR · Rse";
+    Object.entries({ x: c.x[0] + (c.x[1] - c.x[0]) * 0.02, y: -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "font-size": (c.x[1] - c.x[0]) / 95, fill: "#5b5a55", "font-family": "Geist Mono, monospace" }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); }
+  // Coldest interior surface.
+  const m = R.tsMin, rr = (c.x[1] - c.x[0]) / 110, mark = document.createElementNS(NS, "g");
+  mark.innerHTML = `<circle cx="${m.x}" cy="${-m.y}" r="${rr}" fill="none" stroke="#fff" stroke-width="4" vector-effect="non-scaling-stroke"/>` +
+    `<circle cx="${m.x}" cy="${-m.y}" r="${rr}" fill="none" stroke="#000" stroke-width="1.5" vector-effect="non-scaling-stroke"/>`;
+  svg.appendChild(mark);
+}
+function thermalPanel() {
+  const R = th.res, legend = document.getElementById("legend");
+  if (!R || state.view !== "thermal") { legend.hidden = true; return; }
+  const flux = th.mode === "fluxflood";
+  legend.hidden = th.mode === "lines" || th.mode === "vectors";
+  if (flux) {
+    const stops = Array.from({ length: 11 }, (_, i) => `rgb(${inferno(i / 10).join(",")}) ${i * 10}%`).join(",");
+    legend.innerHTML = `<div class="lg" style="background:linear-gradient(to right,${stops})"></div><div class="lgl"><span>low</span><span>heat flux |q| (log)</span><span>high</span></div>`;
+  } else {
+    // vertical stepped legend: one swatch per 2 °C band, ticks every 5 °C, the special isotherms named
+    const { Te, Ti } = R.bc, top = Math.floor(Ti / 2) * 2, rows = [], at = (T) => ((Ti - T) / (Ti - Te)) * 100;
+    for (let T = top; T >= Te - 1; T -= 2) rows.push(`<i style="background:rgb(${inferno(band2(T, R.bc)).join(",")})"></i>`);
+    legend.innerHTML = `<div class="vleg"><div class="steps">${rows.join("")}</div><div class="marks">`
+      + [20, 15, 10, 5, 0, -5, -10, -15].filter((T) => T <= Ti && T >= Te).map((T) => `<span style="top:${at(T)}%">${T} °C</span>`).join("")
+      + `<span class="sp" style="top:${at(critT(R.bc))}%">${critT(R.bc).toFixed(1)} °C · f<sub>Rsi</sub> 0.70</span><span class="sp" style="top:${at(0)}%">0 °C</span></div></div>`
+      + `<p class="lcap">Computed (screening), 2 °C bands. ${Te} / ${Ti} °C. Lowest f<sub>Rsi</sub> ${R.fRsi.toFixed(2)}.</p>`;
+  }
+  const dT = R.bc.Ti - R.bc.Te;
+  const span = (a) => (a.length ? (Math.max(...a) - Math.min(...a) + R.dx) / 1000 : 0);
+  const rows = Object.entries(R.groups).sort((a, b) => b[1].Q - a[1].Q).map(([tag, g]) => {
+    const proj = Math.max(span(g.ys), span(g.xs));
+    return `<tr><td>${tag}</td><td>${(proj * 1000).toFixed(0)}</td><td>${g.Q.toFixed(2)}</td><td>${proj ? (g.Q / dT / proj).toFixed(2) : "–"}</td></tr>`;
+  }).join("");
+  const ok = R.fRsi >= 0.7;
+  document.getElementById("thermal-out").innerHTML = `
+    <div class="big">${R.fRsi.toFixed(2)} <small>f<sub>Rsi</sub> at the coldest interior surface: ${R.tsMin.T.toFixed(1)} °C on <code>${R.tsMin.part}</code> (circled). ${ok ? "Meets" : "<b>Below</b>"} the PHI 0.70 limit.</small></div>
+    <table class="t"><tr><th>Boundary conditions</th><td colspan="3">${R.bc.label}, Rse ${R.bc.Rse.toFixed(3)}</td></tr>
+      <tr><th>Heat flow, interior</th><td colspan="3">${R.Qi.toFixed(2)} W/m, L<sub>2D</sub> ${(R.Qi / dT).toFixed(3)} W/(m·K)</td></tr>
+      <tr><th>Heat flow, exterior</th><td colspan="3">${R.Qe.toFixed(2)} W/m (balance ${((Math.abs(R.Qi - R.Qe) / Math.max(R.Qi, 1e-9)) * 100).toFixed(2)} %)</td></tr>
+      <tr><th>T min / max</th><td colspan="3">${R.Tmin.toFixed(1)} / ${R.Tmax.toFixed(1)} °C</td></tr></table>
+    <table class="t"><tr><th>U-factor tag</th><th>proj. mm</th><th>Q W/m</th><th>U W/m²K</th></tr>${rows}</table>
+    <p class="note">Grid ${R.dx} mm (${R.nx} × ${R.ny}, ${R.M} unknowns, ${R.it} CG iterations). Crop edges adiabatic. ${R.cavK.length} enclosed cavities
+    (argon gaps 0.017, others 0.04 W/m·K). Maker parts use screening equivalents (kEq).${R.missing.length ? " No conductivity: " + R.missing.join(", ") + "." : ""}
+    U-factor tags are interior heat flow ÷ ΔT ÷ projected length of that tag's interior surface (approximate). Screening only: export to THERM for the certified result.</p>`;
+}
+document.getElementById("th-run").onclick = () => {
+  th.case = document.getElementById("th-case").value;
+  th.bc = document.getElementById("th-bc").value;
+  th.dx = +document.getElementById("th-dx").value;
+  document.getElementById("thermal-out").innerHTML = '<p class="hint">Solving…</p>';
+  setTimeout(() => { solveThermal(); fitView(CASES[th.case]); drawThermal(); setHud(th.res.fRsi, "lowest interior f_Rsi, limit 0.70", 2, th.res.fRsi < 0.7); }, 30);
+};
+for (const [k, v] of Object.entries(CASES)) document.getElementById("th-case").add(new Option(v.label, k));
+for (const [k, v] of Object.entries(BCS)) document.getElementById("th-bc").add(new Option(v.label, k));
+document.querySelectorAll("input[name=th-mode]").forEach((r) => (r.onchange = (e) => { th.mode = e.target.value; drawThermal(); }));
+
+// =====================================================================================================================
+// Draft view (prototype of the visual direction, section 2): the real section drawn as a detail sheet.
+// - Framed drawing at true scale (scale bar = real mm); schedule column outside the frame; leaders horizontal from the
+//   part, kinked only at the frame edge, ordered top to bottom so they never cross; text at a fixed screen size.
+// - Hatches by material class; solid ink only for parts thinner than 3 mm (membranes, flashings, pans, tapes);
+//   maker profiles (door parts) as outline + light tint; glass as hairlines; cut lines heavy, hatch lines light.
+// Shares helpers with viewer.js (inlined in the same module).
+// =====================================================================================================================
+const DRAFT = { win: { x: [-200, 290], y: [-215, 115] }, sel: null, w: 900 };
+const draftHost = document.getElementById("draft");
+const PAPER = "#F4F2EC", INK = "#1B1B1A", SIGNAL = "#E0482B", MUTE = "#5b5a55", RULE = "#D9D5CB";
+const hatchOf = (p) => {
+  const m = p.mat ?? "";
+  if (p.nocarbon || p.kEq) return "maker";
+  return /concrete|parge|polymer/.test(m) ? "conc" : /eps|pu-struct|cork|comfortboard|cellular|woodfibre/.test(m) ? "rigid" : /comfortbatt|cellulose/.test(m) ? "batt"
+    : /glulam|softwood|plywood|cedar/.test(m) ? "timber" : /aggregate/.test(m) ? "gravel" : /reclaimed-stone|paver/.test(m) ? "stone" : /^soil/.test(m) ? "earth"
+    : /igu|glass/.test(m) ? "glass" : /gypsum/.test(m) ? "gyp" : /stainless|aluminium|steel|membrane|epdm|ldpe|hdpe|butyl|geotextile/.test(m) ? "ink" : "plain";
+};
+const thinness = (poly) => {
+  // ≈ thickness of a thin strip: 2 · area / perimeter
+  let a = 0, per = 0;
+  poly.forEach(([x, y], i) => { const [x2, y2] = poly[(i + 1) % poly.length]; a += x * y2 - x2 * y; per += Math.hypot(x2 - x, y2 - y); });
+  return (2 * Math.abs(a / 2)) / Math.max(per, 1e-9);
+};
+const shortName = (p) => p.name.replace(/\s*\(.*?\)\s*/g, " ").split(/[,;:]/)[0].replace(/\s+/g, " ").trim().toUpperCase().replace(/^(ENGINEERED|SELF-ADHERED|PERFORATED|EXPANDED|MACHINED|THERMALLY BROKEN|DRAINED) /, "").slice(0, Math.floor((DRAFT.colChars ?? 30)));
+const DEFS = `<defs>
+<pattern id="d-timber" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="${INK}" stroke-width=".4"/><line x1="0" y1="0" x2="8" y2="0" stroke="${INK}" stroke-width=".4"/></pattern>
+<pattern id="d-rigid" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#E4E4E7"/><line x1="0" y1="0" x2="0" y2="6" stroke="${INK}" stroke-width=".35"/><line x1="3" y1="0" x2="3" y2="6" stroke="${INK}" stroke-width=".35" stroke-dasharray=".6 1.2"/></pattern>
+<pattern id="d-batt" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0 6 Q3 0 6 6 T12 6" fill="none" stroke="${INK}" stroke-width=".4"/></pattern>
+<pattern id="d-conc" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".7" fill="${INK}"/><path d="M8 7 l2 -3 l2 3z" fill="none" stroke="${INK}" stroke-width=".35"/><circle cx="11" cy="11" r=".5" fill="${INK}"/></pattern>
+<pattern id="d-gravel" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="none" stroke="${INK}" stroke-width=".35"/><circle cx="9" cy="8" r="1.5" fill="none" stroke="${INK}" stroke-width=".35"/></pattern>
+<pattern id="d-stone" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#C9C7C2"/><path d="M2 3 l3 1 M9 2 l2 3 M5 9 l3 -1 M11 10 l1 3 M1 12 l3 1" stroke="${INK}" stroke-width=".35"/></pattern>
+<pattern id="d-earth" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="6" y2="0" stroke="${INK}" stroke-width=".5"/><line x1="8" y1="8" x2="12" y2="8" stroke="${INK}" stroke-width=".5"/></pattern>
+<pattern id="d-gyp" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".4" fill="${INK}"/></pattern>
+<pattern id="d-maker" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="6" height="6" fill="#E6E2D8"/><line x1="0" y1="0" x2="0" y2="6" stroke="#B9B4A8" stroke-width=".35"/></pattern>
+</defs>`;
+const fillOf = (h, thin) => (thin || h === "ink" ? INK : h === "glass" || h === "plain" ? PAPER : `url(#d-${h})`);
+
+function drawDraft() {
+  const box = draftHost.getBoundingClientRect();
+  const W = Math.max(box.width, 320), H = Math.max(box.height, 300);
+  const COL = Math.min(250, Math.max(190, W * 0.34)), PAD = 28, FW = W - COL - PAD * 2 - 16, FH = H - PAD * 2 - 44;
+  // keep the window's aspect equal to the frame's (no distortion), centred on the requested window
+  const win = DRAFT.win, cxm = (win.x[0] + win.x[1]) / 2, cym = (win.y[0] + win.y[1]) / 2;
+  let ww = win.x[1] - win.x[0], wh = win.y[1] - win.y[0];
+  if (ww / wh > FW / FH) wh = (ww * FH) / FW; else ww = (wh * FW) / FH;
+  const X0 = cxm - ww / 2, Y1 = cym + wh / 2, s = FW / ww;          // px per mm
+  const px = (x, y) => [PAD + (x - X0) * s, PAD + (Y1 - y) * s];
+  let geo = "", under = "";
+  const labels = [];
+  const layersMode = DRAFT.mode === "section", on = state.layers.size ? state.layers : new Set(CONTROL);
+  for (const p of ORDER) {
+    if (p.type === "virtual" || p.role === "planting" || p.role === "furniture") continue;
+    for (const sh of sectionShapes(p, DRAFT.w)) {
+      if (p.void) { if (sh.poly) geo += `<polygon points="${sh.poly.map(([x, y]) => `${x},${-y}`).join(" ")}" fill="${PAPER}"/>`; continue; }
+      if (sh.circle) {
+        const [x, y, r, ri] = sh.circle;
+        geo += `<circle cx="${x}" cy="${-y}" r="${r}" fill="${PAPER}" stroke="${INK}" stroke-width="1" vector-effect="non-scaling-stroke"/>` + (ri ? `<circle cx="${x}" cy="${-y}" r="${ri}" fill="none" stroke="${INK}" stroke-width=".5" vector-effect="non-scaling-stroke"/>` : "");
+        if (x > X0 + 10 / s && x < X0 + ww - 10 / s && y > Y1 - wh + 10 / s && y < Y1 - 10 / s) labels.push({ p, x, y, area: Math.PI * r * r });
+        continue;
+      }
+      const h = hatchOf(p), thin = h !== "glass" && h !== "maker" && thinness(sh.poly) < 3;
+      const sel = DRAFT.sel === p.id, pts = sh.poly.map(([x, y]) => `${x},${-y}`).join(" ");
+      under += `<polygon points="${pts}" fill="none" stroke="${INK}" stroke-width="4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+      // Layers mode: the control layers (water, air, thermal, vapour) as coloured bands on the cut; everything else ink
+      const band = layersMode && on.has(p.role) ? ROLE[p.role] : null;
+      geo += `<polygon data-id="${p.id}" points="${pts}" fill="${band && !thin ? band + "33" : fillOf(h, thin)}" stroke="${sel ? SIGNAL : band ?? INK}" stroke-width="${sel ? 2.2 : band ? 2 : h === "glass" ? 0.5 : 0.75}" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+      // label anchor: a point inside the polygon near its centroid
+      const xs = sh.poly.map((v) => v[0]), ys = sh.poly.map((v) => v[1]);
+      // anchor: a point of the part inside the visible frame (centre of the visible overlap, else a grid search in it)
+      const m = 12 / s, ox0 = Math.max(Math.min(...xs), X0 + m), ox1 = Math.min(Math.max(...xs), X0 + ww - m);
+      const oy0 = Math.max(Math.min(...ys), Y1 - wh + m), oy1 = Math.min(Math.max(...ys), Y1 - m);
+      let ax = NaN, ay = NaN;
+      if (ox0 < ox1 && oy0 < oy1) {
+        const cands = [[(ox0 + ox1) / 2, (oy0 + oy1) / 2]];
+        for (let i = 1; i < 6; i++) for (let j = 1; j < 6; j++) cands.push([ox0 + ((ox1 - ox0) * i) / 6, oy0 + ((oy1 - oy0) * j) / 6]);
+        const hit = cands.find(([x, y]) => pip(sh.poly, x, y)) ?? (thinness(sh.poly) < 3 ? sh.poly.find(([x, y]) => x > ox0 && x < ox1 && y > oy0 && y < oy1) : null);
+        if (hit) [ax, ay] = hit;
+      }
+      const vis = !Number.isNaN(ax);
+      const per = sh.poly.reduce((a, [x, y], i) => { const [x2, y2] = sh.poly[(i + 1) % sh.poly.length]; return a + Math.hypot(x2 - x, y2 - y); }, 0);
+      const area = Math.abs(xs.reduce((a, x, i) => a + x * ys[(i + 1) % ys.length] - xs[(i + 1) % xs.length] * ys[i], 0) / 2);
+      if (vis) labels.push({ p, x: ax, y: ay, area: thin ? Math.max(area, (per / 2) * 6) : area });   // thin key parts count by length
+    }
+  }
+  // Schedule, level of detail: rank parts by importance × on-screen size; minor parts (tapes, sealants, screens…)
+  // only when zoomed in far (> 4 px/mm) or selected; fewer rows on the wide view, more when zoomed in.
+  const MINOR = /tape|seal|foil|back-fill|screen|clip|stool|ledge|gasket|skirt|weep|transition|subflash|rebar|soilgas|geotextile|dampproof|airseal|gap-fill|tray-ledge|slot/;
+  const ROLE_W = { frame: 1.3, water: 1.2, thermal: 1.1, cladding: 1.1, ground: 1.0, metal: 0.9, concrete: 0.8, drainage: 0.6, air: 0.5 };
+  const importance = (p) => (MINOR.test(p.id) ? 0.12 : ROLE_W[p.role] ?? 0.6);
+  const rowsFit = Math.max(4, Math.min(10, Math.min(Math.floor(FH / 30), 7 + Math.round(Math.log2(Math.max(s, 0.25)) * 2))));
+  const byPart = new Map();
+  for (const l of labels) if (!byPart.has(l.p.id) || byPart.get(l.p.id).area < l.area) byPart.set(l.p.id, l);
+  let chosen = [...byPart.values()]
+    .filter((l) => l.p.id === DRAFT.sel || (l.area * s * s > 300 && (!MINOR.test(l.p.id) || s > 4)))
+    .map((l) => ({ ...l, score: l.p.id === DRAFT.sel ? 1e12 : importance(l.p) * Math.pow(l.area * s * s, 0.25) }))
+    .sort((a, b) => b.score - a.score).slice(0, rowsFit);
+  chosen = chosen.map((l) => ({ ...l, py: px(l.x, l.y)[1], pxx: px(l.x, l.y)[0] })).sort((a, b) => a.py - b.py);
+  const GAP = 20;
+  let prev = PAD - GAP;
+  for (const l of chosen) { l.ly = Math.min(Math.max(l.py, prev + GAP), PAD + FH - 84); prev = l.ly; }   // rows stop above the title block
+  for (let i = chosen.length - 2; i >= 0; i--) if (chosen[i].ly > chosen[i + 1].ly - GAP) chosen[i].ly = chosen[i + 1].ly - GAP;   // push up from the bottom
+  const KX = PAD + FW, COLX = KX + 22;
+  DRAFT.colChars = Math.floor((W - COLX - 30) / 7.4);
+  const zoneN = {}, tagOf = (p) => { const z = p.junction ?? "X"; zoneN[z] = (zoneN[z] ?? 0) + 1; return z + zoneN[z]; };
+  const M = `font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.04em;paint-order:stroke;stroke:${PAPER};stroke-width:3px;stroke-linejoin:round`;
+  let ann = "";
+  chosen.forEach((l, i) => {
+    const on = DRAFT.sel === l.p.id, c = on ? SIGNAL : INK;
+    ann += `<polyline points="${l.pxx.toFixed(1)},${l.py.toFixed(1)} ${KX - 8},${l.py.toFixed(1)} ${KX + 6},${l.ly.toFixed(1)} ${COLX - 4},${l.ly.toFixed(1)}" fill="none" stroke="${c}" stroke-width="${on ? 1 : 0.75}" stroke-opacity=".8"/>`;
+    ann += `<circle cx="${l.pxx.toFixed(1)}" cy="${l.py.toFixed(1)}" r="2" fill="${c}"/>`;
+    ann += `<circle cx="${COLX + 8}" cy="${l.ly.toFixed(1)}" r="10" fill="${PAPER}" stroke="${c}" stroke-width=".75"/><text x="${COLX + 8}" y="${(l.ly + 3.5).toFixed(1)}" text-anchor="middle" style="${M};font-size:9px" fill="${c}">${tagOf(l.p)}</text>`
+      + `<text data-id="${l.p.id}" x="${COLX + 24}" y="${(l.ly + 4).toFixed(1)}" style="${M};cursor:pointer" fill="${c}">${shortName(l.p)}${l.p.nocarbon ? "  (MAKER)" : ""}</text>`;
+  });
+  // threshold dimension when the threshold is in view
+  const [txL, ty0] = px(0, -7), [, ty1] = px(0, 5);
+  if (ty0 > PAD && ty1 < PAD + FH && txL > PAD) {
+    const [xr] = px(205, 5);
+    const [xs] = px(83.5, -7), xd = Math.min(Math.max(px(150, 0)[0], PAD + 30), PAD + FW - 30);
+    ann += `<g stroke="${INK}" stroke-width=".75" stroke-opacity=".85"><line x1="${xs + 3}" y1="${ty0}" x2="${xd + 6}" y2="${ty0}"/><line x1="${xr - 3}" y1="${ty1}" x2="${xd - 6}" y2="${ty1}"/>`
+      + `<line x1="${xd}" y1="${ty1 - 10}" x2="${xd}" y2="${ty0 + 10}"/><line x1="${xd - 4}" y1="${ty1 + 4}" x2="${xd + 4}" y2="${ty1 - 4}"/><line x1="${xd - 4}" y1="${ty0 + 4}" x2="${xd + 4}" y2="${ty0 - 4}"/></g>`
+      + `<text x="${xd + 7}" y="${ty1 - 12}" style="${M}" fill="${INK}">12</text>`;
+  }
+  // datums: long-dash-dot 0.75 px with filled triangles and three-decimal values, where they fall in the frame
+  for (const [y, label] of [[0, "\u00b10.000 FFL"], [2785, "+2.785 HEAD"], [-530, "\u22120.530 U/S BEAM"]]) {
+    const [, py] = px(0, y);
+    if (py < PAD + 14 || py > PAD + FH - 4) continue;
+    ann += `<line x1="${PAD}" y1="${py}" x2="${PAD + FW}" y2="${py}" stroke="${INK}" stroke-width=".75" stroke-opacity=".55" stroke-dasharray="16 3 2 3"/>`
+      + `<path d="M${PAD + FW - 14} ${py} l-4.5 -7 h9 z" fill="${INK}"/><text x="${PAD + FW - 24}" y="${py - 5}" text-anchor="end" style="${M}" fill="${INK}">${label}</text>`;
+  }
+  // orientation: exterior (garden, west) left, interior (east) right
+  ann += `<text x="${PAD + 6}" y="${PAD + FH - 8}" style="${M}" fill="${INK}">W</text><text x="${PAD + FW - 14}" y="${PAD + FH - 8}" style="${M}" fill="${INK}">E</text>`;
+  // title block under the schedule column
+  { const tx = KX + 22, ty = PAD + FH - 64;
+    ann += `<rect x="${tx - 8}" y="${ty - 16}" width="${W - tx - 4}" height="70" fill="${PAPER}" stroke="${INK}" stroke-width=".75"/>`
+      + `<text x="${tx}" y="${ty}" style="${M}" fill="${INK}">THE LIVING EDGE &#183; DETAIL 02</text><text x="${tx}" y="${ty + 16}" style="${M}" fill="${MUTE}">THRESHOLD TO GARDEN, VANCOUVER</text>`
+      + `<text x="${tx}" y="${ty + 32}" style="${M}" fill="${MUTE}">${layersMode ? "CONTROL LAYERS" : "SECTION"} AT W ${DRAFT.w} &#183; v3</text><text x="${tx}" y="${ty + 48}" style="${M}" fill="${MUTE}">SCALE: SEE BAR</text>`; }
+  // scale bar: a round length near 1/5 of the frame
+  const target = ww / 5, nice = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000].reduce((b, v) => (Math.abs(v - target) < Math.abs(b - target) ? v : b), 100);
+  const sb = nice * s, by = PAD + FH + 20;
+  ann += `<rect x="${PAD}" y="${by}" width="${sb / 2}" height="3" fill="${INK}"/><rect x="${PAD + sb / 2}" y="${by}" width="${sb / 2}" height="3" fill="none" stroke="${INK}" stroke-width=".6"/>`;
+  ann += `<text x="${PAD}" y="${by + 16}" style="${M}" fill="${INK}">0</text><text x="${PAD + sb / 2}" y="${by + 16}" text-anchor="middle" style="${M}" fill="${INK}">${nice / 2}</text><text x="${PAD + sb}" y="${by + 16}" text-anchor="middle" style="${M}" fill="${INK}">${nice} mm</text>`;
+  ann += `<text x="${PAD + Math.max(sb, 110) + 48}" y="${by + 16}" style="${M}" fill="${MUTE}">D02 SECTION AT W ${DRAFT.w}, ${chosen.length} OF ${byPart.size} PARTS LABELLED</text>`;
+  draftHost.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">
+    <rect width="${W}" height="${H}" fill="${PAPER}"/>
+    <svg x="${PAD}" y="${PAD}" width="${FW}" height="${FH}" viewBox="${X0} ${-Y1} ${ww} ${wh}">${DEFS}<rect x="${X0}" y="${-Y1}" width="${ww}" height="${wh}" fill="${PAPER}"/>${under}${geo}</svg>
+    <rect x="${PAD}" y="${PAD}" width="${FW}" height="${FH}" fill="none" stroke="${INK}" stroke-width=".5"/>
+    ${ann}</svg>`;
+  draftHost.querySelectorAll("[data-id]").forEach((el) => el.addEventListener("click", (e) => { e.stopPropagation(); DRAFT.sel = el.dataset.id; select(el.dataset.id); drawDraft(); }));
+  DRAFT.view = { X0, Y1, ww, wh, s, PAD, FW, FH };
+}
+// pan / zoom inside the frame
+let dDrag = null;
+draftHost.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const v = DRAFT.view, r = draftHost.getBoundingClientRect(), f = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+  const mx = v.X0 + (e.clientX - r.left - v.PAD) / v.s, my = v.Y1 - (e.clientY - r.top - v.PAD) / v.s;
+  const w = DRAFT.win;
+  DRAFT.win = { x: [mx - (mx - w.x[0]) * f, mx + (w.x[1] - mx) * f], y: [my - (my - w.y[0]) * f, my + (w.y[1] - my) * f] };
+  drawDraft();
+}, { passive: false });
+draftHost.addEventListener("pointerdown", (e) => { dDrag = { x: e.clientX, y: e.clientY, win: JSON.parse(JSON.stringify(DRAFT.win)) }; });
+window.addEventListener("pointerup", () => (dDrag = null));
+window.addEventListener("pointermove", (e) => {
+  if (!dDrag || state.view !== "draft") return;
+  const s = DRAFT.view.s, dx = (e.clientX - dDrag.x) / s, dy = (e.clientY - dDrag.y) / s;
+  DRAFT.win = { x: [dDrag.win.x[0] - dx, dDrag.win.x[1] - dx], y: [dDrag.win.y[0] + dy, dDrag.win.y[1] + dy] };
+  drawDraft();
+});
+new ResizeObserver(() => { if (state.view === "draft") drawDraft(); }).observe(draftHost);
+
+// Open on the drafting view (direction s2): the hairline section is the default; colour is a mode.
+showView("draft");
+
+</script>
+</body>
+</html>

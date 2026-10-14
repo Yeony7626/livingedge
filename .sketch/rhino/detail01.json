@@ -1,0 +1,4935 @@
+{
+ "L": 900,
+ "parts": [
+  {
+   "id": "fwall",
+   "name": "Concrete foundation wall 200, keyed into footing",
+   "role": "concrete",
+   "junction": "E",
+   "src": [
+    "07 E5",
+    "06 A3"
+   ],
+   "poly": [
+    [
+     0,
+     -199
+    ],
+    [
+     56.5,
+     -199
+    ],
+    [
+     56.5,
+     -237
+    ],
+    [
+     143.5,
+     -237
+    ],
+    [
+     143.5,
+     -199
+    ],
+    [
+     200,
+     -199
+    ],
+    [
+     200,
+     300
+    ],
+    [
+     0,
+     300
+    ]
+   ]
+  },
+  {
+   "id": "epdm",
+   "name": "EPDM sill membrane, turned 40 down the foundation face",
+   "role": "water",
+   "junction": "D",
+   "src": [
+    "07 D12",
+    "DEFG E15"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     140,
+     300.5
+    ],
+    [
+     -0.5,
+     300.5
+    ],
+    [
+     -0.5,
+     260
+    ]
+   ]
+  },
+  {
+   "id": "gasket",
+   "name": "Closed-cell sill gasket (air seal)",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "07 D11",
+    "06 A7"
+   ],
+   "poly": [
+    [
+     0,
+     301
+    ],
+    [
+     140,
+     301
+    ],
+    [
+     140,
+     304
+    ],
+    [
+     0,
+     304
+    ]
+   ]
+  },
+  {
+   "id": "sill",
+   "name": "PT sill plate 38x140, flush with foundation face",
+   "role": "frame",
+   "junction": "A",
+   "src": [
+    "06 A8",
+    "07 D13"
+   ],
+   "poly": [
+    [
+     0,
+     304
+    ],
+    [
+     140,
+     304
+    ],
+    [
+     140,
+     342
+    ],
+    [
+     0,
+     342
+    ]
+   ]
+  },
+  {
+   "id": "anchor",
+   "name": "Anchor bolt 12.7 HDG, embedded 100+",
+   "role": "metal",
+   "junction": "D",
+   "src": [
+    "07 D2",
+    "06 A8"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": 70,
+   "w": [
+    700
+   ],
+   "d": 12.7,
+   "from": 200,
+   "to": 362,
+   "embeds": [
+    "fwall",
+    "epdm",
+    "gasket",
+    "sill",
+    "washer",
+    "nut",
+    "batts"
+   ]
+  },
+  {
+   "id": "anchor-seal",
+   "name": "Sealant collar where the bolt passes EPDM and gasket",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "DEFG E6",
+    "ABC 17"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": 70,
+   "w": [
+    700
+   ],
+   "d": 16.7,
+   "di": 12.7,
+   "from": 300,
+   "to": 304,
+   "embeds": [
+    "epdm",
+    "gasket"
+   ]
+  },
+  {
+   "id": "washer",
+   "name": "Plate washer",
+   "role": "metal",
+   "junction": "D",
+   "src": [
+    "07 D13"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": 70,
+   "w": [
+    700
+   ],
+   "d": 50,
+   "from": 342,
+   "to": 347,
+   "embeds": [
+    "batts"
+   ]
+  },
+  {
+   "id": "nut",
+   "name": "Anchor nut",
+   "role": "metal",
+   "junction": "D",
+   "src": [
+    "07 D2"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": 70,
+   "w": [
+    700
+   ],
+   "d": 22,
+   "from": 347,
+   "to": 358,
+   "embeds": [
+    "batts"
+   ]
+  },
+  {
+   "id": "fill",
+   "name": "Compacted subgrade, organics removed",
+   "role": "ground",
+   "junction": "D",
+   "src": [
+    "07 D3"
+   ],
+   "poly": [
+    [
+     200,
+     -200
+    ],
+    [
+     375,
+     -200
+    ],
+    [
+     375,
+     -450
+    ],
+    [
+     900,
+     -450
+    ],
+    [
+     900,
+     23.75
+    ],
+    [
+     200,
+     23.75
+    ]
+   ]
+  },
+  {
+   "id": "granular",
+   "name": "Gas-permeable clear crushed stone 100",
+   "role": "drainage",
+   "junction": "D",
+   "src": [
+    "07 D4"
+   ],
+   "poly": [
+    [
+     200,
+     23.75
+    ],
+    [
+     900,
+     23.75
+    ],
+    [
+     900,
+     123.75
+    ],
+    [
+     200,
+     123.75
+    ]
+   ],
+   "note": "Radon rough-in per VBBL 9.13.4.3: vent-pipe inlet near slab centre, gas-permeable layer 100+ beyond the inlet, pipe sealed at the barrier, labelled every 1.8 m, terminates 1.8 m+ from the property line with a 10–12.5 mm screen (shown on plan, outside this slice)."
+  },
+  {
+   "id": "xps-a",
+   "name": "Under-slab XPS 38 (layer 1 of 2, staggered)",
+   "role": "thermal",
+   "junction": "D",
+   "src": [
+    "07 D6"
+   ],
+   "poly": [
+    [
+     200,
+     123.75
+    ],
+    [
+     900,
+     123.75
+    ],
+    [
+     900,
+     161.75
+    ],
+    [
+     200,
+     161.75
+    ]
+   ]
+  },
+  {
+   "id": "xps-b",
+   "name": "Under-slab XPS 38 (layer 2 of 2)",
+   "role": "thermal",
+   "junction": "D",
+   "src": [
+    "07 D6"
+   ],
+   "poly": [
+    [
+     200,
+     161.75
+    ],
+    [
+     900,
+     161.75
+    ],
+    [
+     900,
+     199.75
+    ],
+    [
+     200,
+     199.75
+    ]
+   ]
+  },
+  {
+   "id": "edge-xps",
+   "name": "Slab-edge XPS 75 (thermal break, isolation joint)",
+   "role": "thermal",
+   "junction": "D",
+   "src": [
+    "07 D7"
+   ],
+   "poly": [
+    [
+     200,
+     199.75
+    ],
+    [
+     275,
+     199.75
+    ],
+    [
+     275,
+     300
+    ],
+    [
+     200,
+     300
+    ]
+   ]
+  },
+  {
+   "id": "soilgas",
+   "name": "0.25 mm soil-gas / air barrier, lapped 300, up slab edge, taped to ledge",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "07 D8",
+    "07 D10"
+   ],
+   "type": "sheet",
+   "t": 0.25,
+   "path": [
+    [
+     900,
+     199.875
+    ],
+    [
+     275.125,
+     199.875
+    ],
+    [
+     275.125,
+     300.125
+    ],
+    [
+     141,
+     300.125
+    ]
+   ],
+   "note": "Sequence: leave the upstand loose ~150 mm during the pour; after cure fold it over the edge XPS and tape it to the ledge, then EPDM, gasket, sill, framing, then lap and seal the wall poly (DEFG E14)."
+  },
+  {
+   "id": "slab",
+   "name": "Concrete slab 100, reglet at perimeter",
+   "role": "concrete",
+   "junction": "D",
+   "src": [
+    "07 D9"
+   ],
+   "poly": [
+    [
+     275.25,
+     200
+    ],
+    [
+     900,
+     200
+    ],
+    [
+     900,
+     300
+    ],
+    [
+     281.25,
+     300
+    ],
+    [
+     281.25,
+     294
+    ],
+    [
+     275.25,
+     294
+    ]
+   ]
+  },
+  {
+   "id": "slab-seal",
+   "name": "Flexible sealant at slab perimeter (VBBL 9.25.3.6(5))",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "DEFG E5"
+   ],
+   "poly": [
+    [
+     275.25,
+     294
+    ],
+    [
+     281.25,
+     294
+    ],
+    [
+     281.25,
+     300
+    ],
+    [
+     275.25,
+     300
+    ]
+   ]
+  },
+  {
+   "id": "seal-floor",
+   "name": "Acoustical sealant bead, wall poly to slab barrier",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "DEFG E1"
+   ],
+   "poly": [
+    [
+     150,
+     300.25
+    ],
+    [
+     156,
+     300.25
+    ],
+    [
+     156,
+     301.25
+    ],
+    [
+     150,
+     301.25
+    ]
+   ]
+  },
+  {
+   "id": "vpoly",
+   "name": "6 mil poly air/vapour barrier, lapped 104 onto slab barrier",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "07 D14",
+    "06 B2",
+    "DEFG E1"
+   ],
+   "type": "sheet",
+   "t": 0.15,
+   "path": [
+    [
+     141.08,
+     3100
+    ],
+    [
+     141.08,
+     301.325
+    ],
+    [
+     245,
+     301.325
+    ]
+   ]
+  },
+  {
+   "id": "seal-sill",
+   "name": "Acoustical sealant bead, poly to sill plate",
+   "role": "air",
+   "junction": "D",
+   "src": [
+    "DEFG E1",
+    "ABC 17"
+   ],
+   "poly": [
+    [
+     140,
+     305
+    ],
+    [
+     141.00500000000002,
+     305
+    ],
+    [
+     141.00500000000002,
+     311
+    ],
+    [
+     140,
+     311
+    ]
+   ]
+  },
+  {
+   "id": "edge-cap",
+   "name": "Fibre-cement floor-edge cap 12, adhered (no fasteners through barrier)",
+   "role": "frame",
+   "junction": "D",
+   "src": [
+    "DEFG E2"
+   ],
+   "poly": [
+    [
+     154,
+     301.4
+    ],
+    [
+     295,
+     301.4
+    ],
+    [
+     295,
+     313.4
+    ],
+    [
+     154,
+     313.4
+    ]
+   ]
+  },
+  {
+   "id": "studs",
+   "name": "Studs 38x140 at 400",
+   "role": "frame",
+   "junction": "G",
+   "src": [
+    "07 G1"
+   ],
+   "poly": [
+    [
+     0,
+     342
+    ],
+    [
+     140,
+     342
+    ],
+    [
+     140,
+     3024
+    ],
+    [
+     0,
+     3024
+    ]
+   ],
+   "runs": [
+    [
+     60,
+     98
+    ],
+    [
+     466,
+     504
+    ],
+    [
+     862,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "batts",
+   "name": "Batt insulation",
+   "role": "thermal",
+   "junction": "G",
+   "src": [
+    "07 G1"
+   ],
+   "poly": [
+    [
+     0,
+     342
+    ],
+    [
+     140,
+     342
+    ],
+    [
+     140,
+     3024
+    ],
+    [
+     0,
+     3024
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     862
+    ]
+   ]
+  },
+  {
+   "id": "plate1",
+   "name": "Top plate (lower)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B1"
+   ],
+   "poly": [
+    [
+     0,
+     3024
+    ],
+    [
+     140,
+     3024
+    ],
+    [
+     140,
+     3062
+    ],
+    [
+     0,
+     3062
+    ]
+   ]
+  },
+  {
+   "id": "plate2",
+   "name": "Top plate (upper)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B1"
+   ],
+   "poly": [
+    [
+     0,
+     3062
+    ],
+    [
+     140,
+     3062
+    ],
+    [
+     140,
+     3100
+    ],
+    [
+     0,
+     3100
+    ]
+   ]
+  },
+  {
+   "id": "seal-plate",
+   "name": "Acoustical sealant bead, poly to top plate",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "ABC 10"
+   ],
+   "poly": [
+    [
+     140,
+     3077
+    ],
+    [
+     141.00500000000002,
+     3077
+    ],
+    [
+     141.00500000000002,
+     3083
+    ],
+    [
+     140,
+     3083
+    ]
+   ]
+  },
+  {
+   "id": "gypsum",
+   "name": "Gypsum board 12.7",
+   "role": "frame",
+   "junction": "G",
+   "src": [
+    "07 G (interior)"
+   ],
+   "poly": [
+    [
+     141.155,
+     310
+    ],
+    [
+     153.85500000000002,
+     310
+    ],
+    [
+     153.85500000000002,
+     3100
+    ],
+    [
+     141.155,
+     3100
+    ]
+   ]
+  },
+  {
+   "id": "ceiling",
+   "name": "Gypsum ceiling 12.7 (no ceiling poly: roof is exterior-insulated)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "ABC 16"
+   ],
+   "poly": [
+    [
+     153.85500000000002,
+     3087.3
+    ],
+    [
+     900,
+     3087.3
+    ],
+    [
+     900,
+     3100
+    ],
+    [
+     153.85500000000002,
+     3100
+    ]
+   ]
+  },
+  {
+   "id": "sheath",
+   "name": "Sheathing 12, bottom flush with sill underside",
+   "role": "frame",
+   "junction": "A",
+   "src": [
+    "06 A10",
+    "07 G2"
+   ],
+   "poly": [
+    [
+     -12,
+     304
+    ],
+    [
+     0,
+     304
+    ],
+    [
+     0,
+     3100
+    ],
+    [
+     -12,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     840
+    ]
+   ]
+  },
+  {
+   "id": "flash",
+   "name": "Base flashing 24 ga prefinished steel, lap 75 over sill joint, 10% leg, 45 deg drip",
+   "role": "water",
+   "junction": "A",
+   "src": [
+    "06 A11"
+   ],
+   "type": "sheet",
+   "t": 0.61,
+   "path": [
+    [
+     -12.305,
+     360
+    ],
+    [
+     -12.305,
+     225
+    ],
+    [
+     -120.81,
+     214.1495
+    ],
+    [
+     -127.81,
+     207.1495
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     790
+    ]
+   ]
+  },
+  {
+   "id": "flash-nails",
+   "name": "Flashing fasteners at 300 o.c. into sill plate (under membrane lap)",
+   "role": "metal",
+   "junction": "A",
+   "src": [
+    "06 A11"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 330,
+   "w": [
+    75,
+    375,
+    675
+   ],
+   "d": 3.8,
+   "from": -12.61,
+   "to": 45,
+   "embeds": [
+    "flash",
+    "sheath",
+    "sill"
+   ]
+  },
+  {
+   "id": "membrane",
+   "name": "Sheathing membrane, shingled over flashing upstand",
+   "role": "water",
+   "junction": "A",
+   "src": [
+    "06 A12",
+    "07 G3"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -12.25,
+     3100
+    ],
+    [
+     -12.25,
+     362
+    ],
+    [
+     -12.86,
+     361
+    ],
+    [
+     -12.86,
+     240
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     740
+    ]
+   ]
+  },
+  {
+   "id": "ei",
+   "name": "Exterior rigid mineral wool 50, 128+ kg/m3",
+   "role": "thermal",
+   "junction": "G",
+   "src": [
+    "07 G.2(d)",
+    "DEFG E4"
+   ],
+   "poly": [
+    [
+     -63.11,
+     232
+    ],
+    [
+     -13.11,
+     232
+    ],
+    [
+     -13.11,
+     3100
+    ],
+    [
+     -63.11,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     680
+    ]
+   ],
+   "note": "Stucco is hung on strapping screwed through 50 mm mineral wool: screw size and spacing to be confirmed by a structural engineer (RDH13 3-46)."
+  },
+  {
+   "id": "strap",
+   "name": "PT strapping 19x64 on stud lines",
+   "role": "frame",
+   "junction": "G",
+   "src": [
+    "07 G4",
+    "06 A13"
+   ],
+   "poly": [
+    [
+     -82.11,
+     232
+    ],
+    [
+     -63.11,
+     232
+    ],
+    [
+     -63.11,
+     3043
+    ],
+    [
+     -82.11,
+     3043
+    ]
+   ],
+   "runs": [
+    [
+     47,
+     111
+    ],
+    [
+     453,
+     517
+    ]
+   ]
+  },
+  {
+   "id": "strap-screws",
+   "name": "Strapping screws 6 mm through insulation into studs, 300 o.c. from y 375",
+   "role": "metal",
+   "junction": "G",
+   "src": [
+    "DEFG E4",
+    "ABC 5"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "ys": [
+    375,
+    675,
+    975,
+    1275,
+    1575,
+    1875,
+    2175,
+    2475,
+    2775,
+    2950
+   ],
+   "w": [
+    79,
+    485
+   ],
+   "d": 6,
+   "from": -82.11,
+   "to": 75,
+   "embeds": [
+    "strap",
+    "ei",
+    "membrane",
+    "sheath",
+    "studs"
+   ]
+  },
+  {
+   "id": "screen-base",
+   "name": "Perforated insect screen across cavity and insulation base",
+   "role": "metal",
+   "junction": "A",
+   "src": [
+    "06 A14",
+    "07 G7"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -13.11,
+     231.75
+    ],
+    [
+     -82.11,
+     231.75
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     620
+    ]
+   ]
+  },
+  {
+   "id": "line-wire",
+   "name": "Galvanized line wire 1.2 at 150, backing the paper between straps",
+   "role": "metal",
+   "junction": "G",
+   "src": [
+    "DEFG E3"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -82.66,
+     300
+    ],
+    [
+     -82.66,
+     450
+    ],
+    [
+     -82.66,
+     600
+    ],
+    [
+     -82.66,
+     750
+    ],
+    [
+     -82.66,
+     900
+    ],
+    [
+     -82.66,
+     1050
+    ],
+    [
+     -82.66,
+     1200
+    ],
+    [
+     -82.66,
+     1350
+    ],
+    [
+     -82.66,
+     1500
+    ],
+    [
+     -82.66,
+     1650
+    ],
+    [
+     -82.66,
+     1800
+    ],
+    [
+     -82.66,
+     1950
+    ],
+    [
+     -82.66,
+     2100
+    ],
+    [
+     -82.66,
+     2250
+    ],
+    [
+     -82.66,
+     2400
+    ],
+    [
+     -82.66,
+     2550
+    ],
+    [
+     -82.66,
+     2700
+    ],
+    [
+     -82.66,
+     2850
+    ],
+    [
+     -82.66,
+     3000
+    ]
+   ],
+   "d": 1.2,
+   "from": 0,
+   "to": 570,
+   "embeds": [
+    "strap"
+   ]
+  },
+  {
+   "id": "paper",
+   "name": "Stucco backing paper",
+   "role": "water",
+   "junction": "G",
+   "src": [
+    "07 G8b"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -83.56,
+     230
+    ],
+    [
+     -83.56,
+     3020
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     570
+    ]
+   ]
+  },
+  {
+   "id": "lath",
+   "name": "Self-furred galvanized lath, 6 mm off paper",
+   "role": "metal",
+   "junction": "G",
+   "src": [
+    "07 G8b"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -90.31,
+     230.6
+    ],
+    [
+     -90.31,
+     3019.4
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     540
+    ]
+   ],
+   "embeds": [
+    "stucco"
+   ]
+  },
+  {
+   "id": "lath-screws",
+   "name": "Lath screws with 25 mm washers into strapping, 150 o.c.",
+   "role": "metal",
+   "junction": "G",
+   "src": [
+    "ABC 4",
+    "DEFG E10"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "ys": [
+    375,
+    525,
+    675,
+    825,
+    975,
+    1125,
+    1275,
+    1425,
+    1575,
+    1725,
+    1875,
+    2025,
+    2175,
+    2325,
+    2475,
+    2625,
+    2775,
+    2925
+   ],
+   "w": [
+    64,
+    470
+   ],
+   "d": 4,
+   "from": -91.31,
+   "to": -64.11,
+   "embeds": [
+    "stucco",
+    "lath",
+    "paper",
+    "strap"
+   ],
+   "note": "Lath fastened into 19 mm strapping, not 25 mm into framing: alternative solution under 9.27.5.7(3) / 9.28.4.6(2), needs engineer or manufacturer acceptance."
+  },
+  {
+   "id": "stucco",
+   "name": "Three-coat cement stucco 25",
+   "role": "cladding",
+   "junction": "G",
+   "src": [
+    "07 G9b",
+    "06 A15a",
+    "DEFG D3"
+   ],
+   "poly": [
+    [
+     -108.81,
+     230
+    ],
+    [
+     -83.81,
+     230
+    ],
+    [
+     -83.81,
+     3020
+    ],
+    [
+     -108.81,
+     3020
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     500
+    ]
+   ],
+   "note": "Vertical control joints at 4.57 m max and at opening corners, through the lath; no T or L panels (CMHC 7-17). Stucco +230 is 30 above the 200 minimum: the decades view flags grade rise over 30 mm."
+  },
+  {
+   "id": "bead-base",
+   "name": "Zinc-alloy casing bead, 10+ above flashing, left open",
+   "role": "metal",
+   "junction": "A",
+   "src": [
+    "06 A15a",
+    "ABC D2"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "path": [
+    [
+     -84.11,
+     270
+    ],
+    [
+     -84.11,
+     229.7
+    ],
+    [
+     -108.51,
+     229.7
+    ],
+    [
+     -108.51,
+     236
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     500
+    ]
+   ],
+   "embeds": [
+    "stucco"
+   ]
+  },
+  {
+   "id": "dampproof",
+   "name": "Damp-proofing (not code-required here, 9.13.2.1(1); best practice)",
+   "role": "water",
+   "junction": "E",
+   "src": [
+    "07 E6",
+    "DEFG 0"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -0.5,
+     224.7239787935558
+    ],
+    [
+     -0.5,
+     -199
+    ]
+   ]
+  },
+  {
+   "id": "fnd-xps",
+   "name": "Foundation XPS 50, footing to flashing",
+   "role": "thermal",
+   "junction": "D",
+   "src": [
+    "DEFG D1",
+    "IG4 p.10"
+   ],
+   "poly": [
+    [
+     -1,
+     -199
+    ],
+    [
+     -1,
+     224.7239787935558
+    ],
+    [
+     -12,
+     224.7239787935558
+    ],
+    [
+     -51,
+     220.82397879355582
+    ],
+    [
+     -51,
+     -199
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     790
+    ]
+   ]
+  },
+  {
+   "id": "parging",
+   "name": "Cement parging 12 on lath, 150 below grade to flashing",
+   "role": "concrete",
+   "junction": "F",
+   "src": [
+    "DEFG D1",
+    "07 F5"
+   ],
+   "poly": [
+    [
+     -51,
+     -149.5
+    ],
+    [
+     -51,
+     220.82397879355582
+    ],
+    [
+     -63,
+     219.6239787935558
+    ],
+    [
+     -63,
+     -149.5
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     740
+    ]
+   ]
+  },
+  {
+   "id": "parging-lath",
+   "name": "Galvanized lath in parging",
+   "role": "metal",
+   "junction": "F",
+   "src": [
+    "07 F5"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -57,
+     -140
+    ],
+    [
+     -57,
+     214.2239787935558
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     740
+    ]
+   ],
+   "embeds": [
+    "parging"
+   ]
+  },
+  {
+   "id": "parging-anchors",
+   "name": "Insulation anchors with 50 mm washers into concrete",
+   "role": "metal",
+   "junction": "F",
+   "src": [
+    "[I]"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "ys": [
+    -60,
+    120
+   ],
+   "w": [
+    150,
+    600
+   ],
+   "d": 6,
+   "from": -63,
+   "to": 40,
+   "embeds": [
+    "parging",
+    "parging-lath",
+    "fnd-xps",
+    "dampproof",
+    "fwall"
+   ]
+  },
+  {
+   "id": "joists",
+   "name": "Roof joists 38x235, 600 cantilever",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B3",
+    "ABC 1"
+   ],
+   "poly": [
+    [
+     -600,
+     3100
+    ],
+    [
+     900,
+     3100
+    ],
+    [
+     900,
+     3335
+    ],
+    [
+     -600,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     60,
+     98
+    ],
+    [
+     466,
+     504
+    ],
+    [
+     862,
+     900
+    ]
+   ],
+   "note": "3 x 82 mm toe-nails per joist to the plate (Table 9.23.3.4) and a galvanized uplift clip on each joist, installed before the spray foam (ABC 12)."
+  },
+  {
+   "id": "blocking",
+   "name": "Full-depth blocking, caulked 4 sides (air transfer + fire block)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B4"
+   ],
+   "poly": [
+    [
+     0,
+     3100
+    ],
+    [
+     38,
+     3100
+    ],
+    [
+     38,
+     3335
+    ],
+    [
+     0,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     862
+    ]
+   ]
+  },
+  {
+   "id": "vpoly-tail",
+   "name": "Wall poly turned 50 onto top plate",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "ABC 10"
+   ],
+   "type": "sheet",
+   "t": 0.15,
+   "path": [
+    [
+     90,
+     3100.075
+    ],
+    [
+     141.155,
+     3100.075
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     862
+    ]
+   ]
+  },
+  {
+   "id": "foam",
+   "name": "Closed-cell spray foam, top-plate poly to deck",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "06 B5"
+   ],
+   "poly": [
+    [
+     38,
+     3100.15
+    ],
+    [
+     160,
+     3100.15
+    ],
+    [
+     160,
+     3335
+    ],
+    [
+     38,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     862
+    ]
+   ]
+  },
+  {
+   "id": "sheath-top",
+   "name": "Sheathing between joists to deck",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B21"
+   ],
+   "poly": [
+    [
+     -12,
+     3100
+    ],
+    [
+     0,
+     3100
+    ],
+    [
+     0,
+     3335
+    ],
+    [
+     -12,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     840
+    ]
+   ]
+  },
+  {
+   "id": "membrane-lap",
+   "name": "Upper sheathing membrane, lapped 100 over wall membrane",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "ABC 9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -12.75,
+     3000
+    ],
+    [
+     -12.75,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     60,
+     98
+    ],
+    [
+     466,
+     504
+    ]
+   ]
+  },
+  {
+   "id": "membrane-top",
+   "name": "Upper sheathing membrane to deck underside",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B21",
+    "ABC 9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -12.75,
+     3000
+    ],
+    [
+     -12.75,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     740
+    ]
+   ],
+   "note": "Self-adhered collar at each joist where it crosses the membrane: 3 sides, 50 mm onto the membrane (ABC 9)."
+  },
+  {
+   "id": "ei-top",
+   "name": "Mineral wool infill between joists (wall-line thermal continuity)",
+   "role": "thermal",
+   "junction": "B",
+   "src": [
+    "06 B6"
+   ],
+   "poly": [
+    [
+     -63.11,
+     3100
+    ],
+    [
+     -13.11,
+     3100
+    ],
+    [
+     -13.11,
+     3335
+    ],
+    [
+     -63.11,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     680
+    ]
+   ]
+  },
+  {
+   "id": "windbarrier",
+   "name": "Vapour-permeable wind barrier on eave mineral wool",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "ABC 11"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -63.36,
+     3081
+    ],
+    [
+     -63.36,
+     3335
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     60
+    ],
+    [
+     98,
+     466
+    ],
+    [
+     504,
+     680
+    ]
+   ]
+  },
+  {
+   "id": "closure",
+   "name": "PT cavity-top closure (cavity not open to soffit)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B22"
+   ],
+   "poly": [
+    [
+     -82.11,
+     3043
+    ],
+    [
+     -63.11,
+     3043
+    ],
+    [
+     -63.11,
+     3081
+    ],
+    [
+     -82.11,
+     3081
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     620
+    ]
+   ]
+  },
+  {
+   "id": "closure-screws",
+   "name": "Closure screws through insulation into top plates",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 15"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 3062,
+   "w": [
+    79,
+    485
+   ],
+   "d": 6,
+   "from": -82.11,
+   "to": 75,
+   "embeds": [
+    "closure",
+    "ei",
+    "membrane",
+    "membrane-lap",
+    "sheath",
+    "plate1",
+    "plate2"
+   ]
+  },
+  {
+   "id": "bead-top",
+   "name": "Casing bead at stucco top",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B23"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "path": [
+    [
+     -84.11,
+     2990
+    ],
+    [
+     -84.11,
+     3020.3
+    ],
+    [
+     -108.51,
+     3020.3
+    ],
+    [
+     -108.51,
+     3014
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     500
+    ]
+   ],
+   "embeds": [
+    "stucco"
+   ]
+  },
+  {
+   "id": "screen-top",
+   "name": "Insect screen across cavity-top vent slot",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B22",
+    "07 G7"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -109.06,
+     3020.6
+    ],
+    [
+     -109.06,
+     3080.75
+    ],
+    [
+     -84.11,
+     3080.75
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     620
+    ]
+   ]
+  },
+  {
+   "id": "frieze",
+   "name": "Larch frieze trim fixed to soffit, 20 mm vent slot below",
+   "role": "cladding",
+   "junction": "B",
+   "src": [
+    "06 B24"
+   ],
+   "poly": [
+    [
+     -134.81,
+     3040
+    ],
+    [
+     -115.81,
+     3040
+    ],
+    [
+     -115.81,
+     3081
+    ],
+    [
+     -134.81,
+     3081
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     750
+    ]
+   ]
+  },
+  {
+   "id": "soffit-out",
+   "name": "Larch soffit boards 19",
+   "role": "cladding",
+   "junction": "B",
+   "src": [
+    "06 B20"
+   ],
+   "poly": [
+    [
+     -600,
+     3081
+    ],
+    [
+     -323.4,
+     3081
+    ],
+    [
+     -323.4,
+     3100
+    ],
+    [
+     -600,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     750
+    ]
+   ]
+  },
+  {
+   "id": "soffit-in",
+   "name": "Larch soffit boards 19",
+   "role": "cladding",
+   "junction": "B",
+   "src": [
+    "06 B20"
+   ],
+   "poly": [
+    [
+     -277.4,
+     3081
+    ],
+    [
+     -63.61,
+     3081
+    ],
+    [
+     -63.61,
+     3100
+    ],
+    [
+     -277.4,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     750
+    ]
+   ]
+  },
+  {
+   "id": "soffit-mesh",
+   "name": "Soffit vent insect mesh",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B20"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -326.4,
+     3080.75
+    ],
+    [
+     -274.4,
+     3080.75
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     750
+    ]
+   ]
+  },
+  {
+   "id": "deck",
+   "name": "Plywood roof deck 16",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B7"
+   ],
+   "poly": [
+    [
+     -600,
+     3335
+    ],
+    [
+     900,
+     3335
+    ],
+    [
+     900,
+     3351
+    ],
+    [
+     -600,
+     3351
+    ]
+   ]
+  },
+  {
+   "id": "prestrip",
+   "name": "Self-adhered pre-strip, 50 past interior wall face",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "06 B8",
+    "ABC 8"
+   ],
+   "type": "sheet",
+   "t": 1.5,
+   "path": [
+    [
+     -600,
+     3351.75
+    ],
+    [
+     205,
+     3351.75
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     880
+    ]
+   ]
+  },
+  {
+   "id": "avb",
+   "name": "Air/vapour control membrane on deck",
+   "role": "air",
+   "junction": "B",
+   "src": [
+    "06 B9"
+   ],
+   "type": "sheet",
+   "t": 1.5,
+   "path": [
+    [
+     -600,
+     3353.25
+    ],
+    [
+     206,
+     3353.25
+    ],
+    [
+     209,
+     3351.75
+    ],
+    [
+     900,
+     3351.75
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-1",
+   "name": "PT nailer ply 1 of 4 (38)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B11",
+    "ABC 13"
+   ],
+   "poly": [
+    [
+     -600,
+     3354
+    ],
+    [
+     -460,
+     3354
+    ],
+    [
+     -460,
+     3392
+    ],
+    [
+     -600,
+     3392
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-2",
+   "name": "PT nailer ply 2 of 4 (38)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B11",
+    "ABC 13"
+   ],
+   "poly": [
+    [
+     -600,
+     3392
+    ],
+    [
+     -460,
+     3392
+    ],
+    [
+     -460,
+     3430
+    ],
+    [
+     -600,
+     3430
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-3",
+   "name": "PT nailer ply 3 of 4 (38)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B11",
+    "ABC 13"
+   ],
+   "poly": [
+    [
+     -600,
+     3430
+    ],
+    [
+     -460,
+     3430
+    ],
+    [
+     -460,
+     3468
+    ],
+    [
+     -600,
+     3468
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-4",
+   "name": "PT nailer ply 4 of 4 (38)",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B11",
+    "ABC 13"
+   ],
+   "poly": [
+    [
+     -600,
+     3468
+    ],
+    [
+     -460,
+     3468
+    ],
+    [
+     -460,
+     3506
+    ],
+    [
+     -600,
+     3506
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-rip",
+   "name": "PT nailer rip 10, glued and nailed",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "ABC 13"
+   ],
+   "poly": [
+    [
+     -600,
+     3506
+    ],
+    [
+     -460,
+     3506
+    ],
+    [
+     -460,
+     3516
+    ],
+    [
+     -600,
+     3516
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     860
+    ]
+   ]
+  },
+  {
+   "id": "nailer-screws--580",
+   "name": "Bottom nailer ply screws, 2 per joist, 50+ into joist",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 13"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -580,
+   "w": [
+    79,
+    485,
+    881
+   ],
+   "d": 6,
+   "from": 3285,
+   "to": 3392,
+   "embeds": [
+    "nailer-1",
+    "avb",
+    "prestrip",
+    "deck",
+    "joists"
+   ]
+  },
+  {
+   "id": "nailer-screws--480",
+   "name": "Bottom nailer ply screws, 2 per joist, 50+ into joist",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 13"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -480,
+   "w": [
+    79,
+    485,
+    881
+   ],
+   "d": 6,
+   "from": 3285,
+   "to": 3392,
+   "embeds": [
+    "nailer-1",
+    "avb",
+    "prestrip",
+    "deck",
+    "joists"
+   ]
+  },
+  {
+   "id": "nailer-ply-screws",
+   "name": "Ply-to-ply screws, staggered at 400",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 13"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -540,
+   "w": [
+    200,
+    600
+   ],
+   "d": 5,
+   "from": 3380,
+   "to": 3506,
+   "embeds": [
+    "nailer-1",
+    "nailer-2",
+    "nailer-3",
+    "nailer-4"
+   ]
+  },
+  {
+   "id": "roofins-1",
+   "name": "Polyiso 75 (layer 1)",
+   "role": "thermal",
+   "junction": "B",
+   "src": [
+    "06 B10"
+   ],
+   "poly": [
+    [
+     -460,
+     3354
+    ],
+    [
+     900,
+     3354
+    ],
+    [
+     900,
+     3429
+    ],
+    [
+     -460,
+     3429
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     820
+    ]
+   ]
+  },
+  {
+   "id": "roofins-2",
+   "name": "Polyiso tapered (layer 2), 2 % to eave",
+   "role": "thermal",
+   "junction": "B",
+   "src": [
+    "06 B10",
+    "06 B3"
+   ],
+   "poly": [
+    [
+     -460,
+     3429
+    ],
+    [
+     900,
+     3429
+    ],
+    [
+     900,
+     3531.2
+    ],
+    [
+     -460,
+     3504
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     780
+    ]
+   ]
+  },
+  {
+   "id": "coverboard",
+   "name": "Cover board 12",
+   "role": "frame",
+   "junction": "B",
+   "src": [
+    "06 B12"
+   ],
+   "poly": [
+    [
+     -460,
+     3504
+    ],
+    [
+     900,
+     3531.2
+    ],
+    [
+     900,
+     3543.2
+    ],
+    [
+     -460,
+     3516
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     740
+    ]
+   ]
+  },
+  {
+   "id": "fascia-lower",
+   "name": "Larch fascia board 25 (lower), back-primed, ends sealed",
+   "role": "cladding",
+   "junction": "B",
+   "src": [
+    "06 B18",
+    "ABC 14"
+   ],
+   "poly": [
+    [
+     -625,
+     3070
+    ],
+    [
+     -600,
+     3070
+    ],
+    [
+     -600,
+     3340
+    ],
+    [
+     -625,
+     3340
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     800
+    ]
+   ]
+  },
+  {
+   "id": "fascia-upper",
+   "name": "Larch fascia board 25 (upper), rebated drip joint",
+   "role": "cladding",
+   "junction": "B",
+   "src": [
+    "06 B18",
+    "ABC 14"
+   ],
+   "poly": [
+    [
+     -625,
+     3340
+    ],
+    [
+     -600,
+     3340
+    ],
+    [
+     -600,
+     3516
+    ],
+    [
+     -625,
+     3516
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     800
+    ]
+   ],
+   "note": "Fascia stays under the roof edge (ABC D3 declined: the proposed outboard fascia puts the edge metal through it). Back-primed, end grain sealed; re-coating needs the gutter off, not the roof edge."
+  },
+  {
+   "id": "fascia-screws-a",
+   "name": "Stainless fascia screws into joist ends",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B18"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 3200,
+   "w": [
+    79,
+    485,
+    881
+   ],
+   "d": 5,
+   "from": -625,
+   "to": -540,
+   "embeds": [
+    "fascia-lower",
+    "joists"
+   ]
+  },
+  {
+   "id": "fascia-screws-b",
+   "name": "Stainless fascia screws into nailer",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 14"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 3448,
+   "w": [
+    79,
+    485
+   ],
+   "d": 5,
+   "from": -625,
+   "to": -560,
+   "embeds": [
+    "fascia-upper",
+    "nailer-3"
+   ]
+  },
+  {
+   "id": "basesheet",
+   "name": "SBS base sheet, 52 down fascia face",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B13"
+   ],
+   "type": "sheet",
+   "t": 3,
+   "path": [
+    [
+     -626.5,
+     3464
+    ],
+    [
+     -626.5,
+     3517.5
+    ],
+    [
+     -460.01499850029995,
+     3517.5
+    ],
+    [
+     899.9700059982006,
+     3544.6997000899696
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     700
+    ]
+   ]
+  },
+  {
+   "id": "mastic",
+   "name": "Mastic bed under metal flange",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B14"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -515,
+     3519.5
+    ],
+    [
+     -628,
+     3519.5
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     700
+    ]
+   ]
+  },
+  {
+   "id": "edge-metal",
+   "name": "24 ga metal edge: 110 flange, face to 3416, 45 deg drip 12 off face",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B15"
+   ],
+   "type": "sheet",
+   "t": 0.61,
+   "path": [
+    [
+     -515,
+     3520.305
+    ],
+    [
+     -628.305,
+     3520.305
+    ],
+    [
+     -628.305,
+     3416
+    ],
+    [
+     -640.305,
+     3404
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     700
+    ]
+   ]
+  },
+  {
+   "id": "edge-cleat",
+   "name": "24 ga continuous cleat engaging the drip",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 2",
+    "RCABC P13 3.3(5)"
+   ],
+   "type": "sheet",
+   "t": 0.61,
+   "path": [
+    [
+     -625.305,
+     3460
+    ],
+    [
+     -625.305,
+     3418.1373297269524
+    ],
+    [
+     -638.4594513011031,
+     3404.982878425849
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     700
+    ]
+   ]
+  },
+  {
+   "id": "edge-hem",
+   "name": "12 mm hem of the edge metal, folded round the cleat tip",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "ABC 2",
+    "RCABC P13 3.2(2)(a)"
+   ],
+   "type": "sheet",
+   "t": 0.61,
+   "path": [
+    [
+     -639.4423297269524,
+     3403.1373297269524
+    ],
+    [
+     -630.9570483527139,
+     3411.622611101191
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     700
+    ]
+   ]
+  },
+  {
+   "id": "cleat-screws",
+   "name": "Cleat screws at 300 through fascia into nailer",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 2"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 3440,
+   "w": [
+    50,
+    350,
+    650
+   ],
+   "d": 4.5,
+   "from": -625.61,
+   "to": -570,
+   "embeds": [
+    "edge-cleat",
+    "fascia-upper",
+    "nailer-3"
+   ]
+  },
+  {
+   "id": "edge-fasteners-a",
+   "name": "Edge-metal fasteners, row 1 (203 o.c., staggered)",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B15"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -580,
+   "w": [
+    50,
+    253,
+    456,
+    659
+   ],
+   "d": 4.5,
+   "from": 3480,
+   "to": 3520.61,
+   "embeds": [
+    "edge-metal",
+    "mastic",
+    "basesheet",
+    "nailer-4",
+    "nailer-rip"
+   ]
+  },
+  {
+   "id": "edge-fasteners-b",
+   "name": "Edge-metal fasteners, row 2",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "06 B15"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -540,
+   "w": [
+    151,
+    354,
+    557
+   ],
+   "d": 4.5,
+   "from": 3480,
+   "to": 3520.61,
+   "embeds": [
+    "edge-metal",
+    "mastic",
+    "basesheet",
+    "nailer-4",
+    "nailer-rip"
+   ]
+  },
+  {
+   "id": "stripin",
+   "name": "SBS strip-in over flange, 101.6 onto field",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B16"
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -626.4,
+     3521.61
+    ],
+    [
+     -513.8681652054191,
+     3521.61
+    ],
+    [
+     -507.8681652054192,
+     3520
+    ],
+    [
+     -460.03999899963446,
+     3520
+    ],
+    [
+     -407.01999600006906,
+     3521.0604000000144
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     680
+    ]
+   ]
+  },
+  {
+   "id": "capsheet",
+   "name": "SBS cap sheet",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B17"
+   ],
+   "type": "sheet",
+   "t": 4,
+   "path": [
+    [
+     -626.4,
+     3524.61
+    ],
+    [
+     -513.4726608216768,
+     3524.61
+    ],
+    [
+     -507.47266082167664,
+     3523
+    ],
+    [
+     -460.06999599853805,
+     3523
+    ],
+    [
+     -407.05998999940715,
+     3524.060200060017
+    ],
+    [
+     -404.7778259419715,
+     3524.060200060017
+    ],
+    [
+     -396.7975991237309,
+     3522.2650479175454
+    ],
+    [
+     899.9600079976008,
+     3548.200200059972
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     640
+    ]
+   ]
+  },
+  {
+   "id": "gutter",
+   "name": "Prefinished gutter on 8 mm stand-offs",
+   "role": "water",
+   "junction": "B",
+   "src": [
+    "06 B19",
+    "ABC 3"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "path": [
+    [
+     -633.3,
+     3398
+    ],
+    [
+     -633.3,
+     3290
+    ],
+    [
+     -758,
+     3290
+    ],
+    [
+     -768,
+     3383
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     760
+    ]
+   ],
+   "note": "Hangers at 600 max; gutter removable for re-coating the fascia (CMHC-FL 2.25); downspout piped separately to the storm sump."
+  },
+  {
+   "id": "gutter-spacers",
+   "name": "Stainless stand-offs 8 at each hanger",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 3"
+   ],
+   "poly": [
+    [
+     -633,
+     3370
+    ],
+    [
+     -625,
+     3370
+    ],
+    [
+     -625,
+     3390
+    ],
+    [
+     -633,
+     3390
+    ]
+   ],
+   "runs": [
+    [
+     140,
+     160
+    ],
+    [
+     640,
+     660
+    ]
+   ]
+  },
+  {
+   "id": "gutter-screws",
+   "name": "Gutter screws through stand-offs into nailer",
+   "role": "metal",
+   "junction": "B",
+   "src": [
+    "ABC 3"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 3380,
+   "w": [
+    150,
+    650
+   ],
+   "d": 5,
+   "from": -633.6,
+   "to": -580,
+   "embeds": [
+    "gutter",
+    "gutter-spacers",
+    "fascia-upper",
+    "nailer-1"
+   ]
+  },
+  {
+   "id": "native",
+   "name": "Undisturbed native soil",
+   "role": "ground",
+   "junction": "E",
+   "src": [
+    "07 E1"
+   ],
+   "poly": [
+    [
+     -1300,
+     -700
+    ],
+    [
+     900,
+     -700
+    ],
+    [
+     900,
+     -450
+    ],
+    [
+     -175,
+     -450
+    ],
+    [
+     -175,
+     -450.5
+    ],
+    [
+     -299.5,
+     -450.5
+    ],
+    [
+     -299.5,
+     -505.5
+    ],
+    [
+     -586,
+     -505.5
+    ],
+    [
+     -586,
+     -450
+    ],
+    [
+     -1300,
+     -450
+    ]
+   ],
+   "cuts": [
+    "pier-1",
+    "pier-2",
+    {
+     "type": "rod",
+     "axis": "y",
+     "x": -855,
+     "w": [
+      150,
+      750
+     ],
+     "d": 250,
+     "from": -600,
+     "to": -499
+    },
+    {
+     "type": "rod",
+     "axis": "y",
+     "x": -1115,
+     "w": [
+      150,
+      750
+     ],
+     "d": 250,
+     "from": -600,
+     "to": -499
+    }
+   ]
+  },
+  {
+   "id": "footing",
+   "name": "Strip footing 550x250, underside at frost depth 450",
+   "role": "concrete",
+   "junction": "E",
+   "src": [
+    "07 E2",
+    "07 E3"
+   ],
+   "poly": [
+    [
+     -175,
+     -450
+    ],
+    [
+     375,
+     -450
+    ],
+    [
+     375,
+     -200
+    ],
+    [
+     144.5,
+     -200
+    ],
+    [
+     144.5,
+     -238
+    ],
+    [
+     55.5,
+     -238
+    ],
+    [
+     55.5,
+     -200
+    ],
+    [
+     -175,
+     -200
+    ]
+   ]
+  },
+  {
+   "id": "capbreak",
+   "name": "Capillary break coating on footing top, into keyway",
+   "role": "water",
+   "junction": "E",
+   "src": [
+    "07 E4"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -175,
+     -199.5
+    ],
+    [
+     56,
+     -199.5
+    ],
+    [
+     56,
+     -237.5
+    ],
+    [
+     144,
+     -237.5
+    ],
+    [
+     144,
+     -199.5
+    ],
+    [
+     200,
+     -199.5
+    ]
+   ]
+  },
+  {
+   "id": "rock",
+   "name": "Clear crushed drain rock, 150+ cover, stepped clear of the footing",
+   "role": "drainage",
+   "junction": "E",
+   "src": [
+    "07 E9",
+    "DEFG E7",
+    "DEFG E8"
+   ],
+   "poly": [
+    [
+     -585.5,
+     -505
+    ],
+    [
+     -300,
+     -505
+    ],
+    [
+     -300,
+     -450
+    ],
+    [
+     -175.5,
+     -450
+    ],
+    [
+     -175.5,
+     -199
+    ],
+    [
+     -51,
+     -199
+    ],
+    [
+     -51,
+     -150
+    ],
+    [
+     -585.5,
+     -150
+    ]
+   ]
+  },
+  {
+   "id": "geotextile",
+   "name": "Non-woven geotextile wrapping the rock envelope",
+   "role": "drainage",
+   "junction": "E",
+   "src": [
+    "07 E9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -51,
+     -149.75
+    ],
+    [
+     -585.75,
+     -149.75
+    ],
+    [
+     -585.75,
+     -505.25
+    ],
+    [
+     -299.75,
+     -505.25
+    ],
+    [
+     -299.75,
+     -450.25
+    ],
+    [
+     -175.25,
+     -450.25
+    ],
+    [
+     -175.25,
+     -199
+    ]
+   ]
+  },
+  {
+   "id": "drainpipe",
+   "name": "Perforated PVC drain 100, invert at footing underside",
+   "role": "drainage",
+   "junction": "E",
+   "src": [
+    "07 E8"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -380.5,
+   "y": -399,
+   "d": 110,
+   "di": 102,
+   "from": 0,
+   "to": 900,
+   "embeds": [
+    "rock"
+   ],
+   "note": "Falls 0.5–1 % to the storm sump (two-pipe system, roof water piped separately); cleanout at each high point (DEFG E9)."
+  },
+  {
+   "id": "backfill",
+   "name": "Free-draining backfill",
+   "role": "ground",
+   "junction": "E",
+   "src": [
+    "07 E11"
+   ],
+   "poly": [
+    [
+     -1300,
+     -450
+    ],
+    [
+     -586,
+     -450
+    ],
+    [
+     -586,
+     -149.5
+    ],
+    [
+     -63,
+     -149.5
+    ],
+    [
+     -63,
+     -125.50062460986251
+    ],
+    [
+     -363.5,
+     -140.52562460986252
+    ],
+    [
+     -368.5,
+     -115.275
+    ],
+    [
+     -1300,
+     -161.85
+    ]
+   ],
+   "cuts": [
+    "pier-1",
+    "pier-2",
+    "edging"
+   ]
+  },
+  {
+   "id": "gravel",
+   "name": "Gravel strip 300, washed stone, 5 % fall",
+   "role": "drainage",
+   "junction": "F",
+   "src": [
+    "07 F4"
+   ],
+   "poly": [
+    [
+     -63,
+     0
+    ],
+    [
+     -363,
+     -15
+    ],
+    [
+     -363,
+     -140
+    ],
+    [
+     -63,
+     -125
+    ]
+   ]
+  },
+  {
+   "id": "geo-gravel",
+   "name": "Geotextile under gravel strip",
+   "role": "drainage",
+   "junction": "F",
+   "src": [
+    "07 F2"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "path": [
+    [
+     -63.02,
+     -125.25131230493126
+    ],
+    [
+     -363.25,
+     -140.26281230493126
+    ],
+    [
+     -363.25,
+     -15
+    ]
+   ]
+  },
+  {
+   "id": "edging",
+   "name": "Steel edging, top flush with grade",
+   "role": "metal",
+   "junction": "F",
+   "src": [
+    "07 F3"
+   ],
+   "poly": [
+    [
+     -368.5,
+     -145
+    ],
+    [
+     -363.5,
+     -145
+    ],
+    [
+     -363.5,
+     -15.15
+    ],
+    [
+     -368.5,
+     -15.15
+    ]
+   ]
+  },
+  {
+   "id": "topsoil",
+   "name": "Topsoil 100, 5 % fall for 3 m",
+   "role": "ground",
+   "junction": "F",
+   "src": [
+    "07 F6"
+   ],
+   "poly": [
+    [
+     -368.5,
+     -15.275
+    ],
+    [
+     -1300,
+     -61.85
+    ],
+    [
+     -1300,
+     -161.85
+    ],
+    [
+     -368.5,
+     -115.275
+    ]
+   ],
+   "cuts": [
+    "pier-1",
+    "pier-2"
+   ]
+  },
+  {
+   "id": "pier-base-1",
+   "name": "Compacted granular base under pier, 250",
+   "role": "drainage",
+   "junction": "C",
+   "src": [
+    "06 C2"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -855,
+   "w": [
+    150,
+    750
+   ],
+   "d": 250,
+   "from": -600,
+   "to": -500
+  },
+  {
+   "id": "pier-1",
+   "name": "Concrete pier 200, 450+ below grade, top 152+ above, top falls 1:10, chamfered",
+   "role": "concrete",
+   "junction": "C",
+   "src": [
+    "06 C1",
+    "06 C3",
+    "ABC 19",
+    "ABC 23"
+   ],
+   "type": "revolve",
+   "x": -855,
+   "w": [
+    150,
+    750
+   ],
+   "profile": [
+    [
+     0,
+     152
+    ],
+    [
+     50,
+     152
+    ],
+    [
+     90,
+     148
+    ],
+    [
+     100,
+     138
+    ],
+    [
+     100,
+     -500
+    ],
+    [
+     0,
+     -500
+    ]
+   ]
+  },
+  {
+   "id": "pier-anchor-1",
+   "name": "Cast-in stainless anchor 16",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C4"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -855,
+   "w": [
+    150,
+    750
+   ],
+   "d": 16,
+   "from": -400,
+   "to": 172,
+   "embeds": [
+    "pier-1",
+    "abu-base-1",
+    "anchor-washer-1",
+    "anchor-nut-1"
+   ]
+  },
+  {
+   "id": "anchor-washer-1",
+   "name": "Stainless washer on anchor",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 20"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -855,
+   "w": [
+    150,
+    750
+   ],
+   "d": 44,
+   "from": 153.5,
+   "to": 156.5
+  },
+  {
+   "id": "anchor-nut-1",
+   "name": "Stainless 5/8 nut on anchor",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 20"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -855,
+   "w": [
+    150,
+    750
+   ],
+   "d": 27,
+   "from": 156.5,
+   "to": 170.5
+  },
+  {
+   "id": "abu-base-1",
+   "name": "Stainless standoff post base: base plate",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 22"
+   ],
+   "poly": [
+    [
+     -893,
+     152
+    ],
+    [
+     -817,
+     152
+    ],
+    [
+     -817,
+     153.5
+    ],
+    [
+     -893,
+     153.5
+    ]
+   ],
+   "runs": [
+    [
+     102.34,
+     197.66
+    ],
+    [
+     702.34,
+     797.66
+    ]
+   ]
+  },
+  {
+   "id": "abu-straps-1",
+   "name": "Standoff post base: side straps (12 ga)",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5"
+   ],
+   "poly": [
+    [
+     -893,
+     153.5
+    ],
+    [
+     -817,
+     153.5
+    ],
+    [
+     -817,
+     292
+    ],
+    [
+     -893,
+     292
+    ]
+   ],
+   "runs": [
+    [
+     102.34,
+     105
+    ],
+    [
+     195,
+     197.66
+    ],
+    [
+     702.34,
+     705
+    ],
+    [
+     795,
+     797.66
+    ]
+   ]
+  },
+  {
+   "id": "abu-seat-1",
+   "name": "Standoff seat, 25 mm above concrete",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5"
+   ],
+   "poly": [
+    [
+     -900,
+     175.5
+    ],
+    [
+     -810,
+     175.5
+    ],
+    [
+     -810,
+     177
+    ],
+    [
+     -900,
+     177
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-1",
+   "name": "White oak post 90x90, end grain 25 above concrete",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C6",
+    "ABC 7"
+   ],
+   "poly": [
+    [
+     -900,
+     177
+    ],
+    [
+     -810,
+     177
+    ],
+    [
+     -810,
+     373.5
+    ],
+    [
+     -900,
+     373.5
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-cap-1",
+   "name": "Butyl/EPDM cap 1.5 on sealed post end grain, lapped 25 down free faces",
+   "role": "water",
+   "junction": "C",
+   "src": [
+    "ABC 7"
+   ],
+   "poly": [
+    [
+     -900,
+     373.5
+    ],
+    [
+     -810,
+     373.5
+    ],
+    [
+     -810,
+     375
+    ],
+    [
+     -900,
+     375
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-bolts-1-150",
+   "name": "Stainless through-bolts 12.7 at catalogue holes",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 18"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -855,
+     221.5
+    ],
+    [
+     -855,
+     270
+    ]
+   ],
+   "d": 12.7,
+   "from": 102,
+   "to": 198,
+   "embeds": [
+    "post-1",
+    "abu-straps-1"
+   ]
+  },
+  {
+   "id": "post-bolts-1-750",
+   "name": "Stainless through-bolts 12.7 at catalogue holes",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 18"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -855,
+     221.5
+    ],
+    [
+     -855,
+     270
+    ]
+   ],
+   "d": 12.7,
+   "from": 702,
+   "to": 798,
+   "embeds": [
+    "post-1",
+    "abu-straps-1"
+   ]
+  },
+  {
+   "id": "apron-1",
+   "name": "Oak apron 45x90, side-bolted to posts",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C8"
+   ],
+   "poly": [
+    [
+     -810,
+     285
+    ],
+    [
+     -765,
+     285
+    ],
+    [
+     -765,
+     375
+    ],
+    [
+     -810,
+     375
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     810
+    ]
+   ]
+  },
+  {
+   "id": "apron-bolts-1",
+   "name": "Stainless through-bolts, 2 per joint (moment connection)",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C7",
+    "06 C8"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "ys": [
+    305,
+    355
+   ],
+   "w": [
+    150,
+    750
+   ],
+   "d": 12.7,
+   "from": -900,
+   "to": -765,
+   "embeds": [
+    "apron-1",
+    "post-1"
+   ]
+  },
+  {
+   "id": "rail-tenon-1",
+   "name": "Rail tenon 25x30, 60 into post",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "poly": [
+    [
+     -900,
+     315
+    ],
+    [
+     -840,
+     315
+    ],
+    [
+     -840,
+     345
+    ],
+    [
+     -900,
+     345
+    ]
+   ],
+   "runs": [
+    [
+     137.5,
+     162.5
+    ],
+    [
+     737.5,
+     762.5
+    ]
+   ],
+   "embeds": [
+    "post-1"
+   ]
+  },
+  {
+   "id": "tenon-pins-1-150",
+   "name": "Stainless drawbore pins 10",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -880,
+     330
+    ],
+    [
+     -860,
+     330
+    ]
+   ],
+   "d": 10,
+   "from": 105,
+   "to": 195,
+   "embeds": [
+    "post-1",
+    "rail-tenon-1"
+   ]
+  },
+  {
+   "id": "tenon-pins-1-750",
+   "name": "Stainless drawbore pins 10",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -880,
+     330
+    ],
+    [
+     -860,
+     330
+    ]
+   ],
+   "d": 10,
+   "from": 705,
+   "to": 795,
+   "embeds": [
+    "post-1",
+    "rail-tenon-1"
+   ]
+  },
+  {
+   "id": "pier-base-2",
+   "name": "Compacted granular base under pier, 250",
+   "role": "drainage",
+   "junction": "C",
+   "src": [
+    "06 C2"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1115,
+   "w": [
+    150,
+    750
+   ],
+   "d": 250,
+   "from": -600,
+   "to": -500
+  },
+  {
+   "id": "pier-2",
+   "name": "Concrete pier 200, 450+ below grade, top 152+ above, top falls 1:10, chamfered",
+   "role": "concrete",
+   "junction": "C",
+   "src": [
+    "06 C1",
+    "06 C3",
+    "ABC 19",
+    "ABC 23"
+   ],
+   "type": "revolve",
+   "x": -1115,
+   "w": [
+    150,
+    750
+   ],
+   "profile": [
+    [
+     0,
+     152
+    ],
+    [
+     50,
+     152
+    ],
+    [
+     90,
+     148
+    ],
+    [
+     100,
+     138
+    ],
+    [
+     100,
+     -500
+    ],
+    [
+     0,
+     -500
+    ]
+   ]
+  },
+  {
+   "id": "pier-anchor-2",
+   "name": "Cast-in stainless anchor 16",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C4"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1115,
+   "w": [
+    150,
+    750
+   ],
+   "d": 16,
+   "from": -400,
+   "to": 172,
+   "embeds": [
+    "pier-2",
+    "abu-base-2",
+    "anchor-washer-2",
+    "anchor-nut-2"
+   ]
+  },
+  {
+   "id": "anchor-washer-2",
+   "name": "Stainless washer on anchor",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 20"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1115,
+   "w": [
+    150,
+    750
+   ],
+   "d": 44,
+   "from": 153.5,
+   "to": 156.5
+  },
+  {
+   "id": "anchor-nut-2",
+   "name": "Stainless 5/8 nut on anchor",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 20"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1115,
+   "w": [
+    150,
+    750
+   ],
+   "d": 27,
+   "from": 156.5,
+   "to": 170.5
+  },
+  {
+   "id": "abu-base-2",
+   "name": "Stainless standoff post base: base plate",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 22"
+   ],
+   "poly": [
+    [
+     -1153,
+     152
+    ],
+    [
+     -1077,
+     152
+    ],
+    [
+     -1077,
+     153.5
+    ],
+    [
+     -1153,
+     153.5
+    ]
+   ],
+   "runs": [
+    [
+     102.34,
+     197.66
+    ],
+    [
+     702.34,
+     797.66
+    ]
+   ]
+  },
+  {
+   "id": "abu-straps-2",
+   "name": "Standoff post base: side straps (12 ga)",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5"
+   ],
+   "poly": [
+    [
+     -1153,
+     153.5
+    ],
+    [
+     -1077,
+     153.5
+    ],
+    [
+     -1077,
+     292
+    ],
+    [
+     -1153,
+     292
+    ]
+   ],
+   "runs": [
+    [
+     102.34,
+     105
+    ],
+    [
+     195,
+     197.66
+    ],
+    [
+     702.34,
+     705
+    ],
+    [
+     795,
+     797.66
+    ]
+   ]
+  },
+  {
+   "id": "abu-seat-2",
+   "name": "Standoff seat, 25 mm above concrete",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5"
+   ],
+   "poly": [
+    [
+     -1160,
+     175.5
+    ],
+    [
+     -1070,
+     175.5
+    ],
+    [
+     -1070,
+     177
+    ],
+    [
+     -1160,
+     177
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-2",
+   "name": "White oak post 90x90, end grain 25 above concrete",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C6",
+    "ABC 7"
+   ],
+   "poly": [
+    [
+     -1160,
+     177
+    ],
+    [
+     -1070,
+     177
+    ],
+    [
+     -1070,
+     373.5
+    ],
+    [
+     -1160,
+     373.5
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-cap-2",
+   "name": "Butyl/EPDM cap 1.5 on sealed post end grain, lapped 25 down free faces",
+   "role": "water",
+   "junction": "C",
+   "src": [
+    "ABC 7"
+   ],
+   "poly": [
+    [
+     -1160,
+     373.5
+    ],
+    [
+     -1070,
+     373.5
+    ],
+    [
+     -1070,
+     375
+    ],
+    [
+     -1160,
+     375
+    ]
+   ],
+   "runs": [
+    [
+     105,
+     195
+    ],
+    [
+     705,
+     795
+    ]
+   ]
+  },
+  {
+   "id": "post-bolts-2-150",
+   "name": "Stainless through-bolts 12.7 at catalogue holes",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 18"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -1115,
+     221.5
+    ],
+    [
+     -1115,
+     270
+    ]
+   ],
+   "d": 12.7,
+   "from": 102,
+   "to": 198,
+   "embeds": [
+    "post-2",
+    "abu-straps-2"
+   ]
+  },
+  {
+   "id": "post-bolts-2-750",
+   "name": "Stainless through-bolts 12.7 at catalogue holes",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C5",
+    "ABC 18"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -1115,
+     221.5
+    ],
+    [
+     -1115,
+     270
+    ]
+   ],
+   "d": 12.7,
+   "from": 702,
+   "to": 798,
+   "embeds": [
+    "post-2",
+    "abu-straps-2"
+   ]
+  },
+  {
+   "id": "apron-2",
+   "name": "Oak apron 45x90, side-bolted to posts",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C8"
+   ],
+   "poly": [
+    [
+     -1205,
+     285
+    ],
+    [
+     -1160,
+     285
+    ],
+    [
+     -1160,
+     375
+    ],
+    [
+     -1205,
+     375
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     810
+    ]
+   ]
+  },
+  {
+   "id": "apron-bolts-2",
+   "name": "Stainless through-bolts, 2 per joint (moment connection)",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "06 C7",
+    "06 C8"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "ys": [
+    305,
+    355
+   ],
+   "w": [
+    150,
+    750
+   ],
+   "d": 12.7,
+   "from": -1205,
+   "to": -1070,
+   "embeds": [
+    "apron-2",
+    "post-2"
+   ]
+  },
+  {
+   "id": "rail-tenon-2",
+   "name": "Rail tenon 25x30, 60 into post",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "poly": [
+    [
+     -1130,
+     315
+    ],
+    [
+     -1070,
+     315
+    ],
+    [
+     -1070,
+     345
+    ],
+    [
+     -1130,
+     345
+    ]
+   ],
+   "runs": [
+    [
+     137.5,
+     162.5
+    ],
+    [
+     737.5,
+     762.5
+    ]
+   ],
+   "embeds": [
+    "post-2"
+   ]
+  },
+  {
+   "id": "tenon-pins-2-150",
+   "name": "Stainless drawbore pins 10",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -1110,
+     330
+    ],
+    [
+     -1090,
+     330
+    ]
+   ],
+   "d": 10,
+   "from": 105,
+   "to": 195,
+   "embeds": [
+    "post-2",
+    "rail-tenon-2"
+   ]
+  },
+  {
+   "id": "tenon-pins-2-750",
+   "name": "Stainless drawbore pins 10",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "at": [
+    [
+     -1110,
+     330
+    ],
+    [
+     -1090,
+     330
+    ]
+   ],
+   "d": 10,
+   "from": 705,
+   "to": 795,
+   "embeds": [
+    "post-2",
+    "rail-tenon-2"
+   ]
+  },
+  {
+   "id": "rail",
+   "name": "Oak cross rail 45x90, tenoned into posts",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C8",
+    "ABC 6"
+   ],
+   "poly": [
+    [
+     -1070,
+     285
+    ],
+    [
+     -900,
+     285
+    ],
+    [
+     -900,
+     375
+    ],
+    [
+     -1070,
+     375
+    ]
+   ],
+   "runs": [
+    [
+     127.5,
+     172.5
+    ],
+    [
+     727.5,
+     772.5
+    ]
+   ]
+  },
+  {
+   "id": "brace",
+   "name": "Oak diagonal brace 45, post base to opposite rail end",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C8",
+    "ABC 6"
+   ],
+   "poly": [
+    [
+     -900,
+     195
+    ],
+    [
+     -900,
+     241
+    ],
+    [
+     -1070,
+     285
+    ],
+    [
+     -1070,
+     239
+    ]
+   ],
+   "runs": [
+    [
+     127.5,
+     172.5
+    ],
+    [
+     727.5,
+     772.5
+    ]
+   ]
+  },
+  {
+   "id": "brace-screws-1",
+   "name": "Stainless structural screw 8, post into brace",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 235,
+   "w": [
+    150,
+    750
+   ],
+   "d": 8,
+   "from": -935,
+   "to": -830,
+   "embeds": [
+    "post-1",
+    "brace"
+   ]
+  },
+  {
+   "id": "brace-screws-2",
+   "name": "Stainless structural screw 8, post into brace",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 6"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "y": 250,
+   "w": [
+    150,
+    750
+   ],
+   "d": 8,
+   "from": -1140,
+   "to": -1035,
+   "embeds": [
+    "post-2",
+    "brace"
+   ]
+  },
+  {
+   "id": "slat-1",
+   "name": "Oak seat slat 45x130, 8 mm gaps",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C9"
+   ],
+   "poly": [
+    [
+     -920,
+     375
+    ],
+    [
+     -790,
+     375
+    ],
+    [
+     -790,
+     420
+    ],
+    [
+     -920,
+     420
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     810
+    ]
+   ]
+  },
+  {
+   "id": "slat-2",
+   "name": "Oak seat slat 45x130, 8 mm gaps",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C9"
+   ],
+   "poly": [
+    [
+     -1058,
+     375
+    ],
+    [
+     -928,
+     375
+    ],
+    [
+     -928,
+     420
+    ],
+    [
+     -1058,
+     420
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     810
+    ]
+   ]
+  },
+  {
+   "id": "slat-3",
+   "name": "Oak seat slat 45x130, 8 mm gaps",
+   "role": "furniture",
+   "junction": "C",
+   "src": [
+    "06 C9"
+   ],
+   "poly": [
+    [
+     -1196,
+     375
+    ],
+    [
+     -1066,
+     375
+    ],
+    [
+     -1066,
+     420
+    ],
+    [
+     -1196,
+     420
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     810
+    ]
+   ]
+  },
+  {
+   "id": "slat-screws-1",
+   "name": "Stainless screws from below through apron",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 21"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -800,
+   "w": [
+    110,
+    300,
+    600,
+    790
+   ],
+   "d": 5,
+   "from": 300,
+   "to": 410,
+   "embeds": [
+    "apron-1",
+    "slat-1"
+   ]
+  },
+  {
+   "id": "slat-screws-2",
+   "name": "Stainless screws from below through rail",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 21"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -990,
+   "w": [
+    140,
+    160,
+    740,
+    760
+   ],
+   "d": 5,
+   "from": 300,
+   "to": 410,
+   "embeds": [
+    "rail",
+    "slat-2"
+   ]
+  },
+  {
+   "id": "slat-screws-3",
+   "name": "Stainless screws from below through apron",
+   "role": "metal",
+   "junction": "C",
+   "src": [
+    "ABC 21"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1180,
+   "w": [
+    110,
+    300,
+    600,
+    790
+   ],
+   "d": 5,
+   "from": 300,
+   "to": 410,
+   "embeds": [
+    "apron-2",
+    "slat-3"
+   ]
+  }
+ ],
+ "views": [
+  {
+   "id": "A-base",
+   "x": [
+    -180,
+    160
+   ],
+   "y": [
+    140,
+    420
+   ]
+  },
+  {
+   "id": "B-eave",
+   "x": [
+    -800,
+    250
+   ],
+   "y": [
+    2950,
+    3600
+   ]
+  },
+  {
+   "id": "C-bench",
+   "x": [
+    -1260,
+    -700
+   ],
+   "y": [
+    -650,
+    460
+   ]
+  },
+  {
+   "id": "D-slab",
+   "x": [
+    -60,
+    420
+   ],
+   "y": [
+    -60,
+    420
+   ]
+  },
+  {
+   "id": "E-footing",
+   "x": [
+    -700,
+    420
+   ],
+   "y": [
+    -720,
+    20
+   ]
+  },
+  {
+   "id": "F-grade",
+   "x": [
+    -420,
+    40
+   ],
+   "y": [
+    -230,
+    330
+   ]
+  },
+  {
+   "id": "G-field",
+   "x": [
+    -130,
+    180
+   ],
+   "y": [
+    1400,
+    1650
+   ]
+  }
+ ]
+}

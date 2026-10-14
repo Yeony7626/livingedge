@@ -1,0 +1,6935 @@
+{
+ "L": 6000,
+ "root": "Detail02",
+ "opening_mm": 4800,
+ "parts": [
+  {
+   "id": "beam",
+   "name": "Engineered reinforced grade beam, rectangular, one pour (Part 4)",
+   "role": "concrete",
+   "mat": "concrete-f2-40scm",
+   "junction": "T",
+   "src": [
+    "R2 N5",
+    "12 foundation",
+    "14 §3.3 #1"
+   ],
+   "poly": [
+    [
+     -20,
+     -530
+    ],
+    [
+     240.4,
+     -530
+    ],
+    [
+     240.4,
+     -193
+    ],
+    [
+     -20,
+     -193
+    ]
+   ],
+   "note": "Part 4 engineered foundation (R2 ruling on VBBL 9.15.4.6). Underside −530: frost margin 74, drain cover 152 (R2 N5). Sill support level ±1 mm over 4.8 m.",
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "beam-rebar",
+   "name": "Beam reinforcement (about 9 kg/m)",
+   "role": "metal",
+   "mat": "rebar-eaf-pnw",
+   "junction": "T",
+   "src": [
+    "R4"
+   ],
+   "type": "virtual",
+   "m3PerMetre": 0.0011464968152866241
+  },
+  {
+   "id": "dampproof",
+   "name": "Water-based damp-proofing on the beam face (EPS-compatible)",
+   "role": "water",
+   "mat": "membrane-poly",
+   "junction": "T",
+   "src": [
+    "07 E6"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "path": [
+    [
+     -20.5,
+     -195
+    ],
+    [
+     -20.5,
+     -530
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "beam-insul",
+   "name": "Graphite EPS Type 3 75 on the beam face, full depth",
+   "role": "thermal",
+   "mat": "graphite-eps",
+   "junction": "T",
+   "src": [
+    "11 T2",
+    "R2 P4",
+    "R2 N5"
+   ],
+   "poly": [
+    [
+     -97,
+     -530
+    ],
+    [
+     -22,
+     -530
+    ],
+    [
+     -22,
+     -193
+    ],
+    [
+     -97,
+     -193
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "course",
+   "name": "Machined structural PU course (Armatherm 500-080 class), top cut to the 6 % fall — no mortar, no wedge",
+   "role": "thermal",
+   "mat": "pu-structural-160",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #3",
+    "R1 N2",
+    "R4 N6"
+   ],
+   "poly": [
+    [
+     -20,
+     -193
+    ],
+    [
+     240.4,
+     -193
+    ],
+    [
+     240.4,
+     -66.4
+    ],
+    [
+     -20,
+     -82
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "note": "Bedded on PU adhesive; drillable only below the pan line. Engineer to confirm long-term stress under the track (1.45 MPa grade)."
+  },
+  {
+   "id": "pan-skirt",
+   "name": "Self-adhered skirt under the pan, down the course face, lapped 100 over the damp-proofing",
+   "role": "water",
+   "mat": "membrane-poly",
+   "junction": "T",
+   "src": [
+    "R1 F1",
+    "R2 3"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     239.55,
+     -66.20092165898618
+    ],
+    [
+     -20.25,
+     -81.75
+    ],
+    [
+     -20.25,
+     -193.5
+    ],
+    [
+     -21.25,
+     -194.5
+    ],
+    [
+     -21.25,
+     -293
+    ]
+   ]
+  },
+  {
+   "id": "dam-angle",
+   "name": "316 stainless dam angle, cast in before the pour (stage 1), top −5",
+   "role": "water",
+   "mat": "stainless",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #4",
+    "R1 N6",
+    "R2 N3"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     240.9,
+     -5
+    ],
+    [
+     240.9,
+     -110
+    ]
+   ],
+   "note": "Interior water-barrier top −5 (5 mm sealant over): every exterior overflow crest is lower (notch −20, weir −95)."
+  },
+  {
+   "id": "pan",
+   "name": "316 welded sill pan 0.8, measured to the framed opening (stage 2), floor 6 %, nose into the channel",
+   "role": "water",
+   "mat": "stainless",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #9",
+    "R1 N6",
+    "11 T6"
+   ],
+   "type": "sheet",
+   "t": 0.8,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     239.55,
+     -65.53092165898617
+    ],
+    [
+     -20,
+     -81.08
+    ],
+    [
+     -38,
+     -82.16
+    ],
+    [
+     -38,
+     -103
+    ]
+   ],
+   "embeds": [
+    "pan-back"
+   ],
+   "note": "End dams 150 up the jambs, welded; jamb membranes lap ≥ 100 over them. Back upturn butyl-lapped to the dam angle (−60 → −25). No fastener through the pan floor (R2 N8)."
+  },
+  {
+   "id": "pan-back",
+   "name": "Pan back upturn (welded), butyl-lapped to the dam angle −60 → −25",
+   "role": "water",
+   "mat": "stainless",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #9"
+   ],
+   "type": "sheet",
+   "t": 0.8,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     240,
+     -25
+    ],
+    [
+     240,
+     -65.90396313364056
+    ]
+   ]
+  },
+  {
+   "id": "stone",
+   "name": "Clear stone 100, gas-permeable layer and capillary break",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "F",
+   "src": [
+    "12 build-up"
+   ],
+   "poly": [
+    [
+     240.4,
+     -300
+    ],
+    [
+     2500,
+     -300
+    ],
+    [
+     2500,
+     -200.25
+    ],
+    [
+     240.4,
+     -200.25
+    ]
+   ],
+   "note": "Radon rough-in per VBBL 9.13.4.3 (outside the slice). Never linked to the perimeter drain.",
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "eps-1",
+   "name": "Graphite EPS Type 2, 50 (layer 1)",
+   "role": "thermal",
+   "mat": "graphite-eps",
+   "junction": "F",
+   "src": [
+    "12 build-up"
+   ],
+   "poly": [
+    [
+     241.4,
+     -200.25
+    ],
+    [
+     2500,
+     -200.25
+    ],
+    [
+     2500,
+     -150.25
+    ],
+    [
+     241.4,
+     -150.25
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "eps-2",
+   "name": "Graphite EPS Type 2, 50 (layer 2, joints staggered)",
+   "role": "thermal",
+   "mat": "graphite-eps",
+   "junction": "F",
+   "src": [
+    "12 build-up"
+   ],
+   "poly": [
+    [
+     241.4,
+     -150.25
+    ],
+    [
+     2500,
+     -150.25
+    ],
+    [
+     2500,
+     -100.25
+    ],
+    [
+     241.4,
+     -100.25
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "soilgas",
+   "name": "0.25 mm soil-gas / air barrier under the slab, turned up the stem (jamb) or the dam angle (opening)",
+   "role": "air",
+   "mat": "ldpe-film",
+   "junction": "F",
+   "src": [
+    "14 §3.3 #5",
+    "12 sealing"
+   ],
+   "type": "sheet",
+   "t": 0.25,
+   "path": [
+    [
+     2500,
+     -100.125
+    ],
+    [
+     241.4,
+     -100.125
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "soilgas-up",
+   "name": "Soil-gas poly up the dam angle's interior face, butyl 85",
+   "role": "air",
+   "mat": "ldpe-film",
+   "junction": "F",
+   "src": [
+    "14 §3.3 #5"
+   ],
+   "type": "sheet",
+   "t": 0.25,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     241.525,
+     -100
+    ],
+    [
+     241.525,
+     -15
+    ]
+   ]
+  },
+  {
+   "id": "slot-edge",
+   "name": "Expanded cork slab-edge strip 25",
+   "role": "thermal",
+   "mat": "cork",
+   "junction": "F",
+   "src": [
+    "14 §3.3 #6",
+    "R1 F4"
+   ],
+   "poly": [
+    [
+     241.65,
+     -100
+    ],
+    [
+     266.65,
+     -100
+    ],
+    [
+     266.65,
+     -8
+    ],
+    [
+     241.65,
+     -8
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "slab",
+   "name": "Low-carbon concrete slab 100, ground finish; mineral floor ≥ 610 from the sill; floor heating within 1 m",
+   "role": "concrete",
+   "mat": "concrete-lowcarbon",
+   "junction": "F",
+   "src": [
+    "12 build-up",
+    "11 T20",
+    "14 §8"
+   ],
+   "poly": [
+    [
+     267,
+     -100
+    ],
+    [
+     2500,
+     -100
+    ],
+    [
+     2500,
+     0
+    ],
+    [
+     267,
+     0
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "sill-bearer",
+   "name": "Purenit bearer 9–18 (550 kg/m³, λ 0.096), screw ground, drainage grooves underneath",
+   "role": "thermal",
+   "mat": "pu-structural",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #11",
+    "R1 N2"
+   ],
+   "poly": [
+    [
+     98,
+     -54.5
+    ],
+    [
+     236,
+     -54.5
+    ],
+    [
+     236,
+     -65.34359447004609
+    ],
+    [
+     98,
+     -73.61087557603688
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "note": "On discrete 2–3 mm PU/epoxy pads at the fixing points; 5 x 3 grooves at 150 o.c. drain outward. Frame screws stop in the bearer (screw ≤ block + bearer − 3)."
+  },
+  {
+   "id": "sill-block",
+   "name": "ENERsign primus sill block (timber / insulation composite), set dry",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §3.1",
+    "ENS-K03"
+   ],
+   "poly": [
+    [
+     100,
+     -54.5
+    ],
+    [
+     234,
+     -54.5
+    ],
+    [
+     234,
+     -1
+    ],
+    [
+     183,
+     -1
+    ],
+    [
+     183,
+     -19
+    ],
+    [
+     100,
+     -19
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "cuts": [
+    "track"
+   ]
+  },
+  {
+   "id": "sill-nosing",
+   "name": "Drained aluminium sill nosing with PVC break, lip −12, 1:8.4 to the track",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §3.1"
+   ],
+   "poly": [
+    [
+     91,
+     -12
+    ],
+    [
+     183,
+     -1
+    ],
+    [
+     183,
+     -19
+    ],
+    [
+     100,
+     -19
+    ],
+    [
+     100,
+     -21
+    ],
+    [
+     91,
+     -21
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "track",
+   "name": "Thermally broken running track, top at FFL",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §3.1"
+   ],
+   "poly": [
+    [
+     183,
+     -15
+    ],
+    [
+     233,
+     -15
+    ],
+    [
+     233,
+     0
+    ],
+    [
+     183,
+     0
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "track-rail",
+   "name": "Running rail, top +5",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §3.1"
+   ],
+   "poly": [
+    [
+     205,
+     0
+    ],
+    [
+     215,
+     0
+    ],
+    [
+     215,
+     5
+    ],
+    [
+     205,
+     5
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ]
+   ]
+  },
+  {
+   "id": "sill-foil",
+   "name": "EPDM air-seal foil 1.0: block face to pan upturn (bonds 34 / 22)",
+   "role": "air",
+   "mat": "epdm",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #15",
+    "R1 N2",
+    "R1 N13"
+   ],
+   "type": "sheet",
+   "t": 1,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     234.5,
+     -2
+    ],
+    [
+     234.5,
+     -36
+    ],
+    [
+     239.1,
+     -36
+    ],
+    [
+     239.1,
+     -58
+    ]
+   ]
+  },
+  {
+   "id": "back-fill",
+   "name": "Cork backer, loose-fit, removable",
+   "role": "thermal",
+   "mat": "cork",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #16"
+   ],
+   "poly": [
+    [
+     235,
+     -35.5
+    ],
+    [
+     238.6,
+     -35.5
+    ],
+    [
+     238.6,
+     -4
+    ],
+    [
+     235,
+     -4
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "sill-cover",
+   "name": "4 mm 316 floor plate over the slot, removable for the 30-year track renewal",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #17",
+    "R1 P7"
+   ],
+   "poly": [
+    [
+     235,
+     -4
+    ],
+    [
+     262,
+     -4
+    ],
+    [
+     262,
+     0
+    ],
+    [
+     235,
+     0
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "edge-seal",
+   "name": "Tin-free MS sealant joint 5, plate to slab",
+   "role": "air",
+   "mat": "butyl-sealant",
+   "junction": "F",
+   "src": [
+    "14 §3.3 #17",
+    "R4 4.8"
+   ],
+   "poly": [
+    [
+     262,
+     -8
+    ],
+    [
+     267,
+     -8
+    ],
+    [
+     267,
+     0
+    ],
+    [
+     262,
+     0
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "tray-ledge",
+   "name": "316 angle clips 40x40x3, 50 long at 300 o.c., screwed to the bearer face",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #18"
+   ],
+   "type": "sheet",
+   "t": 3,
+   "runs": [
+    [
+     150,
+     200
+    ],
+    [
+     450,
+     500
+    ],
+    [
+     750,
+     800
+    ],
+    [
+     1050,
+     1100
+    ],
+    [
+     1350,
+     1400
+    ],
+    [
+     1650,
+     1700
+    ],
+    [
+     1950,
+     2000
+    ],
+    [
+     2250,
+     2300
+    ],
+    [
+     2550,
+     2600
+    ],
+    [
+     2850,
+     2900
+    ],
+    [
+     3150,
+     3200
+    ],
+    [
+     3450,
+     3500
+    ],
+    [
+     3750,
+     3800
+    ],
+    [
+     4050,
+     4100
+    ],
+    [
+     4350,
+     4400
+    ],
+    [
+     4650,
+     4700
+    ]
+   ],
+   "path": [
+    [
+     83.5,
+     -40.5
+    ],
+    [
+     96.5,
+     -40.5
+    ],
+    [
+     96.5,
+     -70
+    ]
+   ]
+  },
+  {
+   "id": "slot-screen",
+   "name": "Perforated 316 dirt screen under the 6 mm slot",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "D",
+   "src": [
+    "14 §3.3 #20",
+    "11 T16"
+   ],
+   "poly": [
+    [
+     85,
+     -46
+    ],
+    [
+     95,
+     -46
+    ],
+    [
+     95,
+     -45
+    ],
+    [
+     85,
+     -45
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "landing-tray",
+   "name": "316 tray 1.5, folded edges, perforated over the channel, lift-out lengths ≤ 1 m",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #19",
+    "R1 P8"
+   ],
+   "type": "sheet",
+   "t": 1.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     -170.75,
+     -8
+    ],
+    [
+     -170.75,
+     -38.25
+    ],
+    [
+     84.25,
+     -38.25
+    ],
+    [
+     84.25,
+     -8
+    ]
+   ]
+  },
+  {
+   "id": "tray-slips",
+   "name": "Granite paver slips 30 in the tray, top −7 (one ground with the landing)",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #19",
+    "R5 P1"
+   ],
+   "poly": [
+    [
+     -170,
+     -37.5
+    ],
+    [
+     83.5,
+     -37.5
+    ],
+    [
+     83.5,
+     -7
+    ],
+    [
+     -170,
+     -7
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4200
+    ]
+   ]
+  },
+  {
+   "id": "tray-slips-notch",
+   "per": "opening",
+   "name": "Slips 17 in the overflow notch, top −20 (crest below the −5 barrier)",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "T",
+   "src": [
+    "R2 N3",
+    "14 §3.5"
+   ],
+   "poly": [
+    [
+     -170,
+     -37.5
+    ],
+    [
+     83.5,
+     -37.5
+    ],
+    [
+     83.5,
+     -20
+    ],
+    [
+     -170,
+     -20
+    ]
+   ],
+   "runs": [
+    [
+     4200,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "channel",
+   "name": "Polymer-concrete trench channel, 316 edge rail, house wall top −92 (pan nose drains in)",
+   "role": "drainage",
+   "mat": "polymer-concrete",
+   "junction": "T",
+   "src": [
+    "11 T16",
+    "R1 N3",
+    "R2 N3",
+    "14 §3.3 #10"
+   ],
+   "poly": [
+    [
+     -171.5,
+     -39
+    ],
+    [
+     -171.5,
+     -130
+    ],
+    [
+     -21.5,
+     -130
+    ],
+    [
+     -21.5,
+     -92
+    ],
+    [
+     -31.5,
+     -92
+    ],
+    [
+     -31.5,
+     -120
+    ],
+    [
+     -159.5,
+     -120
+    ],
+    [
+     -159.5,
+     -39
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "cuts": [
+    "channel-drop"
+   ],
+   "note": "Opening width, 316 end caps flush with the reveal liners (R5 N3). Invert −95 → −120 toward the jamb-A outlet (0.5 %, not drawn); silt-box weir −95; bottom outlet to its own solid pipe (R2 N2, N3)."
+  },
+  {
+   "id": "tray-stools",
+   "name": "316 stools on the pan over the channel house wall, carrying the tray",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "T",
+   "src": [
+    "14 §3.3 #19"
+   ],
+   "poly": [
+    [
+     -31.5,
+     -81.3689400921659
+    ],
+    [
+     -26.5,
+     -81.069400921659
+    ],
+    [
+     -26.5,
+     -39
+    ],
+    [
+     -31.5,
+     -39
+    ]
+   ],
+   "runs": [
+    [
+     150,
+     200
+    ],
+    [
+     450,
+     500
+    ],
+    [
+     750,
+     800
+    ],
+    [
+     1050,
+     1100
+    ],
+    [
+     1350,
+     1400
+    ],
+    [
+     1650,
+     1700
+    ],
+    [
+     1950,
+     2000
+    ],
+    [
+     2250,
+     2300
+    ],
+    [
+     2550,
+     2600
+    ],
+    [
+     2850,
+     2900
+    ],
+    [
+     3150,
+     3200
+    ],
+    [
+     3450,
+     3500
+    ],
+    [
+     3750,
+     3800
+    ],
+    [
+     4050,
+     4100
+    ],
+    [
+     4350,
+     4400
+    ],
+    [
+     4650,
+     4700
+    ]
+   ],
+   "note": "Bonded on the pan floor over the channel house wall; nothing fixed through the pan."
+  },
+  {
+   "id": "haunch",
+   "name": "Concrete haunch under the channel, on the beam insulation and the drain stone",
+   "role": "concrete",
+   "mat": "concrete-lowcarbon",
+   "junction": "T",
+   "src": [
+    "R1 table",
+    "R2 9"
+   ],
+   "poly": [
+    [
+     -171.5,
+     -193
+    ],
+    [
+     -22,
+     -193
+    ],
+    [
+     -22,
+     -130
+    ],
+    [
+     -171.5,
+     -130
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "cuts": [
+    "channel-drop"
+   ]
+  },
+  {
+   "id": "sash",
+   "name": "Sliding sash bottom rail (aluminium-clad spruce), grooved over the running rail",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §3.1",
+    "ENS-K03"
+   ],
+   "poly": [
+    [
+     147,
+     1
+    ],
+    [
+     205,
+     1
+    ],
+    [
+     205,
+     5
+    ],
+    [
+     215,
+     5
+    ],
+    [
+     215,
+     1
+    ],
+    [
+     259,
+     1
+    ],
+    [
+     259,
+     101
+    ],
+    [
+     147,
+     101
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ],
+    [
+     2460,
+     4635
+    ]
+   ]
+  },
+  {
+   "id": "glass-1",
+   "name": "Outer lite 6 mm HS/FT, CSA A460 dot markers on #1 (≤ 50 x 50), low-e #2",
+   "role": "cladding",
+   "mat": "igu-triple",
+   "junction": "D",
+   "src": [
+    "14 §5",
+    "R4 N2",
+    "R3 F11"
+   ],
+   "poly": [
+    [
+     168.6,
+     101
+    ],
+    [
+     174.6,
+     101
+    ],
+    [
+     174.6,
+     2572
+    ],
+    [
+     168.6,
+     2572
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ],
+    [
+     2460,
+     4635
+    ]
+   ],
+   "note": "6/14 Ar/4/14 Ar/8.76 = 46.8 in the 48 rebate; Ug ≈ 0.55–0.6; ≈ 47 kg/m², sash ≈ 310 kg (≤ 400 kg drive). Dry-glazed for the year-30 IGU change."
+  },
+  {
+   "id": "glass-2",
+   "name": "Centre lite 4 mm",
+   "role": "cladding",
+   "mat": "igu-triple",
+   "junction": "D",
+   "src": [
+    "14 §5",
+    "R4 N2",
+    "R3 F11"
+   ],
+   "poly": [
+    [
+     188.6,
+     101
+    ],
+    [
+     192.6,
+     101
+    ],
+    [
+     192.6,
+     2572
+    ],
+    [
+     188.6,
+     2572
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ],
+    [
+     2460,
+     4635
+    ]
+   ]
+  },
+  {
+   "id": "glass-3",
+   "name": "Inner lite 8.76 laminated, low-e #5",
+   "role": "cladding",
+   "mat": "igu-triple",
+   "junction": "D",
+   "src": [
+    "14 §5",
+    "R4 N2",
+    "R3 F11"
+   ],
+   "poly": [
+    [
+     206.6,
+     101
+    ],
+    [
+     215.35999999999999,
+     101
+    ],
+    [
+     215.35999999999999,
+     2572
+    ],
+    [
+     206.6,
+     2572
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ],
+    [
+     2460,
+     4635
+    ]
+   ]
+  },
+  {
+   "id": "sash-top",
+   "name": "Sash top rail + bead (77 + 23)",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §4"
+   ],
+   "poly": [
+    [
+     147,
+     2572
+    ],
+    [
+     259,
+     2572
+    ],
+    [
+     259,
+     2672
+    ],
+    [
+     147,
+     2672
+    ]
+   ],
+   "runs": [
+    [
+     165,
+     2340
+    ],
+    [
+     2460,
+     4635
+    ]
+   ]
+  },
+  {
+   "id": "head-frame",
+   "name": "Head frame member 42; 16 lift / guide clearance to the sash below",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §4"
+   ],
+   "poly": [
+    [
+     0,
+     2688
+    ],
+    [
+     259,
+     2688
+    ],
+    [
+     259,
+     2730
+    ],
+    [
+     0,
+     2730
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "door-jamb-a",
+   "name": "Jamb frame + sash stile, sightline 165 (U_f 0.86, f_Rsi 0.71)",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §4"
+   ],
+   "axis": "x",
+   "x": [
+    0,
+    259
+   ],
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     165,
+     0
+    ],
+    [
+     165,
+     2688
+    ],
+    [
+     0,
+     2688
+    ]
+   ]
+  },
+  {
+   "id": "door-interlock",
+   "name": "Interlock 120 (U_f 1.19, f_Rsi 0.70)",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §4"
+   ],
+   "axis": "x",
+   "x": [
+    0,
+    259
+   ],
+   "poly": [
+    [
+     2340,
+     0
+    ],
+    [
+     2460,
+     0
+    ],
+    [
+     2460,
+     2688
+    ],
+    [
+     2340,
+     2688
+    ]
+   ]
+  },
+  {
+   "id": "door-jamb-b",
+   "name": "Jamb frame, fixed side",
+   "role": "frame",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §4"
+   ],
+   "axis": "x",
+   "x": [
+    0,
+    259
+   ],
+   "poly": [
+    [
+     4635,
+     0
+    ],
+    [
+     4800,
+     0
+    ],
+    [
+     4800,
+     2688
+    ],
+    [
+     4635,
+     2688
+    ]
+   ]
+  },
+  {
+   "id": "door-unit",
+   "name": "Door unit A1–A3 excluding glass: wood-Al frame, lift-slide hardware, SIEGENIA drive (carrier)",
+   "role": "frame",
+   "mat": "door-unit-woodalu",
+   "junction": "D",
+   "src": [
+    "14 §7"
+   ],
+   "type": "virtual",
+   "m3PerMetre": 0.075,
+   "note": "≈ 27 kgCO2e/m² of opening × 2.785 m (frame 15 + hardware 5 + drive 7, mid values, INFERRED); no product EPD — require EN 15804+A2 in the tender."
+  },
+  {
+   "id": "drive",
+   "name": "SIEGENIA DRIVE axxent HSA slide drive, room side on the frame head (≈ 45), jam protection by current limit, manual key",
+   "role": "metal",
+   "mat": "aluminium",
+   "nocarbon": true,
+   "junction": "D",
+   "src": [
+    "14 §6",
+    "R3 N3"
+   ],
+   "poly": [
+    [
+     200,
+     2730
+    ],
+    [
+     259,
+     2730
+    ],
+    [
+     259,
+     2780
+    ],
+    [
+     200,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "note": "Dedicated 120 V circuit to the fixed-panel jamb; push buttons 900–1100 on both faces (B651 5.2.7.1); exterior button cable in a sealed grommet above the pan end dam."
+  },
+  {
+   "id": "head-gap-fill",
+   "name": "Stone-wool strip in the 12 head gap (no foam)",
+   "role": "thermal",
+   "mat": "comfortbatt",
+   "junction": "H",
+   "src": [
+    "13 FB10",
+    "11 H6"
+   ],
+   "poly": [
+    [
+     25,
+     2730
+    ],
+    [
+     200,
+     2730
+    ],
+    [
+     200,
+     2742
+    ],
+    [
+     25,
+     2742
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "head-ground",
+   "name": "D.Fir fixing ground 38, shimmed level ±1 mm, screwed to the glulam soffit after dead load",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "junction": "H",
+   "src": [
+    "13 FB4",
+    "R1 N5"
+   ],
+   "poly": [
+    [
+     25,
+     2742
+    ],
+    [
+     200,
+     2742
+    ],
+    [
+     200,
+     2780
+    ],
+    [
+     25,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "glulam",
+   "name": "Glulam header DF-L 24f-E 215 x 684, flush, joists hung (≤ 3 mm incl. creep: engineer)",
+   "role": "frame",
+   "mat": "glulam",
+   "junction": "H",
+   "src": [
+    "13 §3",
+    "11 H1"
+   ],
+   "poly": [
+    [
+     25,
+     2780
+    ],
+    [
+     240,
+     2780
+    ],
+    [
+     240,
+     3464
+    ],
+    [
+     25,
+     3464
+    ]
+   ],
+   "runs": [
+    [
+     -145,
+     4945
+    ]
+   ],
+   "note": "Stacked-stud / built-up header rejected: 30–40 mm deflection at this span (13 §3.2). Bears 114 on 3 jacks + 2 kings per side."
+  },
+  {
+   "id": "head-tape-ext",
+   "name": "Vapour-open window tape: frame face, loop over the gap, up the ground and glulam face (WRB laps over)",
+   "role": "air",
+   "mat": "membrane-poly",
+   "junction": "H",
+   "src": [
+    "13 FB11",
+    "R1 F5"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     -0.25,
+     2705
+    ],
+    [
+     -0.25,
+     2730.25
+    ],
+    [
+     24.75,
+     2730.25
+    ],
+    [
+     24.75,
+     2800
+    ]
+   ]
+  },
+  {
+   "id": "head-tape-int",
+   "name": "Interior airtight tape (vapour-retarding), frame to glulam, 10 mm loop",
+   "role": "air",
+   "mat": "membrane-poly",
+   "junction": "H",
+   "src": [
+    "13 FB12",
+    "11 H7"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     259.25,
+     2700
+    ],
+    [
+     259.25,
+     2780.25
+    ],
+    [
+     240.25,
+     2780.25
+    ]
+   ]
+  },
+  {
+   "id": "head-block",
+   "name": "Stone-wool board 30 in front of the frame head (P9: interior head f_Rsi 0.67 → ≈ 0.91)",
+   "role": "thermal",
+   "mat": "comfortboard-80",
+   "junction": "H",
+   "src": [
+    "13 FB13",
+    "R1 P9"
+   ],
+   "poly": [
+    [
+     -30,
+     2690
+    ],
+    [
+     -0.5,
+     2690
+    ],
+    [
+     -0.5,
+     2730.5
+    ],
+    [
+     24,
+     2730.5
+    ],
+    [
+     24,
+     2758
+    ],
+    [
+     -30,
+     2758
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "head-cant",
+   "name": "PT head cant, 6 % outward",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "H",
+   "src": [
+    "13 FB14",
+    "VBBL 9.27.3.8(4)"
+   ],
+   "poly": [
+    [
+     -150,
+     2758
+    ],
+    [
+     24,
+     2758
+    ],
+    [
+     24,
+     2792
+    ],
+    [
+     -150,
+     2781.56
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "head-subflash",
+   "name": "Self-adhered head sub-flash, WRB lapped over it ≥ 75 (inboard piece)",
+   "role": "water",
+   "mat": "membrane-poly",
+   "junction": "H",
+   "src": [
+    "13 FB15",
+    "R1 N4"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     23.75,
+     2860
+    ],
+    [
+     23.75,
+     2792.235
+    ],
+    [
+     -124.5,
+     2783.34
+    ]
+   ],
+   "cuts": [
+    "canopy-pad"
+   ]
+  },
+  {
+   "id": "head-drip",
+   "name": "Charcoal 24 ga drip (outboard piece only: no steel touches the header), kick 10 past the liner",
+   "role": "water",
+   "mat": "steel-prefinished",
+   "junction": "H",
+   "src": [
+    "13 FB16",
+    "R1 N4",
+    "R5 N5"
+   ],
+   "type": "sheet",
+   "t": 0.61,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     -125,
+     2783.365
+    ],
+    [
+     -150.45,
+     2781.8379999999997
+    ],
+    [
+     -150.45,
+     2754
+    ],
+    [
+     -160,
+     2750
+    ]
+   ]
+  },
+  {
+   "id": "cassette",
+   "name": "ZIP screen cassette 160 x 118 in the head reveal, charcoal, 6 % solar mesh (west; zone reserved east)",
+   "role": "metal",
+   "mat": "aluminium",
+   "fill": 0.25,
+   "junction": "H",
+   "src": [
+    "13 FB30",
+    "13 §4.4",
+    "R5 N4"
+   ],
+   "poly": [
+    [
+     -150,
+     2608
+    ],
+    [
+     -32,
+     2608
+    ],
+    [
+     -32,
+     2758
+    ],
+    [
+     -150,
+     2758
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "note": "4.8 m needs a 140/180-class system (Renson Fixscreen 150 evo class, WK3). Guides inside the liners; bottom bar to the tray. Doubles as the insect screen when the wall is open."
+  },
+  {
+   "id": "wrb",
+   "name": "Vapour-permeable self-adhered WRB / primary air barrier, folded loop over the floor-line gap",
+   "role": "air",
+   "mat": "membrane-poly",
+   "junction": "H",
+   "src": [
+    "13 FB9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     24.25,
+     2742.5
+    ],
+    [
+     24.25,
+     6200
+    ]
+   ]
+  },
+  {
+   "id": "wf-band",
+   "name": "Wood-fibre board 80 over the glulam and upper wall (joints offset from the sheathing gap)",
+   "role": "thermal",
+   "mat": "woodfibre-board",
+   "junction": "H",
+   "src": [
+    "13 FB17",
+    "09 W1"
+   ],
+   "poly": [
+    [
+     -56,
+     2787.7
+    ],
+    [
+     23.5,
+     2792.47
+    ],
+    [
+     23.5,
+     6200
+    ],
+    [
+     -56,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     6000
+    ]
+   ],
+   "cuts": [
+    "canopy-pad",
+    "canopy-plate"
+   ]
+  },
+  {
+   "id": "canopy-pad",
+   "per": "opening",
+   "name": "Structural thermal-break pad 15 (Armatherm FRR class) under each bracket",
+   "role": "thermal",
+   "mat": "pu-structural",
+   "junction": "H",
+   "src": [
+    "13 FB18"
+   ],
+   "poly": [
+    [
+     9,
+     2800
+    ],
+    [
+     24,
+     2800
+    ],
+    [
+     24,
+     3100
+    ],
+    [
+     9,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     220,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "canopy-plate",
+   "per": "opening",
+   "name": "HDG back plate 10, 4 x Ø10 screws into the glulam (Part 4)",
+   "role": "metal",
+   "mat": "steel-section",
+   "junction": "H",
+   "src": [
+    "13 FB18"
+   ],
+   "poly": [
+    [
+     -1,
+     2800
+    ],
+    [
+     9,
+     2800
+    ],
+    [
+     9,
+     3100
+    ],
+    [
+     -1,
+     3100
+    ]
+   ],
+   "runs": [
+    [
+     220,
+     380
+    ]
+   ]
+  },
+  {
+   "id": "canopy-knife",
+   "per": "opening",
+   "name": "HDG knife plate 10, 120 → 90 deep",
+   "role": "metal",
+   "mat": "steel-section",
+   "junction": "H",
+   "src": [
+    "13 FB19"
+   ],
+   "poly": [
+    [
+     -1,
+     2819
+    ],
+    [
+     -740,
+     2819
+    ],
+    [
+     -740,
+     2909
+    ],
+    [
+     -1,
+     2939
+    ]
+   ],
+   "runs": [
+    [
+     295,
+     305
+    ]
+   ],
+   "embeds": [
+    "canopy-frame",
+    "canopy-ledger",
+    "wf-band"
+   ]
+  },
+  {
+   "id": "canopy-ledger",
+   "name": "PT ledger 38 x 184 on the head cant, slotted at the knife plates",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "H",
+   "src": [
+    "13 FB20"
+   ],
+   "poly": [
+    [
+     -94,
+     2785.42
+    ],
+    [
+     -56,
+     2787.7
+    ],
+    [
+     -56,
+     2958.4
+    ],
+    [
+     -94,
+     2958.4
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "canopy-frame",
+   "name": "PT outriggers either side of each knife plate + purlins at 400",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "fill": 0.25,
+   "junction": "H",
+   "src": [
+    "13 FB21"
+   ],
+   "poly": [
+    [
+     -94,
+     2819
+    ],
+    [
+     -750,
+     2819
+    ],
+    [
+     -750,
+     2932.78
+    ],
+    [
+     -94,
+     2945.9
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "canopy-deck",
+   "name": "Plywood deck 12.5 + self-adhered membrane",
+   "role": "frame",
+   "mat": "plywood",
+   "junction": "H",
+   "src": [
+    "13 FB22"
+   ],
+   "poly": [
+    [
+     -94,
+     2945.9
+    ],
+    [
+     -750,
+     2932.78
+    ],
+    [
+     -750,
+     2945.28
+    ],
+    [
+     -94,
+     2958.4
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "canopy-cap",
+   "name": "Charcoal 24 ga flat-lock cap, upstand 100+ behind the strapping, hemmed drip at the tip",
+   "role": "water",
+   "mat": "steel-prefinished",
+   "junction": "H",
+   "src": [
+    "13 FB22",
+    "13 FB23",
+    "06 B15"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ],
+   "path": [
+    [
+     -56.3,
+     3080
+    ],
+    [
+     -56.3,
+     2958.7000000000003
+    ],
+    [
+     -94,
+     2958.7000000000003
+    ],
+    [
+     -757.3,
+     2945.434
+    ],
+    [
+     -757.3,
+     2950
+    ]
+   ],
+   "note": "Through-insulation sub-flash on a 6 % bevel in a horizontal WF joint at ≈ 2976, lapped under the WRB (FB23, not drawn)."
+  },
+  {
+   "id": "canopy-soffit",
+   "name": "Honey cedar soffit 19 (sheltered)",
+   "role": "cladding",
+   "mat": "cedar-soffit",
+   "junction": "H",
+   "src": [
+    "13 FB24",
+    "R5 palette"
+   ],
+   "poly": [
+    [
+     -750,
+     2800
+    ],
+    [
+     -94,
+     2800
+    ],
+    [
+     -94,
+     2819
+    ],
+    [
+     -750,
+     2819
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "canopy-fascia",
+   "name": "Charcoal fascia (caps the picture frame)",
+   "role": "metal",
+   "mat": "steel-prefinished",
+   "junction": "H",
+   "src": [
+    "13 FB24"
+   ],
+   "poly": [
+    [
+     -757,
+     2795
+    ],
+    [
+     -750,
+     2795
+    ],
+    [
+     -750,
+     2945.0280000000002
+    ],
+    [
+     -757,
+     2945.0280000000002
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "strap-band",
+   "name": "PT strapping 19 x 64 (cavity), from above the cap upstand",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "H",
+   "src": [
+    "13 FB26",
+    "09 W1"
+   ],
+   "poly": [
+    [
+     -75,
+     3080
+    ],
+    [
+     -56,
+     3080
+    ],
+    [
+     -56,
+     6200
+    ],
+    [
+     -75,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     47,
+     111
+    ],
+    [
+     447,
+     511
+    ],
+    [
+     847,
+     911
+    ],
+    [
+     1247,
+     1311
+    ],
+    [
+     1647,
+     1711
+    ],
+    [
+     2047,
+     2111
+    ],
+    [
+     2447,
+     2511
+    ],
+    [
+     2847,
+     2911
+    ],
+    [
+     3247,
+     3311
+    ],
+    [
+     3647,
+     3711
+    ],
+    [
+     4047,
+     4111
+    ],
+    [
+     4447,
+     4511
+    ],
+    [
+     4847,
+     4911
+    ],
+    [
+     5247,
+     5311
+    ],
+    [
+     5647,
+     5711
+    ]
+   ]
+  },
+  {
+   "id": "band-screen",
+   "name": "Black stainless insect screen ≤ 2 mm across the cavity bottom over the canopy",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "H",
+   "src": [
+    "13 FB27",
+    "08 L"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     -56.6,
+     2985.25
+    ],
+    [
+     -74.75,
+     2985.25
+    ]
+   ]
+  },
+  {
+   "id": "cedar-band",
+   "name": "WRC channel siding 19, first course 2975 (≈ 15 above the cap)",
+   "role": "cladding",
+   "mat": "cedar-siding",
+   "junction": "H",
+   "src": [
+    "13 FB28",
+    "09 W1"
+   ],
+   "poly": [
+    [
+     -94,
+     2975
+    ],
+    [
+     -75,
+     2975
+    ],
+    [
+     -75,
+     6200
+    ],
+    [
+     -94,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "joists",
+   "name": "302 I-joists at 400 on face-mount hangers to the glulam",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "fill": 0.35,
+   "junction": "U",
+   "src": [
+    "13 FB5"
+   ],
+   "poly": [
+    [
+     240,
+     3162
+    ],
+    [
+     2500,
+     3162
+    ],
+    [
+     2500,
+     3464
+    ],
+    [
+     240,
+     3464
+    ]
+   ],
+   "runs": [
+    [
+     60,
+     98
+    ],
+    [
+     460,
+     498
+    ],
+    [
+     860,
+     898
+    ],
+    [
+     1260,
+     1298
+    ],
+    [
+     1660,
+     1698
+    ],
+    [
+     2060,
+     2098
+    ],
+    [
+     2460,
+     2498
+    ],
+    [
+     2860,
+     2898
+    ],
+    [
+     3260,
+     3298
+    ],
+    [
+     3660,
+     3698
+    ],
+    [
+     4060,
+     4098
+    ],
+    [
+     4460,
+     4498
+    ],
+    [
+     4860,
+     4898
+    ],
+    [
+     5260,
+     5298
+    ],
+    [
+     5660,
+     5698
+    ]
+   ]
+  },
+  {
+   "id": "joists-jz",
+   "per": "opening",
+   "name": "I-joists over the jamb wall (bearing on the top plates)",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "fill": 0.35,
+   "junction": "U",
+   "src": [
+    "13 FB5"
+   ],
+   "poly": [
+    [
+     177.5,
+     3162
+    ],
+    [
+     2500,
+     3162
+    ],
+    [
+     2500,
+     3464
+    ],
+    [
+     177.5,
+     3464
+    ]
+   ],
+   "runs": [
+    [
+     -1140,
+     -1102
+    ],
+    [
+     -740,
+     -702
+    ],
+    [
+     -340,
+     -302
+    ]
+   ]
+  },
+  {
+   "id": "ceiling",
+   "name": "Gypsum ceiling 12.7 on the joists (glulam face exposed)",
+   "role": "frame",
+   "mat": "gypsum",
+   "junction": "U",
+   "src": [
+    "13 4.1"
+   ],
+   "poly": [
+    [
+     240,
+     3149.3
+    ],
+    [
+     2500,
+     3149.3
+    ],
+    [
+     2500,
+     3162
+    ],
+    [
+     240,
+     3162
+    ]
+   ],
+   "runs": [
+    [
+     -145,
+     4945
+    ]
+   ]
+  },
+  {
+   "id": "ceiling-jz",
+   "per": "opening",
+   "name": "Gypsum ceiling (jamb zone)",
+   "role": "frame",
+   "mat": "gypsum",
+   "junction": "U",
+   "src": [
+    "13 4.1"
+   ],
+   "poly": [
+    [
+     190.2,
+     3149.3
+    ],
+    [
+     2500,
+     3149.3
+    ],
+    [
+     2500,
+     3162
+    ],
+    [
+     190.2,
+     3162
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -145
+    ],
+    [
+     4945,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "subfloor",
+   "name": "Subfloor 19 T&G, glued and screwed over joists and glulam",
+   "role": "frame",
+   "mat": "plywood",
+   "junction": "U",
+   "src": [
+    "13 FB6"
+   ],
+   "poly": [
+    [
+     37.5,
+     3464
+    ],
+    [
+     2500,
+     3464
+    ],
+    [
+     2500,
+     3483
+    ],
+    [
+     37.5,
+     3483
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "upper-plate",
+   "name": "LSL bottom plate 38 x 140",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "junction": "U",
+   "src": [
+    "13 FB7"
+   ],
+   "poly": [
+    [
+     37.5,
+     3483
+    ],
+    [
+     177.5,
+     3483
+    ],
+    [
+     177.5,
+     3521
+    ],
+    [
+     37.5,
+     3521
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "upper-core",
+   "name": "Upper wall 2x6 at 400 + dense-pack cellulose (6 mil poly inside)",
+   "role": "thermal",
+   "mat": "cellulose-dense",
+   "junction": "U",
+   "src": [
+    "09 W1",
+    "13 FB7"
+   ],
+   "poly": [
+    [
+     37.5,
+     3521
+    ],
+    [
+     177.5,
+     3521
+    ],
+    [
+     177.5,
+     6200
+    ],
+    [
+     37.5,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "upper-gyp",
+   "name": "Gypsum 12.7 (upper wall)",
+   "role": "frame",
+   "mat": "gypsum",
+   "junction": "U",
+   "src": [
+    "09 W1"
+   ],
+   "poly": [
+    [
+     177.5,
+     3483
+    ],
+    [
+     190.2,
+     3483
+    ],
+    [
+     190.2,
+     6200
+    ],
+    [
+     177.5,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "upper-ply",
+   "name": "Plywood sheathing 12.5, 3 mm gap above the glulam (shrinkage)",
+   "role": "frame",
+   "mat": "plywood",
+   "junction": "U",
+   "src": [
+    "13 FB8"
+   ],
+   "poly": [
+    [
+     24.9,
+     3467
+    ],
+    [
+     37.5,
+     3467
+    ],
+    [
+     37.5,
+     6200
+    ],
+    [
+     24.9,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-stem",
+   "per": "opening",
+   "name": "Concrete stem on the beam to +300, interior face at the gypsum line",
+   "role": "concrete",
+   "mat": "concrete-f2-40scm",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "06 A.1"
+   ],
+   "poly": [
+    [
+     37,
+     -193
+    ],
+    [
+     240.4,
+     -193
+    ],
+    [
+     240.4,
+     -100
+    ],
+    [
+     190.2,
+     -100
+    ],
+    [
+     190.2,
+     300
+    ],
+    [
+     37,
+     300
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "slab-jz",
+   "per": "opening",
+   "name": "Slab inside the jamb wall",
+   "role": "concrete",
+   "mat": "concrete-lowcarbon",
+   "junction": "F",
+   "src": [
+    "12 build-up"
+   ],
+   "poly": [
+    [
+     190.2,
+     -100
+    ],
+    [
+     267,
+     -100
+    ],
+    [
+     267,
+     0
+    ],
+    [
+     190.2,
+     0
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "plinth-insul",
+   "per": "opening",
+   "name": "Plinth graphite EPS 100 on the stem, top cut to 6 %",
+   "role": "thermal",
+   "mat": "graphite-eps",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -63,
+     -193
+    ],
+    [
+     36.5,
+     -193
+    ],
+    [
+     36.5,
+     299.9
+    ],
+    [
+     23.9,
+     299.9
+    ],
+    [
+     23.9,
+     300.634
+    ],
+    [
+     -63,
+     295.42
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-parge",
+   "per": "opening",
+   "name": "Charcoal mineral parge 12 (RGB 78,78,76), to 186 below grade",
+   "role": "concrete",
+   "mat": "parge-charcoal",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "R5 N3"
+   ],
+   "poly": [
+    [
+     -75,
+     -193
+    ],
+    [
+     -63,
+     -193
+    ],
+    [
+     -63,
+     295.42
+    ],
+    [
+     -75,
+     294.7
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "sill-transition",
+   "per": "opening",
+   "name": "Self-adhered transition membrane: sheathing face over the sill joint, 75 onto the stem",
+   "role": "water",
+   "mat": "membrane-poly",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     24.75,
+     380
+    ],
+    [
+     24.75,
+     300.25
+    ],
+    [
+     36.75,
+     300.25
+    ],
+    [
+     36.75,
+     225
+    ]
+   ]
+  },
+  {
+   "id": "base-flashing",
+   "per": "opening",
+   "name": "Stainless base flashing: upstand to +360, 6 % over the plinth, drip at −107 (13 past the cedar)",
+   "role": "water",
+   "mat": "stainless",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "06 A11"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "runs": [
+    [
+     -1200,
+     -56
+    ],
+    [
+     4856,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     24.2,
+     360
+    ],
+    [
+     24.2,
+     300.952
+    ],
+    [
+     -107,
+     293.08
+    ],
+    [
+     -107,
+     285.08
+    ]
+   ]
+  },
+  {
+   "id": "base-flashing-r",
+   "per": "opening",
+   "name": "Base flashing behind the liner cheek, end dam turned up inside the liner",
+   "role": "water",
+   "mat": "stainless",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "R5 N5"
+   ],
+   "type": "sheet",
+   "t": 0.6,
+   "runs": [
+    [
+     -56,
+     -1
+    ],
+    [
+     4801,
+     4856
+    ]
+   ],
+   "path": [
+    [
+     24.2,
+     360
+    ],
+    [
+     24.2,
+     300.952
+    ],
+    [
+     -93.9,
+     293.866
+    ]
+   ]
+  },
+  {
+   "id": "sill-plate",
+   "per": "opening",
+   "name": "PT sill 38 x 140 on gasket + EPDM sill membrane",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     37.5,
+     300
+    ],
+    [
+     177.5,
+     300
+    ],
+    [
+     177.5,
+     341
+    ],
+    [
+     37.5,
+     341
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-posts",
+   "per": "opening",
+   "name": "3 jacks + 2 kings carrying the glulam",
+   "role": "frame",
+   "mat": "softwood-lumber",
+   "fill": 0.9,
+   "junction": "Z",
+   "src": [
+    "13 FB1"
+   ],
+   "poly": [
+    [
+     37.5,
+     341
+    ],
+    [
+     177.5,
+     341
+    ],
+    [
+     177.5,
+     2780
+    ],
+    [
+     37.5,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     -145,
+     0
+    ],
+    [
+     4800,
+     4945
+    ]
+   ]
+  },
+  {
+   "id": "jamb-core",
+   "per": "opening",
+   "name": "Jamb wall 2x6 at 400 + dense-pack cellulose, plates and rim to the floor",
+   "role": "thermal",
+   "mat": "cellulose-dense",
+   "junction": "Z",
+   "src": [
+    "09 W1"
+   ],
+   "poly": [
+    [
+     37.5,
+     341
+    ],
+    [
+     177.5,
+     341
+    ],
+    [
+     177.5,
+     3464
+    ],
+    [
+     37.5,
+     3464
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -145
+    ],
+    [
+     4945,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-ply",
+   "per": "opening",
+   "name": "Plywood sheathing 12.5 (bottom at the sill underside, never on concrete)",
+   "role": "frame",
+   "mat": "plywood",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "06 A10"
+   ],
+   "poly": [
+    [
+     25,
+     300.5
+    ],
+    [
+     37.5,
+     300.5
+    ],
+    [
+     37.5,
+     3464
+    ],
+    [
+     25,
+     3464
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -145
+    ],
+    [
+     4945,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-ply-p",
+   "per": "opening",
+   "name": "Plywood sheathing on the posts",
+   "role": "frame",
+   "mat": "plywood",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     25,
+     300.5
+    ],
+    [
+     37.5,
+     300.5
+    ],
+    [
+     37.5,
+     2780
+    ],
+    [
+     25,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     -145,
+     -1
+    ],
+    [
+     4801,
+     4945
+    ]
+   ]
+  },
+  {
+   "id": "jamb-gyp",
+   "per": "opening",
+   "name": "Gypsum 12.7 on the jamb wall (poly behind), above the 300 concrete curb",
+   "role": "frame",
+   "mat": "gypsum",
+   "junction": "Z",
+   "src": [
+    "09 W1"
+   ],
+   "poly": [
+    [
+     177.5,
+     300
+    ],
+    [
+     190.2,
+     300
+    ],
+    [
+     190.2,
+     3149
+    ],
+    [
+     177.5,
+     3149
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -145
+    ],
+    [
+     4945,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-gyp-p",
+   "per": "opening",
+   "name": "Gypsum 12.7 on the posts, to the exposed glulam",
+   "role": "frame",
+   "mat": "gypsum",
+   "junction": "Z",
+   "src": [
+    "09 W1"
+   ],
+   "poly": [
+    [
+     177.5,
+     300
+    ],
+    [
+     190.2,
+     300
+    ],
+    [
+     190.2,
+     2780
+    ],
+    [
+     177.5,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     -145,
+     0
+    ],
+    [
+     4800,
+     4945
+    ]
+   ]
+  },
+  {
+   "id": "jamb-wrb",
+   "per": "opening",
+   "name": "Breather membrane, shingle-lapped over the flashing upstand ≥ 50",
+   "role": "air",
+   "mat": "membrane-poly",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "VBBL 9.27.3.8"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     23.65,
+     310
+    ],
+    [
+     23.65,
+     6200
+    ]
+   ]
+  },
+  {
+   "id": "jamb-cg-strip",
+   "per": "opening",
+   "name": "Cellular-glass strip 80 x 50 on the flashing (keeps the wood fibre out of splash)",
+   "role": "thermal",
+   "mat": "cellular-glass",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -56,
+     296.44
+    ],
+    [
+     23.4,
+     301.204
+    ],
+    [
+     23.4,
+     355
+    ],
+    [
+     -56,
+     355
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-wf",
+   "per": "opening",
+   "name": "Wood-fibre board 80 (jamb wall)",
+   "role": "thermal",
+   "mat": "woodfibre-board",
+   "junction": "Z",
+   "src": [
+    "09 W1"
+   ],
+   "poly": [
+    [
+     -56,
+     355
+    ],
+    [
+     23.4,
+     355
+    ],
+    [
+     23.4,
+     6200
+    ],
+    [
+     -56,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-strap",
+   "per": "opening",
+   "name": "PT strapping 19 x 64, bottom 10 above the flashing",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "R5 N5"
+   ],
+   "poly": [
+    [
+     -75,
+     312
+    ],
+    [
+     -56,
+     312
+    ],
+    [
+     -56,
+     6200
+    ],
+    [
+     -75,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -1153,
+     -1089
+    ],
+    [
+     -753,
+     -689
+    ],
+    [
+     -353,
+     -289
+    ],
+    [
+     5889,
+     5953
+    ],
+    [
+     5489,
+     5553
+    ],
+    [
+     5089,
+     5153
+    ]
+   ]
+  },
+  {
+   "id": "jamb-strap-r",
+   "per": "opening",
+   "name": "PT strapping 19 x 64, bottom 10 above the flashing (beside the reveal, below the canopy)",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -75,
+     312
+    ],
+    [
+     -56,
+     312
+    ],
+    [
+     -56,
+     2780
+    ],
+    [
+     -75,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     -130,
+     -66
+    ],
+    [
+     4866,
+     4930
+    ]
+   ]
+  },
+  {
+   "id": "jamb-strap-u",
+   "per": "opening",
+   "name": "PT strapping 19 x 64, bottom 10 above the flashing (beside the reveal, above the canopy)",
+   "role": "frame",
+   "mat": "softwood-pt",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -75,
+     3080
+    ],
+    [
+     -56,
+     3080
+    ],
+    [
+     -56,
+     6200
+    ],
+    [
+     -75,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -130,
+     -66
+    ],
+    [
+     4866,
+     4930
+    ]
+   ]
+  },
+  {
+   "id": "jamb-cedar",
+   "per": "opening",
+   "name": "WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner",
+   "role": "cladding",
+   "mat": "cedar-siding",
+   "junction": "Z",
+   "src": [
+    "09 §9.1",
+    "R5 N5"
+   ],
+   "poly": [
+    [
+     -94,
+     305
+    ],
+    [
+     -75,
+     305
+    ],
+    [
+     -75,
+     6200
+    ],
+    [
+     -94,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     -150
+    ],
+    [
+     4950,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "jamb-cedar-r",
+   "per": "opening",
+   "name": "WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner (beside the reveal, below the canopy)",
+   "role": "cladding",
+   "mat": "cedar-siding",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -94,
+     305
+    ],
+    [
+     -75,
+     305
+    ],
+    [
+     -75,
+     2780
+    ],
+    [
+     -94,
+     2780
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     -1
+    ],
+    [
+     4801,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "jamb-cedar-u",
+   "per": "opening",
+   "name": "WRC channel siding 19, bottom +305, end grain sealed 8 back from the liner (beside the reveal, above the canopy)",
+   "role": "cladding",
+   "mat": "cedar-siding",
+   "junction": "Z",
+   "src": [
+    "09 §9.1"
+   ],
+   "poly": [
+    [
+     -94,
+     2975
+    ],
+    [
+     -75,
+     2975
+    ],
+    [
+     -75,
+     6200
+    ],
+    [
+     -94,
+     6200
+    ]
+   ],
+   "runs": [
+    [
+     -150,
+     -1
+    ],
+    [
+     4801,
+     4950
+    ]
+   ]
+  },
+  {
+   "id": "jamb-screen",
+   "per": "opening",
+   "name": "Black stainless insect screen at the cavity base",
+   "role": "metal",
+   "mat": "stainless",
+   "junction": "Z",
+   "src": [
+    "06 A13"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     -1200,
+     -1
+    ],
+    [
+     4801,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     -56,
+     311.75
+    ],
+    [
+     -75,
+     311.75
+    ]
+   ]
+  },
+  {
+   "id": "liner-jamb-a",
+   "name": "Charcoal PVDF reveal liner, jamb A, x 0 → −150",
+   "role": "metal",
+   "mat": "steel-prefinished",
+   "junction": "Z",
+   "src": [
+    "13 FB29",
+    "R5 P3"
+   ],
+   "axis": "x",
+   "x": [
+    -94,
+    0
+   ],
+   "poly": [
+    [
+     -1,
+     5
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     2754
+    ],
+    [
+     -1,
+     2754
+    ]
+   ]
+  },
+  {
+   "id": "liner-frame-a",
+   "name": "Liner outer cheek, 56 proud of the cedar (hollow)",
+   "role": "metal",
+   "mat": "steel-prefinished",
+   "fill": 0.05,
+   "junction": "Z",
+   "src": [
+    "13 FB29"
+   ],
+   "axis": "x",
+   "x": [
+    -150,
+    -94
+   ],
+   "poly": [
+    [
+     -56,
+     5
+    ],
+    [
+     0,
+     5
+    ],
+    [
+     0,
+     2754
+    ],
+    [
+     -56,
+     2754
+    ]
+   ]
+  },
+  {
+   "id": "liner-jamb-b",
+   "name": "Charcoal PVDF reveal liner, jamb B",
+   "role": "metal",
+   "mat": "steel-prefinished",
+   "junction": "Z",
+   "src": [
+    "13 FB29"
+   ],
+   "axis": "x",
+   "x": [
+    -94,
+    0
+   ],
+   "poly": [
+    [
+     4800,
+     5
+    ],
+    [
+     4801,
+     5
+    ],
+    [
+     4801,
+     2754
+    ],
+    [
+     4800,
+     2754
+    ]
+   ]
+  },
+  {
+   "id": "liner-frame-b",
+   "name": "Liner outer cheek, jamb B",
+   "role": "metal",
+   "mat": "steel-prefinished",
+   "fill": 0.05,
+   "junction": "Z",
+   "src": [
+    "13 FB29"
+   ],
+   "axis": "x",
+   "x": [
+    -150,
+    -94
+   ],
+   "poly": [
+    [
+     4800,
+     5
+    ],
+    [
+     4856,
+     5
+    ],
+    [
+     4856,
+     2754
+    ],
+    [
+     4800,
+     2754
+    ]
+   ]
+  },
+  {
+   "id": "downspout",
+   "per": "opening",
+   "name": "Charcoal downspout from the roof above, on the jamb-A cedar",
+   "role": "water",
+   "mat": "steel-prefinished",
+   "junction": "J",
+   "src": [
+    "R5 P2",
+    "R3 P1"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -144,
+   "w": [
+    -450
+   ],
+   "d": 100,
+   "di": 96,
+   "from": 640,
+   "to": 6200,
+   "embeds": [
+    "spout"
+   ]
+  },
+  {
+   "id": "spout",
+   "per": "opening",
+   "name": "Spout throwing roof water into the basin (≈ 600 off the wall)",
+   "role": "water",
+   "mat": "steel-prefinished",
+   "junction": "J",
+   "src": [
+    "10 §3.6",
+    "R5 P2"
+   ],
+   "type": "rod",
+   "axis": "x",
+   "w": [
+    -450
+   ],
+   "y": 600,
+   "dy": 60,
+   "d": 100,
+   "di": 96,
+   "from": -760,
+   "to": -144
+  },
+  {
+   "id": "liner",
+   "name": "1.0 mm HDPE liner between 407 g/m² geotextiles; underdrain trench; cut-off at 1.89 m",
+   "role": "water",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "08b M",
+    "R2 N2",
+    "R2 N4",
+    "R4"
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -1886.5,
+     -145.56666666666666
+    ],
+    [
+     -1886.5,
+     -326.5834722125785
+    ],
+    [
+     -1699.5740915058698,
+     -323.468040404343
+    ],
+    [
+     -1669.5740915058698,
+     -292.968040404343
+    ],
+    [
+     -172.5,
+     -268.01680554591184
+    ],
+    [
+     -172.5,
+     -67.03333333333333
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "note": "Never pierced by surface water: the channel drains by its own solid pipe and the rill starts at jamb A outside the liner. w-end upturns wrap the channel end caps; the underdrain leaves through one welded boot in the w = 0 upturn (R2 N2, N4, N10)."
+  },
+  {
+   "id": "pavers-lined",
+   "name": "Reclaimed granite planks 60 (150 wide, random 300–900, coursed parallel to the glass), joints 6, BPN ≥ 55",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "M",
+   "src": [
+    "08b M12",
+    "R5 P1",
+    "R4 P3"
+   ],
+   "poly": [
+    [
+     -171.5,
+     -7
+    ],
+    [
+     -1887.5,
+     -35.599999999999994
+    ],
+    [
+     -1887.5,
+     -95.6
+    ],
+    [
+     -171.5,
+     -67
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "bedding-lined",
+   "name": "No. 8 open-graded bedding 50",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "M",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -173.5,
+     -67.03333333333333
+    ],
+    [
+     -1885.5,
+     -95.56666666666666
+    ],
+    [
+     -1885.5,
+     -145.56666666666666
+    ],
+    [
+     -173.5,
+     -117.03333333333333
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "base-lined",
+   "name": "No. 57 open-graded base 150 on the liner",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "M",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -173.5,
+     -117.03333333333333
+    ],
+    [
+     -1885.5,
+     -145.56666666666666
+    ],
+    [
+     -1885.5,
+     -325.56666666666666
+    ],
+    [
+     -1700,
+     -322.475
+    ],
+    [
+     -1670,
+     -291.975
+    ],
+    [
+     -173.5,
+     -267.03333333333336
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "cuts": [
+    "underdrain"
+   ]
+  },
+  {
+   "id": "underdrain",
+   "name": "Perforated HDPE underdrain 100 in the liner trench, 0.5 % to jamb A, cleanout at the high end",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "R2 N4",
+    "08b M"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -1785,
+   "y": -266.89166666666665,
+   "dy": 24,
+   "d": 110,
+   "di": 102,
+   "from": 0,
+   "to": 4800,
+   "embeds": [
+    "jz-base",
+    "underdrain-out"
+   ],
+   "note": "R2 asked 1 %; 0.5 % fits the 30 mm trench over a 4.9 m run (INFERRED minimum for a perforated subdrain)."
+  },
+  {
+   "id": "underdrain-out",
+   "per": "opening",
+   "name": "Solid HDPE outlet from the underdrain to its own storm-sump inlet with a backwater valve",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "R2 N4",
+    "Book II 2.4.5.3 via 08b"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -1785,
+   "y": -272.89166666666665,
+   "dy": 6,
+   "d": 110,
+   "di": 100,
+   "from": -1200,
+   "to": 0,
+   "embeds": [
+    "base-lined"
+   ]
+  },
+  {
+   "id": "perim-rock",
+   "name": "Clear crushed drain stone envelope (19 mm, ≤ 10 % passing 4 mm)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "E",
+   "src": [
+    "R2 2",
+    "R2 N5",
+    "07 E9"
+   ],
+   "poly": [
+    [
+     -97,
+     -530
+    ],
+    [
+     -97,
+     -193
+    ],
+    [
+     -171.5,
+     -193
+    ],
+    [
+     -171.5,
+     -269.00027775849037
+    ],
+    [
+     -400,
+     -272.80833333333334
+    ],
+    [
+     -400,
+     -530
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "cuts": [
+    "perim-drain",
+    "channel-drop",
+    "channel-pipe"
+   ]
+  },
+  {
+   "id": "perim-rock-jz",
+   "per": "opening",
+   "name": "Drain stone envelope in front of the jamb wall",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "E",
+   "src": [
+    "R2 N5",
+    "07 E9"
+   ],
+   "poly": [
+    [
+     -97,
+     -530
+    ],
+    [
+     -97,
+     -285.7583333333333
+    ],
+    [
+     -400,
+     -290.80833333333334
+    ],
+    [
+     -400,
+     -530
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "cuts": [
+    "perim-drain",
+    "channel-pipe"
+   ]
+  },
+  {
+   "id": "perim-geotextile",
+   "name": "Nonwoven geotextile wrapping the drain envelope",
+   "role": "drainage",
+   "mat": "geotextile-pp",
+   "junction": "E",
+   "src": [
+    "07 E9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ],
+   "path": [
+    [
+     -400.25,
+     -272.8183333333333
+    ],
+    [
+     -400.25,
+     -530.25
+    ],
+    [
+     -97,
+     -530.25
+    ]
+   ]
+  },
+  {
+   "id": "perim-geotextile-jz",
+   "per": "opening",
+   "name": "Nonwoven geotextile wrapping the drain envelope (jamb)",
+   "role": "drainage",
+   "mat": "geotextile-pp",
+   "junction": "E",
+   "src": [
+    "07 E9"
+   ],
+   "type": "sheet",
+   "t": 0.5,
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "path": [
+    [
+     -400.25,
+     -290.81666666666666
+    ],
+    [
+     -400.25,
+     -530.25
+    ],
+    [
+     -97,
+     -530.25
+    ]
+   ]
+  },
+  {
+   "id": "perim-drain",
+   "name": "Perforated HDPE drain 100 at the footing base (invert −526, cover 152), own solid outlet to the storm sump",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "E",
+   "src": [
+    "R2 2",
+    "R2 N5",
+    "VBBL 9.14.2.1",
+    "07 E8"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -185,
+   "y": -475,
+   "d": 110,
+   "di": 102,
+   "from": -1200,
+   "to": 6000,
+   "note": "Cleanouts at the corners; storm sump ≥ 750 deep with separate inlets for this drain and the underdrain (9.14.5 via 07 E10). Never linked to the channel, underdrain or sub-slab stone."
+  },
+  {
+   "id": "channel-drop",
+   "per": "opening",
+   "name": "Channel bottom outlet, solid HDPE 63 (jointless through the envelope)",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "T",
+   "src": [
+    "R2 N2",
+    "R2 N3"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -134.25,
+   "w": [
+    75
+   ],
+   "d": 63,
+   "di": 57,
+   "from": -330,
+   "to": -120,
+   "embeds": [
+    "channel-pipe"
+   ]
+  },
+  {
+   "id": "channel-pipe",
+   "per": "opening",
+   "name": "Solid HDPE 63 from the channel to its own storm-sump inlet, 1 % (R2 N3 second outlet)",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "T",
+   "src": [
+    "R2 N2",
+    "R2 N3",
+    "08 J12"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -134.25,
+   "y": -343.065,
+   "dy": 13.065,
+   "d": 63,
+   "di": 57,
+   "from": -1200,
+   "to": 106.5,
+   "note": "Channel catchment is the landing strip and glass wash only (roof water goes to the basin); 63 mm is INFERRED adequate — confirm with the channel maker."
+  },
+  {
+   "id": "jz-pavers",
+   "per": "opening",
+   "name": "Reclaimed granite planks 80 in front of jamb A",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "P",
+   "src": [
+    "R5 P1"
+   ],
+   "poly": [
+    [
+     -75,
+     -5.391666666666667
+    ],
+    [
+     -1887.5,
+     -35.599999999999994
+    ],
+    [
+     -1887.5,
+     -115.6
+    ],
+    [
+     -75,
+     -85.39166666666667
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "cuts": [
+    "basin-void",
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper"
+   ]
+  },
+  {
+   "id": "jz-bedding",
+   "per": "opening",
+   "name": "No. 8 bedding 50 (jamb)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "P",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -75,
+     -85.39166666666667
+    ],
+    [
+     -1887.5,
+     -115.6
+    ],
+    [
+     -1887.5,
+     -165.6
+    ],
+    [
+     -75,
+     -135.39166666666668
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "cuts": [
+    "basin-void",
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper"
+   ]
+  },
+  {
+   "id": "jz-base",
+   "per": "opening",
+   "name": "No. 57 base 150 (jamb), drains into the envelope",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "P",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -75,
+     -135.39166666666668
+    ],
+    [
+     -1887.5,
+     -165.6
+    ],
+    [
+     -1887.5,
+     -315.6
+    ],
+    [
+     -97,
+     -285.7583333333333
+    ],
+    [
+     -97,
+     -193
+    ],
+    [
+     -75,
+     -193
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "cuts": [
+    "basin-void",
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper",
+    "channel-pipe",
+    "underdrain-out"
+   ]
+  },
+  {
+   "id": "liner-edge-curb",
+   "name": "Reclaimed granite curbstone on edge 150, at the liner cut-off",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "M",
+   "src": [
+    "R3 F7",
+    "R5 N8"
+   ],
+   "poly": [
+    [
+     -1887.5,
+     -35.599999999999994
+    ],
+    [
+     -2043.5,
+     -38.2
+    ],
+    [
+     -2043.5,
+     -338.2
+    ],
+    [
+     -1887.5,
+     -335.6
+    ]
+   ],
+   "cuts": [
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "root-barrier-liner",
+   "name": "Ribbed HDPE root barrier, top cast 20 into the curb, to −700",
+   "role": "planting",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "08b M16",
+    "R3 F7"
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -1965.5,
+     -316.9
+    ],
+    [
+     -1965.5,
+     -700
+    ]
+   ],
+   "embeds": [
+    "liner-edge-curb"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "pavers-t",
+   "name": "Reclaimed granite planks 80, coursed parallel to the glass",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "P",
+   "src": [
+    "R4 P3",
+    "R5 P1",
+    "08 H7"
+   ],
+   "poly": [
+    [
+     -2043.5,
+     -38.2
+    ],
+    [
+     -3291.5,
+     -59
+    ],
+    [
+     -3291.5,
+     -139
+    ],
+    [
+     -2043.5,
+     -118.2
+    ]
+   ],
+   "cuts": [
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper",
+    "pocket-curb-h",
+    "pocket-curb-s",
+    "pocket-soil"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "bedding-t",
+   "name": "No. 8 bedding 50",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "P",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -2043.5,
+     -118.2
+    ],
+    [
+     -3291.5,
+     -139
+    ],
+    [
+     -3291.5,
+     -189
+    ],
+    [
+     -2043.5,
+     -168.2
+    ]
+   ],
+   "cuts": [
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper",
+    "pocket-curb-h",
+    "pocket-curb-s",
+    "pocket-soil"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "base-t",
+   "name": "No. 57 base 150 on compacted subgrade (infiltrating beyond 1.9 m)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "P",
+   "src": [
+    "08 H"
+   ],
+   "poly": [
+    [
+     -2043.5,
+     -168.2
+    ],
+    [
+     -3291.5,
+     -189
+    ],
+    [
+     -3291.5,
+     -339
+    ],
+    [
+     -2043.5,
+     -318.2
+    ]
+   ],
+   "cuts": [
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper",
+    "pocket-curb-h",
+    "pocket-curb-s",
+    "pocket-soil"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "edge-restraint",
+   "name": "Reclaimed granite curbstone on edge 150 (path edge)",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "P",
+   "src": [
+    "R5 N8",
+    "08 H"
+   ],
+   "poly": [
+    [
+     -3291.5,
+     -59
+    ],
+    [
+     -3441.5,
+     -59
+    ],
+    [
+     -3441.5,
+     -359
+    ],
+    [
+     -3291.5,
+     -359
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     4950
+    ],
+    [
+     5950,
+     6000
+    ]
+   ],
+   "cuts": [
+    "rill-walls",
+    "rill-floor",
+    "rill-void",
+    "clapper"
+   ]
+  },
+  {
+   "id": "root-barrier-edge",
+   "name": "Ribbed HDPE root barrier under the path edge, top cast 20 into the curbstone, to −700",
+   "role": "planting",
+   "mat": "hdpe",
+   "junction": "P",
+   "src": [
+    "R3 F7",
+    "08 I2"
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -3366.5,
+     -339
+    ],
+    [
+     -3366.5,
+     -700
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     5024
+    ],
+    [
+     5876,
+     6000
+    ]
+   ],
+   "embeds": [
+    "edge-restraint",
+    "pocket-curb-s"
+   ]
+  },
+  {
+   "id": "pocket-curb-h",
+   "per": "opening",
+   "name": "Granite curbstone, house side of the shrub pocket (jamb B)",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "M",
+   "src": [
+    "R5 P2",
+    "08b M"
+   ],
+   "poly": [
+    [
+     -2199.5,
+     -40.8
+    ],
+    [
+     -2349.5,
+     -43.3
+    ],
+    [
+     -2349.5,
+     -343.3
+    ],
+    [
+     -2199.5,
+     -340.8
+    ]
+   ],
+   "runs": [
+    [
+     4950,
+     5950
+    ]
+   ]
+  },
+  {
+   "id": "pocket-curb-s",
+   "per": "opening",
+   "name": "Granite curbstone, sides of the shrub pocket",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "M",
+   "src": [
+    "R5 P2"
+   ],
+   "poly": [
+    [
+     -2349.5,
+     -43.3
+    ],
+    [
+     -3441.5,
+     -59
+    ],
+    [
+     -3441.5,
+     -359
+    ],
+    [
+     -2349.5,
+     -343.3
+    ]
+   ],
+   "runs": [
+    [
+     4950,
+     5100
+    ],
+    [
+     5800,
+     5950
+    ]
+   ]
+  },
+  {
+   "id": "pocket-soil",
+   "per": "opening",
+   "name": "Growing medium 600 in the pocket, open to the bed (granite curbs: no lime)",
+   "role": "ground",
+   "mat": "soil-imported",
+   "junction": "M",
+   "src": [
+    "08b M",
+    "R3 F10",
+    "R3 F18"
+   ],
+   "poly": [
+    [
+     -2349.5,
+     -93.3
+    ],
+    [
+     -3441.5,
+     -109
+    ],
+    [
+     -3441.5,
+     -709
+    ],
+    [
+     -2349.5,
+     -693.3
+    ]
+   ],
+   "runs": [
+    [
+     5100,
+     5800
+    ]
+   ]
+  },
+  {
+   "id": "root-barrier-pocket",
+   "per": "opening",
+   "name": "Root barrier under the pocket curbs (house side), cast 20 into the curb",
+   "role": "planting",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "08b M16",
+    "R3 F7"
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -2274.5,
+     -322.05
+    ],
+    [
+     -2274.5,
+     -700
+    ]
+   ],
+   "runs": [
+    [
+     4950,
+     5950
+    ]
+   ],
+   "embeds": [
+    "pocket-curb-h"
+   ]
+  },
+  {
+   "id": "root-barrier-pocket-s1",
+   "per": "opening",
+   "name": "Root barrier under a pocket side curb, cast 20+ into the curb",
+   "role": "planting",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "R3 F7"
+   ],
+   "axis": "x",
+   "x": [
+    -3441.5,
+    -2349.5
+   ],
+   "poly": [
+    [
+     5024,
+     -700
+    ],
+    [
+     5026,
+     -700
+    ],
+    [
+     5026,
+     -323.3
+    ],
+    [
+     5024,
+     -323.3
+    ]
+   ],
+   "embeds": [
+    "pocket-curb-s"
+   ]
+  },
+  {
+   "id": "root-barrier-pocket-s2",
+   "per": "opening",
+   "name": "Root barrier under a pocket side curb, cast 20+ into the curb",
+   "role": "planting",
+   "mat": "hdpe",
+   "junction": "M",
+   "src": [
+    "R3 F7"
+   ],
+   "axis": "x",
+   "x": [
+    -3441.5,
+    -2349.5
+   ],
+   "poly": [
+    [
+     5874,
+     -700
+    ],
+    [
+     5876,
+     -700
+    ],
+    [
+     5876,
+     -323.3
+    ],
+    [
+     5874,
+     -323.3
+    ]
+   ],
+   "embeds": [
+    "pocket-curb-s"
+   ]
+  },
+  {
+   "id": "basin-shell",
+   "per": "opening",
+   "name": "Reclaimed granite basin under the spout, sump floor −350 (silt settles here; removable bucket)",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R2 N2",
+    "R5 P2",
+    "R3 P1",
+    "08b M9"
+   ],
+   "poly": [
+    [
+     -500,
+     -12.475
+    ],
+    [
+     -500,
+     -410
+    ],
+    [
+     -1100,
+     -410
+    ],
+    [
+     -1100,
+     -22.475
+    ],
+    [
+     -1040,
+     -21.475
+    ],
+    [
+     -1040,
+     -350
+    ],
+    [
+     -560,
+     -350
+    ],
+    [
+     -560,
+     -13.475
+    ]
+   ],
+   "runs": [
+    [
+     -690,
+     -210
+    ]
+   ],
+   "cuts": [
+    {
+     "type": "rod",
+     "axis": "x",
+     "w": [
+      -450
+     ],
+     "ys": [
+      -105
+     ],
+     "d": 80,
+     "from": -1110,
+     "to": -1030
+    }
+   ],
+   "note": "Inlet: the downspout from the roof above, spouting from the jamb-A wall. Overflow over the rim onto paving that falls away from the wall."
+  },
+  {
+   "id": "basin-ends",
+   "per": "opening",
+   "name": "Basin end walls",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R5 P2"
+   ],
+   "poly": [
+    [
+     -500,
+     -12.475
+    ],
+    [
+     -1100,
+     -22.475
+    ],
+    [
+     -1100,
+     -410
+    ],
+    [
+     -500,
+     -410
+    ]
+   ],
+   "runs": [
+    [
+     -750,
+     -690
+    ],
+    [
+     -210,
+     -150
+    ]
+   ]
+  },
+  {
+   "id": "basin-void",
+   "void": true,
+   "poly": [
+    [
+     -1100,
+     -410
+    ],
+    [
+     -500,
+     -410
+    ],
+    [
+     -500,
+     5
+    ],
+    [
+     -1100,
+     5
+    ]
+   ],
+   "runs": [
+    [
+     -750,
+     -150
+    ]
+   ]
+  },
+  {
+   "id": "basin-cobbles",
+   "per": "opening",
+   "name": "Cobbles 100–150 filling the basin (splash and silt trap)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "J",
+   "src": [
+    "10 §3.6",
+    "R5 P2"
+   ],
+   "poly": [
+    [
+     -560,
+     -53.475
+    ],
+    [
+     -1040,
+     -61.475
+    ],
+    [
+     -1040,
+     -350
+    ],
+    [
+     -560,
+     -350
+    ]
+   ],
+   "runs": [
+    [
+     -690,
+     -210
+    ]
+   ]
+  },
+  {
+   "id": "rill-floor",
+   "per": "opening",
+   "name": "Rill floor, stone-faced precast U-trough 50 (sealed, gasketed joints)",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R2 N1",
+    "R2 N2",
+    "R3 P1"
+   ],
+   "poly": [
+    [
+     -1100,
+     -145
+    ],
+    [
+     -3441.5,
+     -168.415
+    ],
+    [
+     -3441.5,
+     -218.415
+    ],
+    [
+     -1100,
+     -195
+    ]
+   ],
+   "runs": [
+    [
+     -585,
+     -315
+    ]
+   ]
+  },
+  {
+   "id": "rill-walls",
+   "per": "opening",
+   "name": "Rill walls, flush with the paving (open water, moss patina)",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R3 P1",
+    "R5 P2"
+   ],
+   "poly": [
+    [
+     -1100,
+     -22.475
+    ],
+    [
+     -1731.5,
+     -33
+    ],
+    [
+     -1731.5,
+     -113
+    ],
+    [
+     -2979.5,
+     -133.8
+    ],
+    [
+     -2979.5,
+     -53.8
+    ],
+    [
+     -3291.5,
+     -59
+    ],
+    [
+     -3441.5,
+     -59
+    ],
+    [
+     -3441.5,
+     -168.415
+    ],
+    [
+     -1100,
+     -145
+    ]
+   ],
+   "runs": [
+    [
+     -585,
+     -535
+    ],
+    [
+     -365,
+     -315
+    ]
+   ]
+  },
+  {
+   "id": "rill-void",
+   "void": true,
+   "poly": [
+    [
+     -1100,
+     -17.475
+    ],
+    [
+     -3291.5,
+     -54
+    ],
+    [
+     -3441.5,
+     -54
+    ],
+    [
+     -3441.5,
+     -168.415
+    ],
+    [
+     -1100,
+     -145
+    ]
+   ],
+   "runs": [
+    [
+     -535,
+     -365
+    ]
+   ]
+  },
+  {
+   "id": "clapper",
+   "per": "opening",
+   "name": "Granite clapper slab 80 over the rill, flush (B651 8.2.4)",
+   "role": "ground",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R3 P1",
+    "08 J16"
+   ],
+   "poly": [
+    [
+     -1731.5,
+     -33
+    ],
+    [
+     -2979.5,
+     -53.8
+    ],
+    [
+     -2979.5,
+     -133.8
+    ],
+    [
+     -1731.5,
+     -113
+    ]
+   ],
+   "runs": [
+    [
+     -600,
+     -300
+    ]
+   ]
+  },
+  {
+   "id": "runnel-void",
+   "void": true,
+   "poly": [
+    [
+     -3441.5,
+     -104
+    ],
+    [
+     -5150,
+     -117
+    ],
+    [
+     -5407.186170212767,
+     -202.72872340425573
+    ],
+    [
+     -5407.186170212767,
+     -207.72872340425533
+    ],
+    [
+     -3441.5,
+     -168.415
+    ]
+   ],
+   "runs": [
+    [
+     -535,
+     -365
+    ]
+   ]
+  },
+  {
+   "id": "runnel-floor",
+   "per": "opening",
+   "name": "Runnel floor 50, 2 %, granite lip at the garden (67 above the crest)",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R2 N1",
+    "R3 N1",
+    "08 J11"
+   ],
+   "poly": [
+    [
+     -3441.5,
+     -168.415
+    ],
+    [
+     -5407.186170212767,
+     -207.72872340425533
+    ],
+    [
+     -5407.186170212767,
+     -257.72872340425533
+    ],
+    [
+     -3441.5,
+     -218.415
+    ]
+   ],
+   "runs": [
+    [
+     -585,
+     -315
+    ]
+   ]
+  },
+  {
+   "id": "runnel-walls",
+   "per": "opening",
+   "name": "Runnel walls, top at the bed and slope surface",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R2 N1"
+   ],
+   "poly": [
+    [
+     -3441.5,
+     -109
+    ],
+    [
+     -5150,
+     -122
+    ],
+    [
+     -5407.186170212767,
+     -207.72872340425533
+    ],
+    [
+     -3441.5,
+     -168.415
+    ]
+   ],
+   "runs": [
+    [
+     -585,
+     -535
+    ],
+    [
+     -365,
+     -315
+    ]
+   ]
+  },
+  {
+   "id": "runnel-strip",
+   "per": "opening",
+   "name": "Compacted 19 mm crushed-rock strip 300 under the runnel, to the bed subgrade (no settlement)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "J",
+   "src": [
+    "R2 N1"
+   ],
+   "poly": [
+    [
+     -3441.5,
+     -218.415
+    ],
+    [
+     -5150,
+     -252.58499999999998
+    ],
+    [
+     -5150,
+     -647
+    ],
+    [
+     -3441.5,
+     -634
+    ]
+   ],
+   "runs": [
+    [
+     -600,
+     -300
+    ]
+   ]
+  },
+  {
+   "id": "bed-mulch",
+   "name": "Wood-chip mulch 75, leaf litter left",
+   "role": "ground",
+   "mat": "soil",
+   "junction": "I",
+   "src": [
+    "08 I"
+   ],
+   "poly": [
+    [
+     -3441.5,
+     -109
+    ],
+    [
+     -5150,
+     -122
+    ],
+    [
+     -5150,
+     -197
+    ],
+    [
+     -3441.5,
+     -184
+    ]
+   ],
+   "cuts": [
+    "runnel-walls",
+    "runnel-floor",
+    "runnel-strip",
+    "runnel-void"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "bed-soil",
+   "name": "Planting bed medium 450",
+   "role": "ground",
+   "mat": "soil-imported",
+   "junction": "I",
+   "src": [
+    "08 I"
+   ],
+   "poly": [
+    [
+     -3441.5,
+     -184
+    ],
+    [
+     -5150,
+     -197
+    ],
+    [
+     -5150,
+     -647
+    ],
+    [
+     -3441.5,
+     -634
+    ]
+   ],
+   "cuts": [
+    "runnel-walls",
+    "runnel-floor",
+    "runnel-strip",
+    "runnel-void"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "tree-pit",
+   "per": "opening",
+   "name": "Tree pit 1.0 x 1.0 m in plan, 1 m deep, floor falling 2 % to the garden, base scarified 300",
+   "role": "ground",
+   "mat": "soil-imported",
+   "junction": "I",
+   "src": [
+    "R3 F8",
+    "R3 N6",
+    "R2 N9",
+    "08 I1"
+   ],
+   "poly": [
+    [
+     -3900,
+     -637.4887328065555
+    ],
+    [
+     -4900,
+     -645.097746561311
+    ],
+    [
+     -4900,
+     -1120
+    ],
+    [
+     -3900,
+     -1100
+    ]
+   ],
+   "runs": [
+    [
+     400,
+     1400
+    ]
+   ]
+  },
+  {
+   "id": "pit-link",
+   "per": "opening",
+   "name": "Clear-stone link in geotextile from the pit floor to the garden rock (no pipe)",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "I",
+   "src": [
+    "R3 N6"
+   ],
+   "poly": [
+    [
+     -5150,
+     -1140
+    ],
+    [
+     -4900,
+     -1140
+    ],
+    [
+     -4900,
+     -1080
+    ],
+    [
+     -5150,
+     -1080
+    ]
+   ],
+   "runs": [
+    [
+     400,
+     1400
+    ]
+   ]
+  },
+  {
+   "id": "forebay-dip",
+   "void": true,
+   "poly": [
+    [
+     -5407.186170212767,
+     -207.72872340425573
+    ],
+    [
+     -6007.186170212767,
+     -407.72872340425573
+    ],
+    [
+     -6007.186170212767,
+     -507.72872340425573
+    ],
+    [
+     -5407.186170212767,
+     -307.72872340425573
+    ]
+   ],
+   "runs": [
+    [
+     -700,
+     -200
+    ]
+   ]
+  },
+  {
+   "id": "rg-apron",
+   "per": "opening",
+   "name": "Cobble forebay 100 below the lip (the lip drops a sheet onto it; sediment collects here)",
+   "role": "drainage",
+   "mat": "reclaimed-stone",
+   "junction": "J",
+   "src": [
+    "R3 P2",
+    "08 J11"
+   ],
+   "poly": [
+    [
+     -5407.186170212767,
+     -307.72872340425573
+    ],
+    [
+     -6007.186170212767,
+     -507.72872340425573
+    ],
+    [
+     -6007.186170212767,
+     -607.7287234042558
+    ],
+    [
+     -5407.186170212767,
+     -407.72872340425573
+    ]
+   ],
+   "runs": [
+    [
+     -700,
+     -200
+    ]
+   ]
+  },
+  {
+   "id": "rg-mulch",
+   "name": "Stone mulch 75 on the garden floor",
+   "role": "ground",
+   "mat": "aggregate",
+   "junction": "J",
+   "src": [
+    "08 J",
+    "R3 F5"
+   ],
+   "poly": [
+    [
+     -6209,
+     -475
+    ],
+    [
+     -7009,
+     -475
+    ],
+    [
+     -7009,
+     -550
+    ],
+    [
+     -6209,
+     -550
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "rg-medium",
+   "name": "Bioretention medium 450 (≥ 70 mm/h), planted 3:1 slopes",
+   "role": "ground",
+   "mat": "soil-imported",
+   "junction": "J",
+   "src": [
+    "08 J"
+   ],
+   "poly": [
+    [
+     -5150,
+     -122
+    ],
+    [
+     -6209,
+     -475
+    ],
+    [
+     -6209,
+     -550
+    ],
+    [
+     -7009,
+     -550
+    ],
+    [
+     -7009,
+     -475
+    ],
+    [
+     -7909,
+     -175
+    ],
+    [
+     -7909,
+     -1000
+    ],
+    [
+     -5150,
+     -1000
+    ]
+   ],
+   "cuts": [
+    "forebay-dip",
+    "rg-apron",
+    "runnel-walls",
+    "runnel-floor",
+    "runnel-void"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "rg-choker",
+   "name": "Choker layer 100",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "J",
+   "src": [
+    "08 J"
+   ],
+   "poly": [
+    [
+     -7909,
+     -1100
+    ],
+    [
+     -5150,
+     -1100
+    ],
+    [
+     -5150,
+     -1000
+    ],
+    [
+     -7909,
+     -1000
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "rg-rock",
+   "name": "Clear rock reservoir 300",
+   "role": "drainage",
+   "mat": "aggregate",
+   "junction": "J",
+   "src": [
+    "08 J"
+   ],
+   "poly": [
+    [
+     -7909,
+     -1400
+    ],
+    [
+     -5150,
+     -1400
+    ],
+    [
+     -5150,
+     -1100
+    ],
+    [
+     -7909,
+     -1100
+    ]
+   ],
+   "cuts": [
+    "rg-subdrain"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "rg-subdrain",
+   "name": "Perforated HDPE subdrain 150 near the top of the rock",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "J",
+   "src": [
+    "R3 F3",
+    "R2 N4"
+   ],
+   "type": "rod",
+   "axis": "w",
+   "x": -6609,
+   "y": -1185,
+   "d": 160,
+   "di": 150,
+   "from": -1200,
+   "to": 6000
+  },
+  {
+   "id": "rg-riser",
+   "per": "opening",
+   "name": "HDPE overflow riser 200, beehive grate at the crest, sealed base below the subdrain",
+   "role": "drainage",
+   "mat": "hdpe",
+   "junction": "J",
+   "src": [
+    "08 J",
+    "R3 F5",
+    "R2 N4",
+    "VBBL Book II 2.4.2.5"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -6609,
+   "w": [
+    900
+   ],
+   "d": 210,
+   "di": 200,
+   "from": -1305,
+   "to": -275,
+   "embeds": [
+    "rg-medium",
+    "rg-choker",
+    "rg-rock",
+    "rg-mulch",
+    "rg-subdrain"
+   ],
+   "note": "Outlet to the tank / storm at invert ≤ PONDB − 785 with a backflow flap; 1 m spillway notch in the far rim at crest + 45 (outside this slice)."
+  },
+  {
+   "id": "subgrade",
+   "name": "Compacted subgrade / native soil (landing)",
+   "role": "ground",
+   "mat": "soil",
+   "junction": "E",
+   "src": [
+    "07 E1",
+    "08 H"
+   ],
+   "poly": [
+    [
+     240.4,
+     -530
+    ],
+    [
+     -97,
+     -530
+    ],
+    [
+     -97,
+     -530.5
+    ],
+    [
+     -400.5,
+     -530.5
+    ],
+    [
+     -400.5,
+     -272.8183333333333
+    ],
+    [
+     -1669.1481830117393,
+     -293.961080808686
+    ],
+    [
+     -1699.1481830117393,
+     -324.461080808686
+    ],
+    [
+     -1887.5,
+     -327.60027775849034
+    ],
+    [
+     -1887.5,
+     -1700
+    ],
+    [
+     240.4,
+     -1700
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     4800
+    ]
+   ]
+  },
+  {
+   "id": "subgrade-jz",
+   "per": "opening",
+   "name": "Compacted subgrade (jamb ground)",
+   "role": "ground",
+   "mat": "soil",
+   "junction": "E",
+   "src": [
+    "07 E1"
+   ],
+   "poly": [
+    [
+     240.4,
+     -530
+    ],
+    [
+     -97,
+     -530
+    ],
+    [
+     -97,
+     -530.5
+    ],
+    [
+     -400.5,
+     -530.5
+    ],
+    [
+     -400.5,
+     -290.81666666666666
+    ],
+    [
+     -1887.5,
+     -315.6
+    ],
+    [
+     -1887.5,
+     -1700
+    ],
+    [
+     240.4,
+     -1700
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     0
+    ],
+    [
+     4800,
+     6000
+    ]
+   ],
+   "cuts": [
+    "basin-void",
+    "underdrain-out"
+   ]
+  },
+  {
+   "id": "subgrade-far",
+   "name": "Native soil beyond the cut-off",
+   "role": "ground",
+   "mat": "soil",
+   "junction": "E",
+   "src": [
+    "07 E1",
+    "08 H"
+   ],
+   "poly": [
+    [
+     -1887.5,
+     -335.6
+    ],
+    [
+     -2043.5,
+     -338.2
+    ],
+    [
+     -2043.5,
+     -318.2
+    ],
+    [
+     -3291.5,
+     -339
+    ],
+    [
+     -3291.5,
+     -359
+    ],
+    [
+     -3441.5,
+     -359
+    ],
+    [
+     -3441.5,
+     -634
+    ],
+    [
+     -5150,
+     -647
+    ],
+    [
+     -5150,
+     -1400
+    ],
+    [
+     -7909,
+     -1400
+    ],
+    [
+     -7909,
+     -175
+    ],
+    [
+     -8000,
+     -165
+    ],
+    [
+     -8000,
+     -1700
+    ],
+    [
+     -1887.5,
+     -1700
+    ]
+   ],
+   "cuts": [
+    "tree-pit",
+    "pit-link",
+    "root-barrier-liner",
+    "root-barrier-edge",
+    "pocket-soil",
+    "root-barrier-pocket",
+    "root-barrier-pocket-s1",
+    "root-barrier-pocket-s2"
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "interior-subgrade",
+   "name": "Compacted subgrade under the slab",
+   "role": "ground",
+   "mat": "soil",
+   "junction": "F",
+   "src": [
+    "12"
+   ],
+   "poly": [
+    [
+     240.4,
+     -530
+    ],
+    [
+     240.4,
+     -1700
+    ],
+    [
+     2500,
+     -1700
+    ],
+    [
+     2500,
+     -300
+    ],
+    [
+     240.4,
+     -300
+    ]
+   ],
+   "runs": [
+    [
+     -1200,
+     6000
+    ]
+   ]
+  },
+  {
+   "id": "person-inside",
+   "name": "Occupant standing inside (proxy)",
+   "role": "furniture",
+   "mat": "",
+   "junction": "K",
+   "src": [
+    "08 K"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": 1100,
+   "w": [
+    700
+   ],
+   "d": 360,
+   "from": 0,
+   "to": 1700
+  },
+  {
+   "id": "person-wheelchair",
+   "name": "Wheelchair user on the landing, eye 1250 (proxy, R3 F21)",
+   "role": "furniture",
+   "mat": "",
+   "junction": "K",
+   "src": [
+    "08 K12",
+    "R3 F21"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -1000,
+   "w": [
+    1000
+   ],
+   "d": 700,
+   "from": -22.808333333333334,
+   "to": 1229.1916666666666,
+   "embeds": [
+    "pavers-lined"
+   ]
+  },
+  {
+   "id": "person-terrace",
+   "name": "Person on the terrace (proxy)",
+   "role": "furniture",
+   "mat": "",
+   "junction": "K",
+   "src": [
+    "08 K"
+   ],
+   "type": "rod",
+   "axis": "y",
+   "x": -2650,
+   "w": [
+    1300
+   ],
+   "d": 360,
+   "from": -50.30833333333333,
+   "to": 1651.6916666666666,
+   "embeds": [
+    "pavers-t"
+   ]
+  },
+  {
+   "id": "shrub",
+   "name": "Evergreen huckleberry at jamb B, pruned 1.5 m (proxy)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "M",
+   "src": [
+    "08b M",
+    "R5 P2"
+   ],
+   "type": "revolve",
+   "x": -2750,
+   "w": [
+    5450
+   ],
+   "profile": [
+    [
+     0,
+     -119.975
+    ],
+    [
+     400,
+     150.025
+    ],
+    [
+     550,
+     750.025
+    ],
+    [
+     380,
+     1300.025
+    ],
+    [
+     0,
+     1410.025
+    ]
+   ],
+   "embeds": [
+    "pocket-soil"
+   ]
+  },
+  {
+   "id": "tree",
+   "name": "Small tree in the 1 m tree pit, 1.3 m from the runnel (proxy)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "I",
+   "src": [
+    "08 I",
+    "R3 F8"
+   ],
+   "type": "revolve",
+   "x": -4400,
+   "w": [
+    900
+   ],
+   "profile": [
+    [
+     0,
+     -191.29323968393328
+    ],
+    [
+     75,
+     -191.29323968393328
+    ],
+    [
+     75,
+     1783.7067603160667
+    ],
+    [
+     1300,
+     2483.7067603160667
+    ],
+    [
+     1200,
+     3483.7067603160667
+    ],
+    [
+     0,
+     4183.706760316067
+    ]
+   ],
+   "embeds": [
+    "bed-mulch",
+    "bed-soil"
+   ]
+  },
+  {
+   "id": "bed-plant-1",
+   "name": "Salal and sword fern understorey (proxy, R3 F6)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "I",
+   "src": [
+    "R3 F6",
+    "08 L1"
+   ],
+   "type": "revolve",
+   "x": -3800,
+   "w": [
+    200
+   ],
+   "profile": [
+    [
+     0,
+     -131.7278314310799
+    ],
+    [
+     300,
+     38.27216856892011
+    ],
+    [
+     350,
+     488.2721685689201
+    ],
+    [
+     0,
+     688.27216856892
+    ]
+   ],
+   "embeds": [
+    "bed-mulch"
+   ]
+  },
+  {
+   "id": "bed-plant-2",
+   "name": "Red-flowering currant (early bloom) (proxy, R3 F6)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "I",
+   "src": [
+    "R3 F6",
+    "08 L1"
+   ],
+   "type": "revolve",
+   "x": -4950,
+   "w": [
+    1550
+   ],
+   "profile": [
+    [
+     0,
+     -140.4781972490489
+    ],
+    [
+     300,
+     29.521802750951124
+    ],
+    [
+     350,
+     479.5218027509511
+    ],
+    [
+     0,
+     679.5218027509511
+    ]
+   ],
+   "embeds": [
+    "bed-mulch"
+   ]
+  },
+  {
+   "id": "rg-plant-1",
+   "name": "Slough sedge (wet slope) (proxy)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "J",
+   "src": [
+    "R3 F6",
+    "R3 N7"
+   ],
+   "type": "revolve",
+   "x": -5800,
+   "w": [
+    1200
+   ],
+   "profile": [
+    [
+     0,
+     -358.66666666666663
+    ],
+    [
+     250,
+     -238.66666666666663
+    ],
+    [
+     300,
+     161.33333333333337
+    ],
+    [
+     0,
+     361.33333333333337
+    ]
+   ],
+   "embeds": [
+    "rg-mulch",
+    "rg-medium"
+   ]
+  },
+  {
+   "id": "rg-plant-2",
+   "name": "Common rush (garden floor) (proxy)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "J",
+   "src": [
+    "R3 F6",
+    "R3 N7"
+   ],
+   "type": "revolve",
+   "x": -6600,
+   "w": [
+    300
+   ],
+   "profile": [
+    [
+     0,
+     -495
+    ],
+    [
+     250,
+     -375
+    ],
+    [
+     300,
+     25
+    ],
+    [
+     0,
+     225
+    ]
+   ],
+   "embeds": [
+    "rg-mulch",
+    "rg-medium"
+   ]
+  },
+  {
+   "id": "rg-plant-3",
+   "name": "Pacific ninebark (upper far slope) (proxy)",
+   "role": "planting",
+   "mat": "vegetation",
+   "junction": "J",
+   "src": [
+    "R3 F6",
+    "R3 N7"
+   ],
+   "type": "revolve",
+   "x": -7700,
+   "w": [
+    1200
+   ],
+   "profile": [
+    [
+     0,
+     -264.66666666666663
+    ],
+    [
+     250,
+     -144.66666666666666
+    ],
+    [
+     300,
+     255.33333333333334
+    ],
+    [
+     0,
+     455.33333333333337
+    ]
+   ],
+   "embeds": [
+    "rg-mulch",
+    "rg-medium"
+   ]
+  }
+ ],
+ "views": [
+  {
+   "id": "T-threshold",
+   "x": [
+    -200,
+    300
+   ],
+   "y": [
+    -210,
+    130
+   ]
+  },
+  {
+   "id": "H-head",
+   "x": [
+    -800,
+    300
+   ],
+   "y": [
+    2550,
+    3650
+   ]
+  },
+  {
+   "id": "F-floor",
+   "x": [
+    -200,
+    700
+   ],
+   "y": [
+    -560,
+    120
+   ]
+  },
+  {
+   "id": "M-landing",
+   "x": [
+    -2200,
+    100
+   ],
+   "y": [
+    -600,
+    200
+   ]
+  },
+  {
+   "id": "C-water-corner",
+   "x": [
+    -3600,
+    0
+   ],
+   "y": [
+    -700,
+    900
+   ]
+  },
+  {
+   "id": "Z-jamb-base",
+   "x": [
+    -250,
+    300
+   ],
+   "y": [
+    -260,
+    500
+   ]
+  },
+  {
+   "id": "I-bed-tree",
+   "x": [
+    -5400,
+    -3000
+   ],
+   "y": [
+    -1200,
+    4400
+   ]
+  },
+  {
+   "id": "J-rain-garden",
+   "x": [
+    -8000,
+    -4800
+   ],
+   "y": [
+    -1500,
+    300
+   ]
+  },
+  {
+   "id": "S-section",
+   "x": [
+    -8000,
+    2500
+   ],
+   "y": [
+    -1700,
+    3800
+   ]
+  }
+ ],
+ "assemblies": [
+  {
+   "name": "Floor (slab on 100 graphite EPS)",
+   "target": 2.45,
+   "films": [
+    0.16
+   ],
+   "layers": [
+    {
+     "mat": "concrete-lowcarbon",
+     "t": 100
+    },
+    {
+     "mat": "graphite-eps",
+     "t": 100
+    }
+   ]
+  },
+  {
+   "name": "Floor band (glulam 215 + WF 80; vented cladding excluded)",
+   "target": 3.85,
+   "films": [
+    0.12,
+    0.12
+   ],
+   "layers": [
+    {
+     "mat": "glulam",
+     "t": 215
+    },
+    {
+     "mat": "woodfibre-board",
+     "t": 80
+    }
+   ]
+  },
+  {
+   "name": "Wall W1 (ply + 2x6 cellulose, 23 % framing + WF 80)",
+   "target": 3.85,
+   "films": [
+    0.12,
+    0.12
+   ],
+   "layers": [
+    {
+     "mat": "gypsum",
+     "t": 12.7
+    },
+    {
+     "mat": "cellulose-dense",
+     "t": 140,
+     "framing": {
+      "mat": "softwood-lumber",
+      "frac": 0.23
+     }
+    },
+    {
+     "mat": "plywood",
+     "t": 12.5
+    },
+    {
+     "mat": "woodfibre-board",
+     "t": 80
+    }
+   ]
+  }
+ ],
+ "zones": {
+  "D": {
+   "label": "door unit (frame, glass, drive)",
+   "elev_m": 2.785
+  },
+  "T": {
+   "label": "threshold"
+  },
+  "H": {
+   "label": "floor-band head + canopy"
+  },
+  "F": {
+   "label": "floor",
+   "depth_m": 2.24
+  },
+  "M": {
+   "label": "lined landing",
+   "depth_m": 1.72
+  },
+  "P": {
+   "label": "granite terrace + jamb ground",
+   "depth_m": 1.4
+  },
+  "I": {
+   "label": "planting bed",
+   "depth_m": 1.75
+  },
+  "J": {
+   "label": "water corner + rain garden"
+  },
+  "E": {
+   "label": "subgrade / drains"
+  },
+  "Z": {
+   "label": "jamb A wall (W1) base"
+  },
+  "U": {
+   "label": "upper floor and wall"
+  }
+ }
+}

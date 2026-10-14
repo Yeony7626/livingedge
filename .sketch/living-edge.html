@@ -1,0 +1,671 @@
+<title>The Living Edge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a pinned drawing stage (left) with the story in chapters beside it (right); the ground colour shifts with each chapter.
+   After the story, the working tool: 2D section and sectional isometric side by side, a time strip below, the chat docked right. */
+@property --ground { syntax: "<color>"; inherits: true; initial-value: #f1f2ef; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #202624; }
+@property --ink-soft { syntax: "<color>"; inherits: true; initial-value: #6b7470; }
+@property --larch { syntax: "<color>"; inherits: true; initial-value: #d6bb94; }
+:root {
+  --ground: #f1f2ef; --ink: #202624; --ink-soft: #6b7470; --rule: rgba(32,38,36,.14); --paper: #fafaf8;
+  --water: #3f7cb6; --sun: #d8a02a; --grow: #5f8445; --grow-soft: #b7c99d; --wear: #f3e8cf;
+  /* material fills, kept quiet so line work leads */
+  --concrete: #d7d5cf; --earth: #ddd3c4; --topsoil: #cbbca3; --roofing: #b3b9bb; --gravel: #d9d9d3; --rock: #cfd0ca; --insul: #f1e6c8; --timber: #e8d6b5;
+  --ply: #e2cba3; --membrane: #3b4448; --metal: #a3abb0; --board: #dad8d2; --render: #eeebe4; --xps: #d8e2e6; --oak: #c49d74; --larch: #d6bb94; --cavity: #f6f5f1;
+  --font: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Consolas, monospace;
+  --ease: cubic-bezier(.16,1,.3,1);
+  color-scheme: light;
+  transition: --ground 1.2s var(--ease), --ink 1.2s var(--ease), --ink-soft 1.2s var(--ease);
+}
+:root[data-chapter="weather"] { --ground: #e1e7ea; --ink: #1d2830; --ink-soft: #5c6a74; }
+:root[data-chapter="time"]    { --ground: #e7ece2; --ink: #1f2a1f; --ink-soft: #5f6c59; }
+:root[data-chapter="people"]  { --ground: #2a3136; --ink: #e8ebe5; --ink-soft: #a5b0ab; --rule: rgba(232,235,229,.16); color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--water); outline-offset: 3px; }
+
+.bar { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; padding-inline: clamp(16px, 3vw, 40px); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.wordmark { font: 500 1rem/1 var(--font); letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; }
+.wordmark svg { width: 22px; height: 22px; }
+.bar-actions { display: flex; gap: 8px; }
+.pill { border: 1px solid var(--rule); background: color-mix(in srgb, var(--ground) 82%, transparent); backdrop-filter: blur(8px); border-radius: 999px; padding: 8px 14px; font-size: .82rem; cursor: pointer; color: var(--ink); text-decoration: none; transition: transform .2s var(--ease); }
+.pill:active { transform: scale(.97); }
+.pill[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+
+.story { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr); }
+.stage { position: sticky; top: 0; height: 100dvh; display: grid; place-items: center; padding: 64px clamp(8px, 2vw, 32px) 16px; }
+#stage-draw { width: 100%; height: 100%; display: grid; place-items: center; }
+#stage-draw svg { width: 100%; height: 100%; max-height: calc(100dvh - 80px); overflow: visible; }
+.year { position: absolute; left: clamp(24px, 4vw, 56px); top: 76px; font: 300 clamp(2.2rem, 4.6vw, 3.8rem)/1 var(--font); letter-spacing: -.03em; opacity: 0; transition: opacity .8s var(--ease); font-variant-numeric: tabular-nums; }
+.year small { display: block; font: 400 .76rem/1.4 var(--mono); letter-spacing: 0; color: var(--ink-soft); margin-top: 6px; }
+:root[data-chapter="time"] .year, :root[data-chapter="people"] .year { opacity: 1; }
+.chapters { padding-inline: clamp(16px, 3vw, 44px) clamp(20px, 4vw, 60px); }
+.chapter { min-height: 100dvh; display: grid; align-content: center; gap: 18px; max-width: 31rem; padding-block: 14dvh; }
+.chapter h2 { margin: 0; font: 500 clamp(1.7rem, 3vw, 2.35rem)/1.1 var(--font); letter-spacing: -.02em; text-wrap: balance; }
+.chapter p { margin: 0; font: 300 clamp(1.04rem, 1.35vw, 1.18rem)/1.62 var(--font); max-width: 33ch; }
+.chapter .fine { font: 400 .78rem/1.55 var(--mono); color: var(--ink-soft); max-width: 44ch; }
+.hero h1 { margin: 0; font: 400 clamp(2.5rem, 5.4vw, 4.4rem)/1.03 var(--font); letter-spacing: -.035em; text-wrap: balance; }
+.ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--ground); border-radius: 999px; padding: 12px 22px; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; transition: transform .25s var(--ease); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn:hover { transform: translateY(-1px); } .btn:active { transform: translateY(1px) scale(.98); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px 18px; }
+.steps li { display: grid; grid-template-columns: 1.9em 1fr; font-size: .84rem; line-height: 1.45; color: var(--ink-soft); transition: color .4s; padding-block: 2px; }
+.steps li b { font: 400 .76rem/1.6 var(--mono); }
+.steps li.on, .steps li.done { color: var(--ink); }
+.steps li.on b { color: var(--water); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font: 400 .82rem/1.4 var(--font); color: var(--ink-soft); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { width: 22px; height: 0; border-top: 2px dashed currentColor; display: inline-block; }
+
+/* Hairline palette: plates in the ground colour, one stroke in a few weights, one highlight */
+#stage-draw, .view .canvas, .key .thumb { position: relative; --plate: var(--ground); --hl-edge: color-mix(in srgb, var(--ink) 40%, var(--plate)); }
+.view .canvas, .key .thumb { --plate: var(--paper); }
+.pl { fill: var(--plate); stroke: none; stroke-width: .9px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.ol { stroke: color-mix(in srgb, var(--ink) 30%, var(--plate)); stroke-width: .9px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; transition: stroke 260ms cubic-bezier(.5,0,.1,1); }
+.cut { stroke: color-mix(in srgb, var(--ink) 48%, var(--plate)); stroke-width: .9px; vector-effect: non-scaling-stroke; stroke-linejoin: round; transition: stroke 260ms cubic-bezier(.5,0,.1,1); }
+.mk { stroke: color-mix(in srgb, var(--ink) 18%, var(--plate)); fill: none; stroke-width: .8px; vector-effect: non-scaling-stroke; }
+.dotmk { fill: color-mix(in srgb, var(--ink) 45%, var(--plate)); }
+.pt.hi .ol, .pt.hi .cut { stroke: var(--ink); }
+.readout { position: absolute; right: 14px; top: 10px; font: 400 .76rem/1 var(--mono); color: var(--ink-soft); pointer-events: none; }
+#tool-3d { cursor: ew-resize; touch-action: pan-y; }
+/* pens */
+.p-cut { stroke: var(--ink); stroke-width: 1.35px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.p-edge { stroke: var(--ink); stroke-width: .7px; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.p-fine { stroke: var(--ink-soft); stroke-width: .5px; vector-effect: non-scaling-stroke; fill: none; }
+.p-hid { stroke: var(--ink-soft); stroke-width: .6px; vector-effect: non-scaling-stroke; stroke-dasharray: 6 4; fill: none; }
+.p-mem { stroke: var(--ink); stroke-width: 2.2px; vector-effect: non-scaling-stroke; fill: none; }
+.txt { fill: var(--ink); font: 400 78px var(--font); }
+.txt-s { fill: var(--ink-soft); font: 400 58px var(--mono); }
+.key-c { fill: var(--paper); stroke: var(--ink); stroke-width: .8px; vector-effect: non-scaling-stroke; }
+.key-t { fill: var(--ink); font: 500 46px var(--mono); text-anchor: middle; dominant-baseline: central; }
+.keylist { list-style: none; margin: 0; padding: 0; columns: 3 14rem; column-gap: 20px; font-size: .76rem; line-height: 1.5; color: var(--ink-soft); }
+.keylist li { break-inside: avoid; display: grid; grid-template-columns: 1.8em 1fr; }
+.keylist b { font: 500 .72rem/1.6 var(--mono); color: var(--ink); }
+
+.layer { transition: transform 1s var(--ease), opacity .7s var(--ease); }
+.st-exploded .layer:not(.in) { transform: translate(var(--ex), var(--ey)); opacity: 0; }
+.callouts { opacity: 0; transition: opacity .8s var(--ease); }
+.st-keys .callouts { opacity: 1; }
+.fx-weather, .fx-sun, .fx-wet, .fx-people { opacity: 0; transition: opacity 1s var(--ease); }
+.st-wet .fx-weather, .st-wet .fx-sun, .st-wet .fx-wet { opacity: 1; }
+.st-people .fx-people { opacity: 1; }
+.moss { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform 1.6s var(--ease); }
+.st-y5 .moss { transform: scaleY(.3); } .st-y15 .moss { transform: scaleY(.7); } .st-y30 .moss { transform: scaleY(1); }
+.lichen, .silt { opacity: 0; transition: opacity 1.2s; }
+.st-y15 .lichen, .st-y30 .lichen, .st-y15 .silt, .st-y30 .silt { opacity: 1; }
+.root { stroke-dasharray: 1400; stroke-dashoffset: 1400; transition: stroke-dashoffset 2s var(--ease); }
+.st-y5 .root { stroke-dashoffset: 1000; } .st-y15 .root { stroke-dashoffset: 520; } .st-y30 .root { stroke-dashoffset: 0; }
+.plant { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(.35); transition: transform 1.8s var(--ease); }
+.st-y5 .plant { transform: scale(.6); } .st-y15 .plant { transform: scale(.85); } .st-y30 .plant, .st-people .plant { transform: scale(1); }
+.st-y30 { --larch: #b8b6ae; }
+.wear { opacity: 0; transition: opacity 1s; } .st-y30 .wear, .st-people .wear { opacity: 1; }
+.flow { stroke-dasharray: 16 12; }
+@media (prefers-reduced-motion: no-preference) {
+  .st-wet .rain g { animation: fall .9s linear infinite; }
+  .st-wet .flow { animation: flow 1.2s linear infinite; }
+  .st-wet .drip { animation: drip 1.4s ease-in infinite; }
+  .st-people .bird { animation: glide 9s ease-in-out infinite alternate; }
+}
+@keyframes fall { from { transform: translate(70px, -300px); } to { transform: translate(0, 0); } }
+@keyframes flow { to { stroke-dashoffset: -56; } }
+@keyframes drip { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(200px); opacity: 0; } }
+@keyframes glide { from { transform: translate(0, 0); } to { transform: translate(-140px, 30px); } }
+
+.tool { min-height: 100dvh; padding: 80px clamp(16px, 3vw, 40px) 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 350px); gap: 18px; }
+.tool-main { display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 12px; min-width: 0; }
+.tool-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; }
+.tool-head h2 { margin: 0; font: 500 1.3rem/1.2 var(--font); letter-spacing: -.01em; }
+.tool-head .meta { font: 400 .78rem/1.4 var(--mono); color: var(--ink-soft); }
+.views { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 12px; min-height: 0; }
+.view { background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; display: grid; grid-template-rows: auto 1fr; min-height: 460px; min-width: 0; overflow: hidden; }
+.view header { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; font: 500 .8rem/1 var(--font); color: var(--ink-soft); border-bottom: 1px solid var(--rule); }
+.view header .mono { font-family: var(--mono); font-weight: 400; }
+.view .canvas { display: grid; place-items: center; padding: 6px; min-height: 0; }
+.view svg { width: 100%; height: 100%; max-height: 66dvh; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: 10px; align-items: stretch; }
+.key { border: 1px solid var(--rule); background: var(--paper); border-radius: 3px; padding: 0; cursor: pointer; display: grid; grid-template-rows: 96px auto; overflow: hidden; text-align: left; color: var(--ink); transition: transform .2s var(--ease); }
+.key:hover { transform: translateY(-2px); }
+.key[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.key svg { width: 100%; height: 96px; }
+.key span { padding: 6px 10px 8px; font: 500 .8rem/1.2 var(--font); display: flex; justify-content: space-between; gap: 6px; }
+.key span em { font: 400 .7rem/1.2 var(--mono); color: var(--ink-soft); font-style: normal; }
+.drivers { display: grid; gap: 7px; align-content: center; padding-left: 4px; font-size: .78rem; color: var(--ink-soft); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; vertical-align: middle; }
+.seg button { border: 0; background: transparent; padding: 5px 9px; cursor: pointer; font-size: .76rem; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+.storm-btn { border: 1px solid var(--water); color: var(--water); background: transparent; border-radius: 999px; padding: 7px 12px; cursor: pointer; font-size: .78rem; }
+.chat { background: var(--paper); border: 1px solid var(--rule); border-radius: 3px; display: grid; grid-template-rows: auto 1fr auto auto; min-height: 0; max-height: calc(100dvh - 108px); position: sticky; top: 80px; }
+.chat header { padding: 12px 16px; border-bottom: 1px solid var(--rule); font: 500 .9rem/1.2 var(--font); }
+.msgs { overflow-y: auto; padding: 14px 16px; display: grid; gap: 14px; align-content: start; }
+.msg { font-size: .88rem; line-height: 1.55; max-width: 94%; }
+.msg.user { justify-self: end; background: var(--ink); color: var(--ground); padding: 10px 13px; border-radius: 14px 14px 4px 14px; }
+.card { border: 1px solid var(--rule); border-radius: 3px; padding: 10px 12px; display: grid; gap: 6px; font-size: .82rem; margin-top: 8px; background: var(--ground); }
+.card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; }
+.card dt { color: var(--ink-soft); } .card dd { margin: 0; }
+.card.refuse { border-color: color-mix(in srgb, #b4473b 55%, transparent); }
+.card.refuse b { color: #b4473b; font-weight: 600; }
+.card .src { font: 400 .72rem/1.4 var(--mono); color: var(--ink-soft); }
+.compose { border-top: 1px solid var(--rule); padding: 10px; display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.compose label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.compose textarea { resize: none; border: 1px solid var(--rule); border-radius: 8px; padding: 9px 10px; background: var(--ground); color: var(--ink); font: 400 .88rem/1.4 var(--font); min-height: 42px; }
+.compose textarea::placeholder { color: var(--ink-soft); }
+.rate { border-top: 1px solid var(--rule); padding: 10px 14px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .8rem; color: var(--ink-soft); }
+.rate button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--rule); background: transparent; cursor: pointer; font: 500 .78rem/1 var(--mono); }
+.rate button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media (max-width: 980px) {
+  .story { grid-template-columns: minmax(0, 1fr); }
+  .stage { height: 58dvh; z-index: 1; background: var(--ground); padding-top: 60px; }
+  #stage-draw svg { max-height: calc(58dvh - 64px); }
+  .chapter { min-height: 80dvh; padding-block: 8dvh; }
+  .year { top: 60px; font-size: 1.8rem; }
+  .tool { grid-template-columns: minmax(0, 1fr); }
+  .views { grid-template-columns: minmax(0, 1fr); }
+  .chat { position: static; max-height: none; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .drivers { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  :root, .layer, .moss, .plant, .root, .fx-weather, .fx-sun, .fx-people, .fx-wet, .lichen, .silt, .wear, .year, .callouts { transition: none !important; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="shared-defs"></defs></svg>
+
+<div class="bar">
+  <div class="wordmark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M7 20V7h9v13M7 7l-3 2M16 11h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>The Living Edge</div>
+  <div class="bar-actions">
+    <button class="pill" id="sound" type="button" aria-pressed="false">Sound off</button>
+    <a class="pill" href="#tool">Open the tool</a>
+  </div>
+</div>
+
+<main>
+  <section class="story" aria-label="The story of one edge">
+    <div class="stage">
+      <div id="stage-draw"></div>
+      <div class="year" id="year">Year 0<small>pavilion edge, facing north, Vancouver</small></div>
+    </div>
+    <div class="chapters">
+      <article class="chapter hero" data-chapter="intro">
+        <h1>Where a wall meets the ground</h1>
+        <p>Follow one pavilion edge through its making, its weather, and thirty years of life.</p>
+        <div class="ctas"><a class="btn" href="#c-assembly">Begin the story</a><a class="btn ghost" href="#tool">Open the tool</a></div>
+      </article>
+      <article class="chapter" id="c-assembly" data-chapter="assembly">
+        <h2>How it comes together</h2>
+        <p>From the footing up, each layer arrives in the order it is built. Each one has a job: carry, drain, separate, breathe, protect.</p>
+        <ol class="steps" id="steps"></ol>
+      </article>
+      <article class="chapter" data-chapter="weather">
+        <h2>What the weather does</h2>
+        <p>Rain arrives on the wind. The overhang shelters only the top of the wall. Below that the render takes the weather; water that gets behind it runs down the drained cavity and leaves over the flashing. Sun and wind dry it again.</p>
+        <div class="legend"><span style="color:var(--water)"><i></i>water</span><span style="color:var(--sun)"><i></i>sun</span></div>
+        <p class="fine">Vancouver requires a drained cavity behind cladding (VBBL 9.27.2.2). A wall is treated as sheltered only within a quarter of the overhang's depth below it.</p>
+      </article>
+      <article class="chapter" data-chapter="time">
+        <h2>Thirty years</h2>
+        <p>Where splash and shade keep the render damp, moss takes hold first. Lichen arrives after a decade or more. Roots find the drainage, the gravel silts, and the larch turns silver.</p>
+        <p class="fine">Growth is shown in stages, not dates. Most of it rests on qualitative evidence.</p>
+      </article>
+      <article class="chapter" data-chapter="people">
+        <h2>People and nature</h2>
+        <p>People sit where the wall stays dry. The seat wears pale where they rest, and moss keeps the corners. A careful clean resets the surface, for a while.</p>
+        <div class="ctas"><a class="btn" href="#tool">Describe your own edge</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="tool" id="tool" data-chapter="tool" aria-label="The tool">
+    <div class="tool-main">
+      <div class="tool-head">
+        <h2>Pavilion edge, Vancouver</h2>
+        <span class="meta">Detail 01, base of wall and eave · version 3</span>
+      </div>
+      <div class="views">
+        <div class="view"><header><span>Section</span><span class="mono">1:10</span></header><div class="canvas" id="tool-2d"></div></div>
+        <div class="view"><header><span>Axonometric</span><span class="mono">drag to open the layers, point to name one</span></header><div class="canvas" id="tool-3d"></div></div>
+      </div>
+      <ol class="keylist" id="keylist"></ol>
+      <div class="strip" id="strip">
+        <div class="drivers">
+          <div>Orientation <span class="seg"><button type="button" aria-pressed="true">N</button><button type="button" aria-pressed="false">E</button><button type="button" aria-pressed="false">S</button><button type="button" aria-pressed="false">W</button></span></div>
+          <div>Use <span class="seg"><button type="button" aria-pressed="false">rare</button><button type="button" aria-pressed="true">daily</button><button type="button" aria-pressed="false">heavy</button></span></div>
+          <div>Upkeep <span class="seg"><button type="button" aria-pressed="false">none</button><button type="button" aria-pressed="true">some</button><button type="button" aria-pressed="false">regular</button></span></div>
+          <button class="storm-btn" type="button" id="storm">Play a storm at this year</button>
+        </div>
+      </div>
+    </div>
+    <aside class="chat" aria-label="Conversation">
+      <header>Conversation</header>
+      <div class="msgs">
+        <div class="msg user">A pavilion edge in Vancouver, somewhere to sit, and moss welcome on the outer wall.</div>
+        <div class="msg">Here is a first detail, built in order from the footing up. I made two assumptions you can change.
+          <div class="card"><dl><dt>Faces</dt><dd>north (default)</dd><dt>Soil</dt><dd>unknown (default)</dd><dt>Clearance</dt><dd>250 mm, above the 200 mm minimum</dd></dl></div>
+        </div>
+        <div class="msg user">Bring the render down to 150 mm above the ground.</div>
+        <div class="msg">I can't make that change.
+          <div class="card refuse"><b>Kept above 200 mm</b><span>Moisture-sensitive cladding must stay at least 200 mm above finished ground.</span><span class="src">VBBL 2025, 9.27.2.4 · code requirement</span><span>Lowering the gravel strip instead would keep the render where it is and bring the ground down.</span></div>
+        </div>
+      </div>
+      <form class="compose" id="compose"><label for="ask">Message</label><textarea id="ask" rows="1" placeholder="Why is there gravel here?"></textarea><button class="btn" type="submit">Send</button></form>
+      <div class="rate" role="group" aria-label="Rate this section"><span>How credible is this detail?</span><span id="rate"></span></div>
+    </aside>
+  </section>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const L = 900;
+  // The plain middle of the wall (1100 to 2600 mm) is cut out with a break line.
+  const T = (y) => (y <= 1100 ? y : y >= 2600 ? y - 1500 : 1100);
+
+  // Detail 01: base of wall and eave. Vancouver rainscreen on a concrete foundation. Dimensions in mm.
+  const R = (x0, y0, x1, y1) => [[x0, y1], [x1, y1], [x1, y0], [x0, y0]];
+  const COMP = [
+    { id: "footing", step: 1, name: "Concrete footing", fill: "--concrete", hatch: "h-conc", poly: R(-175, -1150, 375, -900), ex: [0, -700] },
+    { id: "fwall", step: 2, name: "Concrete foundation wall", fill: "--concrete", hatch: "h-conc", poly: R(0, -900, 200, 200), ex: [0, -600] },
+    { id: "damp", step: 3, name: "Damp-proofing", fill: "--membrane", poly: R(-5, -900, 0, 0), ex: [-500, 0] },
+    { id: "rock", step: 3, name: "Drain rock and perforated drain", fill: "--rock", hatch: "h-rock", poly: [[-520, -790], [-5, -790], [-5, -900], [-175, -900], [-175, -1150], [-520, -1150]], ex: [-500, -300] },
+    { id: "pipe", step: 3, name: "Drain rock and perforated drain", fill: "--paper", poly: Array.from({ length: 18 }, (_, i) => [-345 + 55 * Math.cos(i / 18 * 2 * Math.PI), -1075 + 55 * Math.sin(i / 18 * 2 * Math.PI)]), ex: [-500, -300] },
+    { id: "backfill", step: 4, name: "Free-draining backfill", fill: "--earth", hatch: "h-earth", poly: [[-1300, -200], [-300, -200], [-300, -150], [-5, -150], [-5, -790], [-520, -790], [-520, -1150], [-1300, -1150]], ex: [-700, -400] },
+    { id: "base", step: 5, name: "Slab on grade: granular base, rigid insulation, slab", fill: "--gravel", hatch: "h-gravel", poly: R(200, -150, 900, 50), ex: [600, -200] },
+    { id: "xps", step: 5, name: "Slab on grade: granular base, rigid insulation, slab", fill: "--xps", hatch: "h-xps", poly: R(200, 50, 900, 100), ex: [600, -200] },
+    { id: "slab", step: 5, name: "Slab on grade: granular base, rigid insulation, slab", fill: "--concrete", hatch: "h-conc", poly: R(200, 100, 900, 200), ex: [600, -200] },
+    { id: "gasket", step: 6, name: "Sill gasket and sill plate", fill: "--membrane", poly: R(0, 200, 152, 206), ex: [0, 500] },
+    { id: "sill", step: 6, name: "Sill gasket and sill plate", fill: "--timber", cross: true, poly: R(12, 206, 152, 244), ex: [0, 500] },
+    { id: "frame", step: 7, name: "38 x 140 studs with batt insulation", fill: "--insul", hatch: "h-batt", poly: R(12, 244, 152, 2962), ex: [0, 800] },
+    { id: "plate", step: 7, name: "38 x 140 studs with batt insulation", fill: "--timber", cross: true, poly: R(12, 2962, 152, 3000), ex: [0, 800] },
+    { id: "gyp", step: 7, name: "38 x 140 studs with batt insulation", fill: "--board", poly: R(152, 244, 165, 3000), ex: [0, 800] },
+    { id: "roof", step: 8, name: "Roof joists, sheathing and membrane", fill: "--ply", hatch: "h-ply", poly: R(-651, 3235, 900, 3250), ex: [0, 900] },
+    { id: "roofm", step: 8, name: "Roof joists, sheathing and membrane", fill: "--roofing", poly: R(-660, 3250, 900, 3257), ex: [0, 900] },
+    { id: "joist", step: 8, name: "Roof joists, sheathing and membrane", fill: "--timber", hatch: "h-grain", poly: R(-632, 3000, 900, 3235), posts: [[60, 98], [466, 504], [872, 900]], beyond: true, ex: [0, 900] },
+    { id: "sheath", step: 9, name: "Sheathing and sheathing membrane", fill: "--ply", hatch: "h-ply", poly: R(0, 244, 12, 3000), w1: L - 110, ex: [-450, 0] },
+    { id: "membr", step: 9, name: "Sheathing and sheathing membrane", fill: "--membrane", poly: R(-2, 232, 0, 3000), w1: L - 180, ex: [-450, 0] },
+    { id: "flash", step: 10, name: "Base flashing with drip", fill: "--metal", poly: [[-4, 345], [-2, 345], [-2, 234], [-58, 234], [-68, 216], [-70, 218], [-61, 232], [-4, 232]], w1: L - 180, ex: [-500, 0] },
+    { id: "strap", step: 11, name: "19 x 64 strapping, drained cavity", fill: "--timber", poly: R(-21, 252, -2, 3000), posts: [[90, 154], [496, 560]], beyond: true, ex: [-600, 0] },
+    { id: "boardc", step: 12, name: "Cement board carrier", fill: "--board", hatch: "h-board", poly: R(-33, 252, -21, 3000), w1: L - 290, ex: [-700, 0] },
+    { id: "render", step: 13, name: "Lime render, 20 mm", fill: "--render", hatch: "h-render", poly: R(-53, 252, -33, 3000), w1: L - 390, ex: [-850, 0] },
+    { id: "soffit", step: 14, name: "Larch soffit and fascia", fill: "--larch", hatch: "h-grain", poly: R(-632, 2981, -53, 3000), ex: [-300, 700] },
+    { id: "fascia", step: 14, name: "Larch soffit and fascia", fill: "--larch", hatch: "h-grain", poly: R(-651, 2972, -632, 3262), ex: [-300, 700] },
+    { id: "gravel", step: 15, name: "Gravel strip over filter fabric", fill: "--gravel", hatch: "h-gravel", poly: [[-300, -6], [-5, 0], [-5, -150], [-300, -150]], ex: [-600, 300] },
+    { id: "topsoil", step: 16, name: "Topsoil and planting, graded away", fill: "--topsoil", hatch: "h-soil", poly: [[-1300, -26], [-300, -6], [-300, -200], [-1300, -200]], ex: [-800, 300] },
+    { id: "seat", step: 17, name: "Oak seat on oak posts", fill: "--oak", hatch: "h-grain", poly: R(-470, 405, -85, 450), w0: 110, w1: L - 140, ex: [-700, 400] },
+    { id: "leg", step: 17, name: "Oak seat on oak posts", fill: "--oak", poly: R(-420, -120, -375, 405), posts: [[190, 235], [L - 260, L - 215]], ex: [-700, 400] },
+  ];
+  const STEPS = [...new Map(COMP.map((c) => [c.step, c.name])).entries()].sort((a, b) => a[0] - b[0]);
+
+  const rnd = (seed) => () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const fmt = (p) => p.map((n) => n.toFixed(1)).join(",");
+
+  // Hatches, drawn to drafting convention at 1:10.
+  (function hatches() {
+    const r = rnd(7);
+    let conc = "", rock = "", grav = "", soil = "", earth = "", rend = "";
+    for (let i = 0; i < 16; i++) { const x = r() * 160, y = r() * 160, s = 6 + r() * 8; conc += i % 3 ? `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="2.2"/>` : `<path d="M${x.toFixed(0)} ${y.toFixed(0)}l${s.toFixed(0)} ${(s * .55).toFixed(0)}l${(-s * .85).toFixed(0)} ${(s * .5).toFixed(0)}z" fill="none"/>`; }
+    for (let i = 0; i < 12; i++) rock += `<circle cx="${(r() * 200).toFixed(0)}" cy="${(r() * 200).toFixed(0)}" r="${(16 + r() * 10).toFixed(0)}"/>`;
+    for (let i = 0; i < 26; i++) grav += `<circle cx="${(r() * 120).toFixed(0)}" cy="${(r() * 120).toFixed(0)}" r="${(4 + r() * 6).toFixed(1)}"/>`;
+    for (let i = 0; i < 28; i++) soil += `<circle cx="${(r() * 140).toFixed(0)}" cy="${(r() * 140).toFixed(0)}" r="2"/>`;
+    for (let i = 0; i < 40; i++) rend += `<circle cx="${(r() * 60).toFixed(0)}" cy="${(r() * 60).toFixed(0)}" r="1.1"/>`;
+    // earth: groups of three short strokes at 45 degrees, the standard earth hatch
+    for (let gx = 0; gx < 2; gx++) for (let gy = 0; gy < 2; gy++) { const ox = gx * 100 + (gy ? 50 : 0), oy = gy * 100; for (let k = 0; k < 3; k++) earth += `<line x1="${ox + k * 12}" y1="${oy + 40}" x2="${ox + k * 12 + 34}" y2="${oy + 6}"/>`; }
+    document.getElementById("shared-defs").innerHTML = `
+      <pattern id="h-conc" width="160" height="160" patternUnits="userSpaceOnUse"><g fill="var(--ink)" stroke="var(--ink)" stroke-width="1.6" opacity=".55">${conc}</g></pattern>
+      <pattern id="h-rock" width="200" height="200" patternUnits="userSpaceOnUse"><g fill="none" stroke="var(--ink)" stroke-width="2" opacity=".55">${rock}</g></pattern>
+      <pattern id="h-gravel" width="120" height="120" patternUnits="userSpaceOnUse"><g fill="none" stroke="var(--ink)" stroke-width="1.6" opacity=".5">${grav}</g></pattern>
+      <pattern id="h-soil" width="140" height="140" patternUnits="userSpaceOnUse"><g fill="var(--ink)" opacity=".5">${soil}</g><g stroke="var(--ink)" stroke-width="1.6" opacity=".35"><line x1="10" y1="70" x2="40" y2="40"/><line x1="80" y1="130" x2="110" y2="100"/></g></pattern>
+      <pattern id="h-earth" width="200" height="200" patternUnits="userSpaceOnUse"><g stroke="var(--ink)" stroke-width="1.8" opacity=".45">${earth}</g></pattern>
+      <pattern id="h-batt" width="140" height="60" patternUnits="userSpaceOnUse"><path d="M0 0 C 40 0, 40 30, 70 30 S 100 60, 140 60 M0 60 C 40 60, 40 30, 70 30 S 100 0, 140 0" fill="none" stroke="var(--ink)" stroke-width="1.6" opacity=".5"/></pattern>
+      <pattern id="h-xps" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M0 24 L24 0 M0 0 L24 24" stroke="var(--ink)" stroke-width="1.2" opacity=".4"/></pattern>
+      <pattern id="h-ply" width="20" height="5" patternUnits="userSpaceOnUse"><line x1="0" y1="2.5" x2="20" y2="2.5" stroke="var(--ink)" stroke-width="1" opacity=".45"/></pattern>
+      <pattern id="h-board" width="30" height="30" patternUnits="userSpaceOnUse"><line x1="6" y1="8" x2="16" y2="8" stroke="var(--ink)" stroke-width="1.2" opacity=".45"/><line x1="18" y1="22" x2="28" y2="22" stroke="var(--ink)" stroke-width="1.2" opacity=".45"/></pattern>
+      <pattern id="h-render" width="60" height="60" patternUnits="userSpaceOnUse"><g fill="var(--ink)" opacity=".5">${rend}</g></pattern>
+      <pattern id="h-grain" width="240" height="18" patternUnits="userSpaceOnUse"><path d="M0 9 C 50 3, 100 15, 150 8 S 220 4, 240 9" fill="none" stroke="var(--ink)" stroke-width="1.3" opacity=".42"/></pattern>`;
+  })();
+
+  function area(poly) { let a = 0; for (let i = 0; i < poly.length; i++) { const [x1, y1] = poly[i], [x2, y2] = poly[(i + 1) % poly.length]; a += x1 * T(y2) - x2 * T(y1); } return a / 2; }
+
+  // ---- Hairline-language axonometric ----
+  // The 2:1 view: camera 45 degrees round, 30 degrees up. Ground lines rise 1 in 2; verticals are true.
+  const K = Math.SQRT1_2, KY = K * 0.5, VZ = Math.cos(Math.PI / 6);
+  // World: x = section depth (exterior negative), ty = height after the wall break, w = along the wall (0 back, L at the cut).
+  // The cut face is the right-hand plane; exterior faces are the left-hand plane.
+  const isoT = (x, ty, w) => [(w + x) * K, (w - x) * KY - ty * VZ];
+  const iso = (x, y, w) => isoT(x, T(y), w);
+  const VIEW = (x, ty, w) => 0.612 * w - 0.612 * x + 0.5 * ty; // larger is nearer the viewer
+  const SHORT = {
+    footing: "footing · 550 × 250", fwall: "foundation wall · 200", damp: "damp-proofing", rock: "drain rock", pipe: "perforated drain · 100",
+    backfill: "free-draining backfill", base: "granular base", xps: "rigid insulation · 50", slab: "slab on grade · 100", gasket: "sill gasket",
+    sill: "sill plate · 38 × 140", frame: "studs and batts · 140", plate: "top plate", gyp: "gypsum board · 13", roof: "roof sheathing",
+    roofm: "roof membrane", joist: "roof joists · 38 × 235", sheath: "sheathing · 12", membr: "sheathing membrane", flash: "base flashing, drip",
+    strap: "strapping · 19 × 64", boardc: "cement board · 12", render: "lime render · 20", soffit: "larch soffit", fascia: "larch fascia",
+    gravel: "gravel strip · 300", topsoil: "topsoil, 2% fall", seat: "oak seat · 45", leg: "oak post",
+  };
+
+  // Round every corner a little, as the kernel does: radius in proportion to the part, none on thin sheets.
+  function rounded(c) {
+    const tp = c.poly.map(([x, y]) => [x, T(y)]);
+    if (c.id === "pipe") return tp;
+    const xs = tp.map((p) => p[0]), ys = tp.map((p) => p[1]);
+    const minSide = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+    const r = Math.min(16, minSide * 0.28);
+    if (r < 3) return tp;
+    const out = [];
+    for (let i = 0; i < tp.length; i++) {
+      const p = tp[(i - 1 + tp.length) % tp.length], v = tp[i], n = tp[(i + 1) % tp.length];
+      const lp = Math.hypot(p[0] - v[0], p[1] - v[1]), ln = Math.hypot(n[0] - v[0], n[1] - v[1]);
+      const rr = Math.min(r, lp * 0.45, ln * 0.45);
+      const a = [v[0] + (p[0] - v[0]) * rr / lp, v[1] + (p[1] - v[1]) * rr / lp], b = [v[0] + (n[0] - v[0]) * rr / ln, v[1] + (n[1] - v[1]) * rr / ln];
+      for (const t of [0, 0.25, 0.5, 0.75, 1]) out.push([(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * v[0] + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * v[1] + t * t * b[1]]);
+    }
+    return out;
+  }
+  const tarea = (tp) => { let a = 0; for (let i = 0; i < tp.length; i++) { const [x1, y1] = tp[i], [x2, y2] = tp[(i + 1) % tp.length]; a += x1 * y2 - x2 * y1; } return a / 2; };
+
+  // One extruded run, drawn as Hairline draws a prism: plates in the ground colour, the silhouette and the cut outline only.
+  function hrun(c, w0, w1, out) {
+    const tp = rounded(c), n = tp.length, sign = Math.sign(tarea(tp)) || 1;
+    const vis = tp.map((_, i) => { const [x1, y1] = tp[i], [x2, y2] = tp[(i + 1) % n]; const nx = (y2 - y1) * sign, ny = -(x2 - x1) * sign; return -0.612 * nx + 0.5 * ny > 1e-6; });
+    for (let i = 0; i < n; i++) {
+      if (!vis[i]) continue;
+      const [x1, y1] = tp[i], [x2, y2] = tp[(i + 1) % n];
+      const q = [isoT(x1, y1, w0), isoT(x2, y2, w0), isoT(x2, y2, w1), isoT(x1, y1, w1)];
+      let lines = `<line x1="${q[0][0].toFixed(1)}" y1="${q[0][1].toFixed(1)}" x2="${q[1][0].toFixed(1)}" y2="${q[1][1].toFixed(1)}" class="ol"/>`;
+      // receding lines only where the surface turns away: the silhouette, never the seams of a rounded corner
+      if (!vis[(i - 1 + n) % n]) lines += `<line x1="${q[0][0].toFixed(1)}" y1="${q[0][1].toFixed(1)}" x2="${q[3][0].toFixed(1)}" y2="${q[3][1].toFixed(1)}" class="ol"/>`;
+      if (!vis[(i + 1) % n]) lines += `<line x1="${q[1][0].toFixed(1)}" y1="${q[1][1].toFixed(1)}" x2="${q[2][0].toFixed(1)}" y2="${q[2][1].toFixed(1)}" class="ol"/>`;
+      out.push({ d: VIEW((x1 + x2) / 2, (y1 + y2) / 2, (w0 + w1) / 2), c, svg: `<polygon points="${q.map(fmt).join(" ")}" class="pl"/>${lines}` });
+    }
+    // the end face, sheared into the plane w = w1: the section itself, outlined, with a few marks of what it is made of
+    const m = `matrix(${K.toFixed(4)} ${(-KY).toFixed(4)} 0 ${(-VZ).toFixed(4)} ${(w1 * K).toFixed(1)} ${(w1 * KY).toFixed(1)})`;
+    const pts = tp.map((p) => p.join(",")).join(" ");
+    const cx = tp.reduce((s, p) => s + p[0], 0) / n, cy = tp.reduce((s, p) => s + p[1], 0) / n;
+    out.push({ d: VIEW(cx, cy, w1) + 0.5, c, svg: `<g transform="${m}"><polygon points="${pts}" class="pl"/>${marks(c, tp)}<polygon points="${pts}" class="${w1 === L ? "cut" : "ol"}" fill="none"/></g>` });
+  }
+
+  // Identity by geometry, not hatching: dots for aggregate, a wave for batts, a cross for cut timber, a ring for the drain.
+  function marks(c, tp) {
+    const xs = tp.map((p) => p[0]), ys = tp.map((p) => p[1]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const r = rnd(c.id.length * 97);
+    if (c.id === "rock" || c.id === "gravel") { let s = ""; for (let i = 0; i < (c.id === "rock" ? 26 : 14); i++) { const x = x0 + 20 + r() * (x1 - x0 - 40), y = y0 + 15 + r() * (y1 - y0 - 30); if (c.id === "rock" && x > -175 && y < -900) continue; s += `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="${c.id === "rock" ? 14 : 8}" class="mk"/>`; } return s; }
+    if (c.id === "frame") { let s = "M"; for (let y = y0 + 40; y < y1 - 40; y += 120) s += `${x0 + 18} ${y} Q ${x1 - 18} ${y + 30} ${x0 + 18} ${y + 60} Q ${x1 - 18} ${y + 90} `; return `<path d="${s}${x0 + 18} ${y1 - 40}" class="mk" fill="none"/>`; }
+    if (c.cross) return `<path d="M${x0 + 6} ${y0 + 6} L${x1 - 6} ${y1 - 6} M${x0 + 6} ${y1 - 6} L${x1 - 6} ${y0 + 6}" class="mk"/>`;
+    if (c.id === "pipe") return `<circle cx="-345" cy="-1075" r="8" class="dotmk"/>`;
+    return "";
+  }
+
+  // Story overlays in world coordinates, each tied to the part it grows on so it moves with it.
+  const P = (x, y, w) => fmt(iso(x, y, w));
+  function hoverlays() {
+    const o = [], m = rnd(5), rW1 = L - 390;
+    let moss = "", lichen = "", wet = "";
+    for (let i = 0; i < 80; i++) { const w = 20 + m() * (rW1 - 40), y0 = 256 + m() * 20, h = 60 + m() * (i % 4 ? 300 : 560); moss += `<path d="M${P(-54, y0, w)} L${P(-56 - m() * 14, y0 + h, w + m() * 24 - 12)}"/>`; }
+    for (let i = 0; i < 30; i++) { const [px, py] = iso(-54, 420 + m() * 600, 40 + m() * (rW1 - 80)); lichen += `<circle cx="${px.toFixed(0)}" cy="${py.toFixed(0)}" r="${(6 + m() * 6).toFixed(0)}"/>`; }
+    for (let i = 0; i < 26; i++) { const w = 15 + i * (rW1 - 30) / 25, top = 520 + m() * 500; wet += `<path d="M${P(-54, top, w)} L${P(-54, 262, w)}"/>`; }
+    o.push({ d: VIEW(-53, 700, rW1 / 2) + 1, c: COMP.find((c) => c.id === "render"), svg: `<g class="moss" stroke="var(--grow)" stroke-width=".8" vector-effect="non-scaling-stroke" fill="none">${moss}</g><g class="lichen" fill="none" stroke="var(--grow)" stroke-width=".6" vector-effect="non-scaling-stroke">${lichen}</g><g class="fx-wet" stroke="var(--water)" stroke-width=".7" vector-effect="non-scaling-stroke" opacity=".7">${wet}</g>` });
+    let tufts = "", silt = "";
+    for (let i = 0; i < 70; i++) { const x = -1280 + m() * 960, w = 20 + m() * (L - 40), [px, py] = iso(x, -16, w), h = 50 + m() * 110; tufts += `<path d="M${px.toFixed(0)} ${py.toFixed(0)} q -14 ${(-h * .6).toFixed(0)} -26 ${(-h).toFixed(0)} M${px.toFixed(0)} ${py.toFixed(0)} q 2 ${(-h * .7).toFixed(0)} 4 ${(-h * 1.1).toFixed(0)} M${px.toFixed(0)} ${py.toFixed(0)} q 14 ${(-h * .5).toFixed(0)} 28 ${(-h * .85).toFixed(0)}"/>`; }
+    for (let i = 0; i < 40; i++) { const [px, py] = iso(-290 + m() * 270, -3, 20 + m() * (L - 40)); silt += `<circle cx="${px.toFixed(0)}" cy="${py.toFixed(0)}" r="4"/>`; }
+    o.push({ d: VIEW(-800, -16, L / 2) + 1, c: COMP.find((c) => c.id === "topsoil"), svg: `<g class="plant" stroke="var(--grow)" stroke-width=".8" vector-effect="non-scaling-stroke" fill="none">${tufts}</g>` });
+    o.push({ d: VIEW(-150, 0, L / 2) + 1, c: COMP.find((c) => c.id === "gravel"), svg: `<g class="silt" fill="var(--hl-edge)">${silt}</g>` });
+    const m2 = `matrix(${K.toFixed(4)} ${(-KY).toFixed(4)} 0 ${(-VZ).toFixed(4)} ${(L * K).toFixed(1)} ${(L * KY).toFixed(1)})`;
+    let roots = "";
+    for (let i = 0; i < 6; i++) { const x0 = -1250 + i * 130; roots += `<path class="root" d="M${x0} -30 C ${x0 + 60} -160, ${x0 + 200} ${-220 - i * 30}, ${x0 + 330 + i * 70} ${-330 - i * 40}"/>`; }
+    o.push({ d: VIEW(-800, -400, L) + 3, c: COMP.find((c) => c.id === "backfill"), svg: `<g transform="${m2}" fill="none" stroke="var(--grow)" stroke-width=".7" vector-effect="non-scaling-stroke" stroke-dasharray="3 4">${roots}</g>` });
+    // an outline tree, as architects draw one: trunk, branches, a scalloped crown
+    const [tx, ty] = iso(-1120, -26, 160), cr = rnd(3); let crown = "M"; const R0 = 360, cx = tx, cy = ty - 1380;
+    for (let k = 0; k <= 28; k++) { const a = (k / 28) * Math.PI * 2, rr = R0 * (0.82 + cr() * .28), px = cx + Math.cos(a) * rr * 1.05, py = cy + Math.sin(a) * rr * .9; crown += k ? ` Q ${(cx + Math.cos(a - .11) * rr * 1.25).toFixed(0)} ${(cy + Math.sin(a - .11) * rr * 1.1).toFixed(0)} ${px.toFixed(0)} ${py.toFixed(0)}` : `${px.toFixed(0)} ${py.toFixed(0)}`; }
+    const br = `M${tx} ${ty} L${tx + 6} ${ty - 1100} M${tx + 3} ${ty - 700} L${tx - 150} ${ty - 1050} M${tx + 4} ${ty - 820} L${tx + 170} ${ty - 1120} M${tx + 5} ${ty - 980} L${tx - 60} ${ty - 1250}`;
+    o.push({ d: VIEW(-1120, 0, 160) + 1, c: COMP.find((c) => c.id === "topsoil"), svg: `<g class="plant"><path d="${br}" class="ol" fill="none"/><path d="${crown}Z" class="pl" style="stroke:var(--grow)"/></g>` });
+    const a = iso(-400, 450, 380), b = iso(-170, 450, 560);
+    o.push({ d: VIEW(-280, 450, L) + 5, c: COMP.find((c) => c.id === "seat"), svg: `<path class="wear" d="M${fmt(a)} L${fmt(b)}" stroke="var(--wear)" stroke-width="9" stroke-linecap="round"/>` });
+    return o;
+  }
+
+  function hsky(bb) {
+    const r = rnd(11), [x0, y0, x1, y1] = bb, top = y0 - 150;
+    let rain = "";
+    for (let i = 0; i < 90; i++) { const x = x0 + r() * (x1 - x0), y = top - 500 + r() * (y1 - top + 400); rain += `<line x1="${x.toFixed(0)}" y1="${y.toFixed(0)}" x2="${(x - 24).toFixed(0)}" y2="${(y + 100).toFixed(0)}"/>`; }
+    const cx = x0 + (x1 - x0) * .34, cy = top - 380;
+    const cloud = `M${cx - 300} ${cy + 110} a120 120 0 0 1 120 -150 a170 170 0 0 1 300 -40 a140 140 0 0 1 230 120 a110 110 0 0 1 -20 200 h-560 a110 110 0 0 1 -70 -130z`;
+    const sx = x0 + 160, sy = top - 420;
+    let rays = ""; for (let i = 0; i < 10; i++) { const a = (i / 10) * Math.PI * 2; rays += `<line x1="${(sx + Math.cos(a) * 120).toFixed(0)}" y1="${(sy + Math.sin(a) * 120).toFixed(0)}" x2="${(sx + Math.cos(a) * 185).toFixed(0)}" y2="${(sy + Math.sin(a) * 185).toFixed(0)}"/>`; }
+    let beam = ""; for (let i = 0; i < 6; i++) { const [bx, by] = iso(-54, 500 + i * 110, 120 + i * 50); beam += `<line x1="${sx + 120 + i * 18}" y1="${sy + 80 + i * 14}" x2="${bx.toFixed(0)}" y2="${by.toFixed(0)}"/>`; }
+    const e1 = iso(-651, 2972, 250), e2 = iso(-54, 2822, 250);
+    const f1 = iso(-54, 980, 300), f2 = iso(-54, 262, 300), f3 = iso(-70, 216, 300), f4 = iso(-230, -4, 300);
+    const drips = [80, 260, 440].map((w, i) => { const [px, py] = iso(-70, 216, w); return `<circle class="drip" style="animation-delay:${i * .45}s" cx="${px.toFixed(0)}" cy="${py.toFixed(0)}" r="8" fill="var(--water)"/>`; }).join("");
+    const birds = `<g class="fx-people bird" class="ol" stroke="var(--hl-hi)" stroke-width=".9" vector-effect="non-scaling-stroke" fill="none"><path d="M${cx} ${cy} q 50 -42 92 0 q 42 -42 92 0"/><path d="M${cx + 300} ${cy + 120} q 40 -34 74 0 q 34 -34 74 0"/></g>`;
+    return {
+      back: `<g class="fx-weather"><g class="rain" stroke="var(--water)" stroke-width=".7" vector-effect="non-scaling-stroke" opacity=".55"><g>${rain}</g></g></g>`,
+      front: `<g class="fx-weather"><path d="${cloud}" class="pl" style="stroke:var(--water)"/>
+        <path d="M${fmt(e1)} L${fmt(e2)}" stroke="var(--water)" stroke-width=".9" vector-effect="non-scaling-stroke" stroke-dasharray="1 4" stroke-linecap="round" fill="none"/>
+        <path class="flow" d="M${fmt(f1)} L${fmt(f2)} L${fmt(f3)} Q ${fmt([(f3[0] + f4[0]) / 2, f3[1] + 30])} ${fmt(f4)}" stroke="var(--water)" stroke-width="1.3" vector-effect="non-scaling-stroke" fill="none"/>${drips}</g>
+        <g class="fx-sun" stroke="var(--sun)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none"><circle cx="${sx}" cy="${sy}" r="88" stroke-dasharray="1 4" stroke-linecap="round"/>${rays}<g stroke-dasharray="1 5" stroke-linecap="round" opacity=".9">${beam}</g></g>${birds}`,
+    };
+  }
+
+  // A seated scale figure in line, plate-filled like everything else.
+  function hsitter() {
+    const [hx, hy] = iso(-300, 450, 470);
+    const pts = [[40, 0], [55, 300], [62, 520], [30, 610], [-40, 600], [-95, 520], [-88, 300], [-120, 60], [-440, 50], [-470, 10], [-455, -380], [-560, -405], [-560, -440], [-410, -440], [-395, -40], [-80, -40]];
+    const body = pts.map(([x, y]) => `${(hx + x).toFixed(0)},${(hy - y).toFixed(0)}`).join(" ");
+    return `<g class="fx-people"><polygon points="${body}" class="pl" style="stroke:var(--hl-edge)"/><circle cx="${hx - 25}" cy="${hy - 720}" r="92" class="pl" style="stroke:var(--hl-edge)"/><path d="M${hx - 20} ${hy - 500} Q ${hx - 160} ${hy - 300} ${hx - 360} ${hy - 90}" class="ol" fill="none"/></g>`;
+  }
+
+  const PARTS = [...new Set(COMP.map((c) => c.id))];
+  function hiso(opts = {}) {
+    const faces = [];
+    for (const c of COMP) { if (c.posts) c.posts.forEach(([a, b]) => hrun(c, a, b, faces)); else hrun(c, c.w0 || 0, c.w1 || L, faces); }
+    const xs = [], ys = [];
+    for (const c of COMP) for (const [x, y] of c.poly) for (const w of [0, c.w1 || L]) { const [px, py] = iso(x, y, w); xs.push(px); ys.push(py); }
+    const bb = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+    const items = faces.concat(opts.life === false ? [] : hoverlays()).sort((a, b) => a.d - b.d);
+    const body = items.map((f) => `<g class="pt" data-c="${f.c.id}" style="transform:translate(var(--x-${f.c.id},0px),var(--y-${f.c.id},0px));opacity:var(--o-${f.c.id},1)">${f.svg}</g>`).join("");
+    const s = opts.weather === false ? { back: "", front: "" } : hsky(bb);
+    const pad = 150, top = opts.weather === false ? bb[1] - pad : bb[1] - 1050;
+    const vb = `${(bb[0] - pad).toFixed(0)} ${top.toFixed(0)} ${(bb[2] - bb[0] + 2 * pad).toFixed(0)} ${(bb[3] + pad - top).toFixed(0)}`;
+    return `<svg viewBox="${vb}" role="img" aria-label="Axonometric of the pavilion edge, base of wall and eave">${s.back}${body}${opts.people === false ? "" : hsitter()}${s.front}</svg>`;
+  }
+
+  // A figure: springs for how far each part stands out (continuous), the bright edge for the one chosen (discrete).
+  function figure(host, opts = {}) {
+    host.insertAdjacentHTML("afterbegin", hiso(opts));
+    const svg = host.querySelector("svg"), read = host.querySelector(".readout");
+    const springs = Object.fromEntries(PARTS.map((id) => [id, { x: 0, v: 0, t: 0, o: 1, ov: 0, ot: 1 }]));
+    const ex = Object.fromEntries(COMP.map((c) => [c.id, [c.ex[0] * K, -c.ex[0] * KY - c.ex[1] * VZ]]));
+    // rest centres of each part's cut face: the pointer is tested against these, never the moving pose
+    const centres = PARTS.map((id) => { const c = COMP.find((k) => k.id === id); const tp = c.poly.map(([x, y]) => [x, T(y)]); const w = c.posts ? c.posts[c.posts.length - 1][1] : c.w1 || L; const cx = tp.reduce((s, p) => s + p[0], 0) / tp.length, cy = tp.reduce((s, p) => s + p[1], 0) / tp.length; return { id, at: isoT(cx, cy, w) }; });
+    let raf = 0, last = 0, hi = null, lbl = null;
+    const tick = (now) => {
+      const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now; let moving = false;
+      for (const id of PARTS) {
+        const s = springs[id];
+        if (reduce) { s.x = s.t; s.o = s.ot; s.v = s.ov = 0; }
+        else { s.v += (100 * (s.t - s.x) - 18 * s.v) * dt; s.x += s.v * dt; s.ov += (100 * (s.ot - s.o) - 18 * s.ov) * dt; s.o += s.ov * dt; }
+        if (Math.abs(s.t - s.x) > 1e-3 || Math.abs(s.v) > 1e-3 || Math.abs(s.ot - s.o) > 1e-3) moving = true;
+        svg.style.setProperty(`--x-${id}`, `${(ex[id][0] * s.x).toFixed(1)}px`);
+        svg.style.setProperty(`--y-${id}`, `${(ex[id][1] * s.x).toFixed(1)}px`);
+        svg.style.setProperty(`--o-${id}`, Math.max(0, Math.min(1, s.o)).toFixed(3));
+      }
+      raf = moving ? requestAnimationFrame(tick) : 0;
+      if (!moving) last = 0;
+    };
+    const wake = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const api = {
+      svg,
+      gap(g, ids = PARTS) { ids.forEach((id) => { springs[id].t = g; }); wake(); },
+      show(ids, on) { ids.forEach((id) => { springs[id].ot = on ? 1 : 0; }); wake(); },
+      pick(id, label) {
+        const text = label || (id ? SHORT[id] : "rest");
+        if (hi === id && lbl === text) return; hi = id; lbl = text;
+        svg.querySelectorAll(".pt.hi").forEach((g) => g.classList.remove("hi"));
+        if (id) svg.querySelectorAll(`.pt[data-c="${id}"]`).forEach((g) => g.classList.add("hi"));
+        if (read) read.textContent = text;
+      },
+      nearest(clientX, clientY) {
+        const pt = svg.createSVGPoint(); pt.x = clientX; pt.y = clientY;
+        const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+        let best = null, bd = Infinity;
+        for (const c of centres) { const d = Math.hypot(c.at[0] - p.x, c.at[1] - p.y); if (d < bd) { bd = d; best = c.id; } }
+        return bd < 380 ? best : null;
+      },
+    };
+    return api;
+  }
+
+  const anchors = { 1: [100, -1030, L], 2: [100, -400, L], 3: [-260, -900, L], 4: [-900, -650, L], 5: [550, 150, L], 6: [80, 225, L], 7: [80, 700, L], 8: [300, 3242, L], 9: [6, 900, L - 110], 10: [-60, 233, L - 180], 11: [-12, 900, 154], 12: [-27, 900, L - 290], 13: [-43, 900, L - 390], 14: [-400, 2990, L], 15: [-150, -75, L], 16: [-800, -100, L], 17: [-280, 428, L - 140] };
+  function stack(items, gap, lo, hi) {
+    items.sort((a, b) => a.ay - b.ay);
+    let prev = -Infinity;
+    items.forEach((it) => { it.ly = Math.max(it.ay, prev + gap); prev = it.ly; });
+    const over = prev - hi; if (over > 0) items.forEach((it) => { it.ly -= over; });
+    let floor = lo; items.forEach((it) => { it.ly = Math.max(it.ly, floor); floor = it.ly + gap; });
+    return items;
+  }
+  // 2D section at 1:10, to drafting convention.
+  function section() {
+    const Y = (y) => -T(y), pts = (a) => a.map(([x, y]) => `${x},${Y(y)}`).join(" ");
+    const drawn = COMP.filter((c) => c.id !== "leg" || true).map((c) => {
+      if (c.beyond) return `<polygon points="${pts(c.poly)}" fill="none" class="p-hid"/>`;
+      const cross = c.cross ? (() => { const xs = c.poly.map((p) => p[0]), ys = c.poly.map((p) => Y(p[1])); const a = Math.min(...xs), b = Math.max(...xs), e = Math.min(...ys), f = Math.max(...ys); return `<path d="M${a} ${e} L${b} ${f} M${a} ${f} L${b} ${e}" class="p-fine"/>`; })() : "";
+      return `<polygon points="${pts(c.poly)}" fill="color-mix(in srgb, var(${c.fill}) 70%, var(--paper))"/>${c.hatch ? `<polygon points="${pts(c.poly)}" fill="url(#${c.hatch})"/>` : ""}${cross}<polygon points="${pts(c.poly)}" fill="none" class="p-cut"/>`;
+    }).join("");
+    // Keyed notes, numbered as in the isometric and the key list: right column for the wall, left for the ground.
+    const keyed = STEPS.map(([n]) => { const [x, y] = anchors[n]; const right = x > -100 || n === 14 || n === 8; return { n, x, y: Y(y), right }; });
+    const place = (list, colX) => stack(list.map((k) => ({ ...k, ay: k.y })), 150, -1820, 1180).map((k) => { const ly = k.ly; return `<path d="M${k.x} ${k.y} L${colX + (colX > 0 ? -70 : 70)} ${ly.toFixed(0)}" class="p-fine"/><circle cx="${k.x}" cy="${k.y}" r="7" fill="var(--ink)"/><circle cx="${colX}" cy="${ly.toFixed(0)}" r="58" class="key-c"/><text x="${colX}" y="${ly.toFixed(0)}" class="key-t" style="font-size:54px">${k.n}</text>`; }).join("");
+    const labels = place(keyed.filter((k) => k.right), 1180), left = place(keyed.filter((k) => !k.right), -1560);
+    return `<svg viewBox="-1680 -1960 3000 3380" role="img" aria-label="Section, base of wall and eave, 1:10">
+      <path d="M-1300 ${Y(-26)} L-300 ${Y(-6)} L-5 0" class="p-edge" fill="none"/>
+      ${drawn}
+      <path d="M-500 ${Y(-790)} L-5 ${Y(-790)} M-520 ${Y(-790)} L-520 ${Y(-1150)} M-300 ${Y(-150)} L-5 ${Y(-150)}" class="p-hid"/>
+      <path d="M200 ${Y(100)} L900 ${Y(100)}" class="p-hid"/>
+      <rect x="-80" y="${Y(1100) - 16}" width="320" height="32" fill="var(--paper)"/><path d="M-110 ${Y(1100)} L-10 ${Y(1100)} L12 ${Y(1100) - 40} L42 ${Y(1100) + 40} L64 ${Y(1100)} L260 ${Y(1100)}" class="p-edge" fill="none"/>
+      <path d="M-1300 ${Y(-1150)} L900 ${Y(-1150)}" class="p-fine"/>
+      ${labels}${left}
+      <g class="p-fine"><line x1="-120" y1="0" x2="-120" y2="${Y(252)}"/><line x1="-150" y1="0" x2="-90" y2="0"/><line x1="-150" y1="${Y(252)}" x2="-90" y2="${Y(252)}"/>
+        <line x1="-651" y1="${Y(3330)}" x2="-53" y2="${Y(3330)}"/><line x1="-651" y1="${Y(3300)}" x2="-651" y2="${Y(3360)}"/><line x1="-53" y1="${Y(3300)}" x2="-53" y2="${Y(3360)}"/></g>
+      <text x="-118" y="${Y(110)}" class="txt-s" text-anchor="end">250</text><text x="-430" y="${Y(3380)}" class="txt-s">600</text>
+      <text x="-1300" y="${Y(-1260)}" class="txt">Detail 01. Base of wall and eave</text><text x="-1300" y="${Y(-1360)}" class="txt-s">1:10, Vancouver. Clearance per VBBL 9.27.2.4</text>
+      <g transform="translate(560 ${Y(-1250)})"><rect x="0" y="0" width="250" height="16" fill="var(--ink)"/><rect x="250" y="0" width="250" height="16" fill="none" class="p-edge"/><text x="0" y="80" class="txt-s">0</text><text x="440" y="80" class="txt-s">500</text></g>
+      <g class="moss" stroke="var(--grow)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none">${Array.from({ length: 26 }, (_, i) => `<line x1="-55" y1="${Y(256 + (i % 4) * 5)}" x2="${-60 - (i * 7) % 22}" y2="${Y(300 + (i * 53) % 460)}"/>`).join("")}</g>
+    </svg>`;
+  }
+
+  // ---- story stage ----
+  const stage = document.getElementById("stage-draw");
+  stage.insertAdjacentHTML("beforeend", `<div class="readout" aria-live="polite">rest</div>`);
+  const fig = figure(stage);
+  const REST_GAP = 0.14; // at rest the layers stand a little apart: the still frame already says what this is
+  const stepsEl = document.getElementById("steps");
+  stepsEl.innerHTML = STEPS.map(([s, n]) => `<li data-step="${s}"><b>${s}</b><span>${n}</span></li>`).join("");
+  const idsOf = (s) => COMP.filter((c) => c.step === s).map((c) => c.id).filter((v, i, a) => a.indexOf(v) === i);
+
+  let timers = [];
+  const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+  function assemble() {
+    clearTimers();
+    fig.gap(1); fig.show(PARTS, false); fig.pick(null, "");
+    stepsEl.querySelectorAll("li").forEach((li) => li.classList.remove("on", "done"));
+    STEPS.forEach(([s], i) => timers.push(setTimeout(() => {
+      const ids = idsOf(s);
+      fig.show(ids, true); fig.gap(0, ids); fig.pick(ids[ids.length - 1], `${s} · ${SHORT[ids[ids.length - 1]]}`);
+      stepsEl.querySelectorAll("li").forEach((li) => { const n = +li.dataset.step; li.classList.toggle("on", n === s); li.classList.toggle("done", n < s); });
+    }, reduce ? 0 : 500 + i * 560)));
+  }
+  function setYear(el, y) { el.classList.toggle("st-y5", y >= 5); el.classList.toggle("st-y15", y >= 15); el.classList.toggle("st-y30", y >= 30); }
+  const yearEl = document.getElementById("year");
+  function whole(gap) { fig.show(PARTS, true); fig.gap(gap); fig.pick("render", "rest"); }
+
+  let chapter = "intro";
+  function enter(ch) {
+    if (ch === chapter) return;
+    chapter = ch;
+    document.documentElement.dataset.chapter = ch === "intro" ? "" : ch;
+    clearTimers();
+    stage.classList.toggle("st-wet", ch === "weather");
+    stage.classList.toggle("st-people", ch === "people");
+    if (ch === "assembly") { setYear(stage, 0); assemble(); } else whole(ch === "intro" ? REST_GAP : 0);
+    if (ch === "intro" || ch === "weather" || ch === "tool") { setYear(stage, 0); yearEl.firstChild.nodeValue = "Year 0"; }
+    if (ch === "time") [0, 5, 15, 30].forEach((y, i) => timers.push(setTimeout(() => { setYear(stage, y); yearEl.firstChild.nodeValue = `Year ${y}`; }, reduce ? 0 : 300 + i * 1300)));
+    if (ch === "people") { setYear(stage, 30); yearEl.firstChild.nodeValue = "Year 30"; }
+    sound.chapter(ch);
+  }
+  whole(REST_GAP);
+  // Pointing at the drawing names the part under the pointer, outside the drawing.
+  stage.addEventListener("pointermove", (e) => { if (chapter === "assembly") return; const id = fig.nearest(e.clientX, e.clientY); fig.pick(id || "render", id ? null : "rest"); });
+  stage.addEventListener("pointerleave", () => { if (chapter !== "assembly") fig.pick("render", "rest"); });
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) enter(e.target.dataset.chapter); }), { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll("article[data-chapter], section[data-chapter]").forEach((el) => io.observe(el));
+
+  // ---- tool ----
+  const t2 = document.getElementById("tool-2d"), t3 = document.getElementById("tool-3d");
+  t2.innerHTML = section();
+  t3.insertAdjacentHTML("beforeend", `<div class="readout" aria-live="polite">rest</div>`);
+  const tfig = figure(t3, { people: false, weather: false });
+  tfig.pick("render", "rest");
+  // Drag across to open the layers (a spring follows the hand); point to name a part.
+  let drag = null, gapNow = 0;
+  t3.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, g: gapNow }; t3.setPointerCapture(e.pointerId); });
+  t3.addEventListener("pointermove", (e) => {
+    if (drag) { const w = t3.getBoundingClientRect().width; gapNow = Math.max(0, Math.min(1, drag.g + (e.clientX - drag.x) / (w * 0.6))); tfig.gap(gapNow); }
+    const id = tfig.nearest(e.clientX, e.clientY); tfig.pick(id || "render", id ? null : "rest");
+  });
+  const end = () => { drag = null; };
+  t3.addEventListener("pointerup", end); t3.addEventListener("pointercancel", end);
+  t3.addEventListener("pointerleave", () => { if (!drag) tfig.pick("render", "rest"); });
+  t3.addEventListener("dblclick", () => { gapNow = 0; tfig.gap(0); });
+
+  document.getElementById("keylist").innerHTML = STEPS.map(([n, t]) => `<li><b>${n}</b><span>${t}</span></li>`).join("");
+  const strip = document.getElementById("strip");
+  const KEYS = [[0, "As built"], [5, "Biofilm"], [15, "Moss"], [30, "Moss, lichen"]];
+  strip.insertAdjacentHTML("afterbegin", KEYS.map(([y, s], i) => `<button class="key" type="button" data-y="${y}" aria-pressed="${i === 0}"><div class="thumb">${hiso({ people: false, weather: false })}</div><span>Year ${y}<em>${s}</em></span></button>`).join(""));
+  strip.querySelectorAll(".key").forEach((k) => { setYear(k, +k.dataset.y); k.querySelectorAll('.pt[data-c="render"]').forEach((g) => g.classList.add("hi")); });
+  strip.addEventListener("click", (e) => {
+    const k = e.target.closest(".key"); if (!k) return;
+    strip.querySelectorAll(".key").forEach((b) => b.setAttribute("aria-pressed", String(b === k)));
+    [t2, t3].forEach((c) => setYear(c, +k.dataset.y));
+  });
+  document.querySelectorAll(".seg").forEach((seg) => seg.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); }));
+  document.getElementById("storm").addEventListener("click", () => { t3.classList.add("st-wet"); sound.burst(); setTimeout(() => t3.classList.remove("st-wet"), 6000); });
+  document.getElementById("rate").innerHTML = [1, 2, 3, 4, 5].map((n) => `<button type="button" aria-pressed="false" aria-label="${n} of 5">${n}</button>`).join("");
+  document.getElementById("rate").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; e.currentTarget.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); });
+  document.getElementById("compose").addEventListener("submit", (e) => e.preventDefault());
+
+  // ---- ambient sound, generated in the browser, off until the viewer turns it on ----
+  const sound = (() => {
+    let ctx = null, rainG, windG, birdTimer = null, on = false, current = "intro";
+    const noise = (brown) => { const b = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate), d = b.getChannelData(0); let last = 0; for (let i = 0; i < d.length; i++) { const w = Math.random() * 2 - 1; if (brown) { last = (last + .02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; } const s = ctx.createBufferSource(); s.buffer = b; s.loop = true; return s; };
+    function start() {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const r = noise(false), bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1400; bp.Q.value = .6; rainG = ctx.createGain(); rainG.gain.value = 0; r.connect(bp).connect(rainG).connect(ctx.destination); r.start();
+      const w = noise(true), lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 500; windG = ctx.createGain(); windG.gain.value = 0; w.connect(lp).connect(windG).connect(ctx.destination); w.start();
+    }
+    function chirp() { const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime; o.type = "sine"; o.frequency.setValueAtTime(2600 + Math.random() * 900, t); o.frequency.exponentialRampToValueAtTime(1800 + Math.random() * 600, t + .12); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .16); o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + .2); }
+    function mix() {
+      if (!ctx) return; const t = ctx.currentTime;
+      rainG.gain.linearRampToValueAtTime(on && current === "weather" ? .22 : 0, t + 1.2);
+      windG.gain.linearRampToValueAtTime(on ? (current === "weather" ? .5 : .14) : 0, t + 1.2);
+      clearInterval(birdTimer); birdTimer = null;
+      if (on && (current === "people" || current === "time")) birdTimer = setInterval(() => { if (Math.random() < .6) { chirp(); setTimeout(chirp, 140); } }, 1700);
+    }
+    return {
+      toggle() { on = !on; if (on && !ctx) start(); if (ctx && ctx.state === "suspended") ctx.resume(); mix(); return on; },
+      chapter(ch) { current = ch; mix(); },
+      burst() { if (!on || !ctx) return; const t = ctx.currentTime; rainG.gain.linearRampToValueAtTime(.25, t + .6); rainG.gain.linearRampToValueAtTime(0, t + 6); },
+    };
+  })();
+  const sb = document.getElementById("sound");
+  sb.addEventListener("click", () => { const on = sound.toggle(); sb.setAttribute("aria-pressed", String(on)); sb.textContent = on ? "Sound on" : "Sound off"; });
+})();
+</script>

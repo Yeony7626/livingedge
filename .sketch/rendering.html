@@ -1,0 +1,364 @@
+<title>Living Edge Rendering Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the drawing is the stage (left, tall sheet); a narrow column of treatment choices and the time of the story sits beside it. The whole ground shifts colour with the chapter. */
+@property --ground { syntax: "<color>"; inherits: true; initial-value: #e9ecea; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #1f2a28; }
+@property --ink-soft { syntax: "<color>"; inherits: true; initial-value: #5d6966; }
+@property --sheet { syntax: "<color>"; inherits: true; initial-value: #f4f5f2; }
+:root {
+  /* Chapter palettes. Info colours are fixed across chapters. */
+  --ground: #e9ecea; --sheet: #f4f5f2; --ink: #1f2a28; --ink-soft: #5d6966; --rule: rgba(31,42,40,.16);
+  --water: #3f7fa6; --moss: #5f7d3a; --lichen: #9aa37a; --wear: #c7b48e;
+  --font-sans: "Geist", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, Consolas, monospace;
+  --ease: cubic-bezier(.32,.72,0,1);
+  color-scheme: light;
+  transition: --ground 1.4s var(--ease), --ink 1.4s var(--ease), --ink-soft 1.4s var(--ease), --sheet 1.4s var(--ease);
+}
+:root[data-atm="storm"]   { --ground: #c9d3d8; --sheet: #d8e0e3; --ink: #1c2a33; --ink-soft: #4e5e68; --rule: rgba(28,42,51,.18); }
+:root[data-atm="decades"] { --ground: #d6dfcf; --sheet: #e2e9dc; --ink: #1e2a1f; --ink-soft: #536150; --rule: rgba(30,42,31,.18); }
+:root[data-atm="dusk"]    { --ground: #161c22; --sheet: #1d252c; --ink: #dfe6e2; --ink-soft: #94a3a0; --rule: rgba(223,230,226,.16); color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--font-sans); }
+.page { min-height: 100%; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: clamp(20px, 3vw, 44px); padding-inline: clamp(16px, 3vw, 44px); padding-block: 28px; max-width: 1440px; margin: 0 auto; }
+.stage { position: relative; min-width: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 14px; }
+.mark { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.mark h1 { margin: 0; font: 500 clamp(1.3rem, 2.2vw, 1.75rem)/1.1 var(--font-sans); letter-spacing: -.01em; }
+.mark span { font: 400 .85rem/1.3 var(--font-mono); color: var(--ink-soft); }
+.sheetwrap { position: relative; background: var(--sheet); border-radius: 2px; min-height: 0; overflow: hidden; box-shadow: 0 1px 0 var(--rule), 0 30px 60px -40px rgba(10,20,20,.35); }
+.sheetwrap svg { display: block; width: 100%; height: 100%; max-height: 82dvh; }
+.line-caption { font: 300 clamp(1.05rem, 1.7vw, 1.35rem)/1.4 var(--font-sans); max-width: 46ch; min-height: 2.8em; margin: 0; transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.line-caption.out { opacity: 0; transform: translateY(6px); }
+aside { display: grid; align-content: start; gap: 28px; min-width: 0; padding-top: 6px; }
+aside h2 { margin: 0 0 10px; font: 500 .95rem/1.2 var(--font-sans); }
+.treatments { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.treat { appearance: none; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); text-align: left; padding: 0; border-radius: 2px; cursor: pointer; display: grid; grid-template-rows: 150px auto; overflow: hidden; transition: border-color .3s, transform .2s var(--ease); }
+.treat:hover { transform: translateY(-2px); }
+.treat:active { transform: translateY(0) scale(.99); }
+.treat[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.treat .thumb { overflow: hidden; display: grid; place-items: center; }
+.treat .thumb svg { width: 100%; height: 150px; }
+.treat .txt { padding: 10px 12px 12px; display: grid; gap: 3px; }
+.treat b { font: 500 .9rem/1.2 var(--font-sans); }
+.treat small { font: 400 .78rem/1.35 var(--font-sans); color: var(--ink-soft); }
+.time { display: grid; gap: 8px; }
+.chapters { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+.chapters button { appearance: none; border: 0; border-right: 1px solid var(--rule); background: transparent; color: var(--ink-soft); font: 500 .82rem/1.2 var(--font-sans); padding: 12px 6px; cursor: pointer; transition: background .4s, color .4s; }
+.chapters button:last-child { border-right: 0; }
+.chapters button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); }
+.legend { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font: 400 .8rem/1.35 var(--font-sans); color: var(--ink-soft); align-items: center; }
+.legend i { display: block; width: 28px; height: 0; border-top: 1.5px solid var(--ink); }
+.legend i.q { border-top-style: dashed; } .legend i.il { border-top-style: dotted; }
+.legend i.w { border-color: var(--water); border-top-width: 3px; } .legend i.m { border-color: var(--moss); border-top-width: 3px; }
+.note { font: 400 .82rem/1.5 var(--font-sans); color: var(--ink-soft); max-width: 44ch; margin: 0; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* Drawing ink follows the chapter */
+.ink { stroke: var(--ink); fill: none; }
+.ink-fill { fill: var(--ink); }
+.soft { stroke: var(--ink-soft); fill: none; }
+.lbl { fill: var(--ink); font-family: var(--font-sans); font-size: 62px; font-weight: 400; }
+.dim { fill: var(--ink-soft); font-family: var(--font-mono); font-size: 54px; }
+/* Chapter effects: present in every treatment, shown by chapter */
+.fx { opacity: 0; transition: opacity 1.2s var(--ease); }
+:root[data-atm="storm"] .fx-storm, :root[data-atm="decades"] .fx-decades, :root[data-atm="dusk"] .fx-decades, :root[data-atm="dusk"] .fx-dusk { opacity: 1; }
+.grow { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(.05); transition: transform 2.4s var(--ease); }
+:root[data-atm="decades"] .grow, :root[data-atm="dusk"] .grow { transform: scaleY(1); }
+:root[data-atm="dusk"] .grow.late { transform: scaleY(1.35); }
+.rain line { stroke: var(--water); stroke-width: 1.2px; vector-effect: non-scaling-stroke; opacity: .55; }
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-atm="storm"] .rain g { animation: fall 1.1s linear infinite; }
+  .draw-in .cut { stroke-dasharray: 9000; stroke-dashoffset: 9000; animation: draw 2.2s var(--ease) forwards; }
+  .draw-in .cut:nth-of-type(2n) { animation-delay: .15s; } .draw-in .cut:nth-of-type(3n) { animation-delay: .3s; }
+  .draw-in .wash, .draw-in .tex { opacity: 0; animation: fadein 1.6s .9s var(--ease) forwards; }
+}
+@keyframes fall { from { transform: translate(0, -260px); } to { transform: translate(-80px, 0); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fadein { to { opacity: 1; } }
+@media (max-width: 900px) {
+  .page { grid-template-columns: minmax(0, 1fr); }
+  .sheetwrap svg { max-height: 70dvh; }
+}
+@media (max-width: 480px) { .treat { grid-template-rows: 110px auto; } .treat .thumb svg { height: 110px; } .chapters button { font-size: .75rem; padding: 11px 2px; } }
+@media (prefers-reduced-motion: reduce) { :root, .fx, .grow, .line-caption { transition: none; } }
+</style>
+
+<div class="page">
+  <section class="stage" aria-label="Drawing">
+    <div class="mark"><h1>The Living Edge</h1><span>Rendering study. Pavilion edge, Vancouver, 1:20</span></div>
+    <div class="sheetwrap" id="sheet"></div>
+    <p class="line-caption" id="caption"></p>
+  </section>
+  <aside>
+    <div>
+      <h2>How the drawing is rendered</h2>
+      <div class="treatments" id="treatments"></div>
+    </div>
+    <div class="time">
+      <h2>Chapter</h2>
+      <div class="chapters" id="chapters" role="group" aria-label="Chapter of the story">
+        <button type="button" data-atm="assembly" aria-pressed="true">Assembly</button>
+        <button type="button" data-atm="storm" aria-pressed="false">Storm</button>
+        <button type="button" data-atm="decades" aria-pressed="false">15 years</button>
+        <button type="button" data-atm="dusk" aria-pressed="false">30 years</button>
+      </div>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <i></i><span>Calculated, or a code requirement</span>
+      <i class="q"></i><span>Qualitative, from evidence</span>
+      <i class="il"></i><span>Illustrative</span>
+      <i class="w"></i><span>Water: rain, wetting, drips</span>
+      <i class="m"></i><span>Growth: moss, lichen, planting</span>
+    </div>
+    <p class="note">Mockup only. Growth and wetness here are drawn to show the treatment, not computed. The photo collage needs real photographs; its frames mark where they would go.</p>
+  </aside>
+</div>
+
+<script>
+(() => {
+  const TREATMENTS = [
+    { id: "line", name: "Pure line", desc: "Ink only. Colour appears only for water and growth." },
+    { id: "wash", name: "Line and watercolour", desc: "Loose washes for soil, stone, moss and wet surfaces." },
+    { id: "texture", name: "Line and material", desc: "Each cut material carries its own grain." },
+    { id: "collage", name: "Line and photo collage", desc: "Photographs of real surfaces set into the section." },
+  ];
+  const CAPTIONS = {
+    assembly: "The plinth first, then gravel, the damp-proof course, the frame, the cavity, the render. The edge arrives in the order it is built.",
+    storm: "Rain drives in under the overhang to about a quarter of its depth. Below that, the render takes the weather and the base flashing throws it clear.",
+    decades: "Fifteen years on, the north face is green at its foot, where splash and shade keep it damp longest.",
+    dusk: "Thirty years. The seat is worn pale where people sat. Moss and lichen hold the rest, and the planting has reached the gravel.",
+  };
+  // Pavilion A section in mm (x inward, y up), from fixtures/models/pavilion-a.json, with a seat leg and planting added for the drawing.
+  const P = {
+    ground: [[-1640, 0], [-300, 0], [-300, -420], [-1640, -420]],
+    drain: [[-300, 0], [-10, 0], [-10, -420], [-300, -420]],
+    base: [[-10, 190], [200, 190], [200, -420], [-10, -420]],
+    sep: [[0, 193], [150, 193], [150, 190], [0, 190]],
+    wall: [[0, 3000], [150, 3000], [150, 193], [0, 193]],
+    cavity: [[-19, 3000], [0, 3000], [0, 200], [-19, 200]],
+    clad: [[-44, 3000], [-19, 3000], [-19, 200], [-44, 200]],
+    overhang: [[-660, 3060], [150, 3060], [150, 3000], [-644, 3000], [-644, 2985], [-660, 2985]],
+    seat: [[-444, 450], [-44, 450], [-44, 405], [-444, 405]],
+    leg: [[-292, 405], [-256, 405], [-256, 0], [-292, 0]],
+  };
+  // The plain middle of the wall (1100 to 2600 mm) is cut out with a break line, so the base and the eave both read.
+  const T = (y) => (y <= 1100 ? y : y >= 2600 ? y - 1500 : 1100);
+  const Y = (y) => -T(y);
+  const pts = (a) => a.map(([x, y]) => `${x},${Y(y)}`).join(" ");
+  const VB = "-1700 -1900 2620 2440";
+  const rnd = (seed) => () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+  function defs(k) {
+    const r = rnd(7);
+    let gravel = "";
+    for (let i = 0; i < 26; i++) gravel += `<circle cx="${(r() * 120).toFixed(0)}" cy="${(r() * 120).toFixed(0)}" r="${(6 + r() * 9).toFixed(1)}" class="ink" stroke-width="1.6"/>`;
+    let soil = "";
+    for (let i = 0; i < 40; i++) soil += `<circle cx="${(r() * 120).toFixed(0)}" cy="${(r() * 120).toFixed(0)}" r="2.6" class="ink-fill"/>`;
+    let conc = "";
+    for (let i = 0; i < 14; i++) { const x = r() * 120, y = r() * 120, s = 5 + r() * 7; conc += i % 3 ? `<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="2.4" class="ink-fill"/>` : `<path d="M${x.toFixed(0)} ${y.toFixed(0)}l${s.toFixed(0)} ${(s * .6).toFixed(0)}l${(-s * .8).toFixed(0)} ${(s * .5).toFixed(0)}z" class="ink" stroke-width="1.4"/>`; }
+    let render = "";
+    for (let i = 0; i < 30; i++) render += `<circle cx="${(r() * 60).toFixed(0)}" cy="${(r() * 60).toFixed(0)}" r="1.3" class="ink-fill"/>`;
+    return `<defs>
+      <pattern id="${k}gravel" width="120" height="120" patternUnits="userSpaceOnUse">${gravel}</pattern>
+      <pattern id="${k}soil" width="120" height="120" patternUnits="userSpaceOnUse">${soil}<path d="M0 120 L120 0" class="ink" stroke-width="1" opacity=".5"/></pattern>
+      <pattern id="${k}conc" width="120" height="120" patternUnits="userSpaceOnUse">${conc}</pattern>
+      <pattern id="${k}render" width="60" height="60" patternUnits="userSpaceOnUse">${render}</pattern>
+      <pattern id="${k}timber" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="40" class="ink" stroke-width="1.5"/></pattern>
+      <pattern id="${k}grain" width="300" height="24" patternUnits="userSpaceOnUse"><path d="M0 12 C60 4 120 20 180 10 S270 6 300 12" class="ink" stroke-width="1.6"/></pattern>
+      <filter id="${k}wc" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency=".008" numOctaves="3" seed="4" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="70" xChannelSelector="R" yChannelSelector="G" result="d"/>
+        <feGaussianBlur in="d" stdDeviation="7" result="b"/>
+        <feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="9" result="g"/>
+        <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.2 1.25" result="ga"/>
+        <feComposite in="b" in2="ga" operator="in"/>
+      </filter>
+      <filter id="${k}grainf" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".35" numOctaves="2" seed="2" result="t"/>
+        <feColorMatrix in="t" type="saturate" values="0" result="m"/>
+        <feComponentTransfer in="m"><feFuncA type="table" tableValues="0 .55"/></feComponentTransfer>
+      </filter>
+      <clipPath id="${k}clipRender"><polygon points="${pts(P.clad)}"/></clipPath>
+      <clipPath id="${k}clipSoil"><polygon points="${pts(P.ground)}"/></clipPath>
+      <clipPath id="${k}clipSeat"><polygon points="${pts(P.seat)}"/></clipPath>
+    </defs>`;
+  }
+
+  // Washes: loose pigment fields, drawn a little past the outlines.
+  function washes(k) {
+    const w = (poly, color, op, cls = "") => `<polygon points="${pts(poly)}" fill="${color}" opacity="${op}" class="${cls}"/>`;
+    return `<g class="wash" filter="url(#${k}wc)" style="mix-blend-mode:multiply">
+      ${w([[-1680, 30], [-290, 20], [-300, -440], [-1680, -440]], "#8a6f52", .45)}
+      ${w([[-310, 15], [0, 10], [0, -430], [-310, -430]], "#9aa1a0", .4)}
+      ${w([[-20, 205], [215, 200], [215, -430], [-20, -430]], "#a39f97", .42)}
+      ${w([[-50, 3000], [-14, 3000], [-14, 190], [-50, 190]], "#d9c9a8", .5)}
+      ${w([[-680, 3075], [160, 3075], [160, 2975], [-680, 2975]], "#b5835a", .45)}
+      ${w([[-460, 460], [-40, 460], [-40, 395], [-460, 395]], "#9c6b3f", .45)}
+      ${w([[-60, 1500], [-10, 1500], [-10, 180], [-60, 180]], "#5d86a8", .38, "fx fx-storm")}
+      ${w([[-330, 30], [0, 30], [0, -90], [-330, -90]], "#5d86a8", .35, "fx fx-storm")}
+      ${w([[-58, 900], [-14, 900], [-14, 190], [-58, 190]], "#5f7d3a", .55, "fx fx-decades")}
+      ${w([[-1680, 60], [-320, 40], [-320, -40], [-1680, -40]], "#4f6e2f", .5, "fx fx-decades")}
+      ${w([[-380, 455], [-110, 455], [-110, 445], [-380, 445]], "#e8dcc0", .8, "fx fx-dusk")}
+    </g>`;
+  }
+
+  function textures(k) {
+    return `<g class="tex">
+      <polygon points="${pts(P.ground)}" fill="#7a644c" opacity=".55"/><polygon points="${pts(P.ground)}" fill="url(#${k}soil)" opacity=".8"/>
+      <polygon points="${pts(P.drain)}" fill="#a9adaa" opacity=".55"/><polygon points="${pts(P.drain)}" fill="url(#${k}gravel)"/>
+      <polygon points="${pts(P.base)}" fill="#b9b5ad" opacity=".6"/><polygon points="${pts(P.base)}" fill="url(#${k}conc)"/>
+      <polygon points="${pts(P.clad)}" fill="#e3d8c1" opacity=".75"/>
+      <rect x="-44" y="-3000" width="25" height="2800" filter="url(#${k}grainf)" clip-path="url(#${k}clipRender)"/>
+      <polygon points="${pts(P.wall)}" fill="#c8a477" opacity=".45"/><polygon points="${pts(P.wall)}" fill="url(#${k}timber)" opacity=".6"/>
+      <polygon points="${pts(P.overhang)}" fill="#b98a5c" opacity=".55"/><polygon points="${pts(P.overhang)}" fill="url(#${k}grain)" opacity=".7"/>
+      <polygon points="${pts(P.seat)}" fill="#8f6440" opacity=".55"/><polygon points="${pts(P.seat)}" fill="url(#${k}grain)" opacity=".7"/>
+    </g>`;
+  }
+
+  function collage() {
+    const slot = (x, y, w, h, label) => `<g><rect x="${x}" y="${-y - h}" width="${w}" height="${h}" fill="var(--sheet)" stroke="var(--ink-soft)" stroke-width="1.2" vector-effect="non-scaling-stroke" stroke-dasharray="6 5"/><text x="${x + 24}" y="${-y - h + 80}" class="dim" style="font-size:46px">${label}</text></g>`;
+    return `<g class="tex">
+      ${slot(-1600, -380, 1180, 360, "photo: planted soil and roots")}
+      ${slot(-640, 880, 560, 300, "photo: moss on lime render")}
+      ${slot(-640, 520, 560, 220, "photo: weathered oak seat")}
+    </g>`;
+  }
+
+  function hatches(k) {
+    return `<g class="hatch">
+      <polygon points="${pts(P.ground)}" fill="url(#${k}soil)" opacity=".75"/>
+      <polygon points="${pts(P.drain)}" fill="url(#${k}gravel)" opacity=".85"/>
+      <polygon points="${pts(P.base)}" fill="url(#${k}conc)" opacity=".85"/>
+      <polygon points="${pts(P.clad)}" fill="url(#${k}render)" opacity=".9"/>
+      <polygon points="${pts(P.wall)}" fill="url(#${k}timber)" opacity=".55"/>
+    </g>`;
+  }
+
+  // Cut lines, heavier than lines beyond. Same in every treatment.
+  function lines() {
+    const cut = (poly, w = 2.4) => `<polygon class="ink cut" points="${pts(poly)}" stroke-width="${w}" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>`;
+    return `<g>
+      <line x1="-1700" y1="0" x2="900" y2="0" class="soft" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      ${cut(P.ground, 1.2)}${cut(P.drain, 1.6)}${cut(P.base)}${cut(P.wall)}${cut(P.clad)}${cut(P.overhang)}${cut(P.seat)}${cut(P.leg, 1.6)}
+      <rect x="-90" y="-1114" width="270" height="28" fill="var(--sheet)"/>
+      <path d="M-120 -1100 L0 -1100 L22 -1145 L52 -1055 L74 -1100 L230 -1100" class="ink" stroke-width="1.2" vector-effect="non-scaling-stroke" fill="none"/>
+      <polygon points="${pts(P.sep)}" class="ink-fill"/>
+      <line x1="-19" y1="-200" x2="-19" y2="-1500" class="ink" stroke-width="1" vector-effect="non-scaling-stroke" stroke-dasharray="14 10"/>
+      <polyline points="0,-262 0,-198 -66,-198 -66,-178" class="ink cut" stroke-width="2.2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    </g>`;
+  }
+
+  // Annotations: dimensions and leader labels in drafting convention.
+  function notes() {
+    const lab = (x, y, tx, ty, text, dotted) => `<path d="M${x} ${Y(y)} L${tx - 20} ${Y(ty)}" class="soft" stroke-width="1" vector-effect="non-scaling-stroke" ${dotted ? 'stroke-dasharray="2 4"' : ""}/><circle cx="${x}" cy="${Y(y)}" r="9" class="ink-fill"/><text x="${tx}" y="${Y(ty) + 20}" class="lbl">${text}</text>`;
+    return `<g class="notes">
+      ${lab(-31, 1000, 260, 1000, "lime render on rainscreen", true)}
+      ${lab(-9, 800, 260, 800, "19 mm drained cavity")}
+      ${lab(75, 600, 260, 600, "timber frame and sheathing")}
+      ${lab(-40, 199, 260, 330, "base flashing")}
+      ${lab(75, 191, 260, 170, "damp-proof course")}
+      ${lab(100, -150, 260, -150, "concrete plinth")}
+      ${lab(-150, -200, -150, -495, "gravel strip", true)}
+      ${lab(100, 3030, 260, 2950, "larch overhang", true)}
+      ${lab(-240, 428, -1080, 700, "oak seat", true)}
+      <g class="soft" stroke-width="1" vector-effect="non-scaling-stroke">
+        <line x1="-180" y1="0" x2="-180" y2="-200"/><line x1="-210" y1="0" x2="-150" y2="0"/><line x1="-210" y1="-200" x2="-150" y2="-200"/>
+        <line x1="-644" y1="-1640" x2="-44" y2="-1640"/><line x1="-644" y1="-1610" x2="-644" y2="-1670"/><line x1="-44" y1="-1610" x2="-44" y2="-1670"/>
+      </g>
+      <text x="-760" y="-80" class="dim">200 min to ground</text>
+      <text x="-420" y="-1690" class="dim">600</text>
+    </g>`;
+  }
+
+  // Story layers: storm, growth, wear. Drawn, not computed (mockup).
+  function story(k) {
+    let rain = "";
+    const r = rnd(11);
+    for (let i = 0; i < 70; i++) { const x = -1650 + r() * 1700, y = -1850 + r() * 1850; if (x > -660 && y < -1450) continue; rain += `<line x1="${x.toFixed(0)}" y1="${y.toFixed(0)}" x2="${(x - 40).toFixed(0)}" y2="${(y + 160).toFixed(0)}"/>`; }
+    let moss = "";
+    const m = rnd(5);
+    for (let i = 0; i < 46; i++) { const y = 205 + m() * 40, h = 60 + m() * (i % 5 ? 420 : 680); moss += `<line x1="-46" y1="${-y}" x2="${(-54 - m() * 26).toFixed(0)}" y2="${(-y - h).toFixed(0)}"/>`; }
+    let plants = "";
+    for (let i = 0; i < 34; i++) { const x = -1600 + m() * 1270, h = 60 + m() * 170; plants += `<path d="M${x.toFixed(0)} 0 q ${(m() * 50 - 25).toFixed(0)} ${(-h / 2).toFixed(0)} ${(m() * 70 - 35).toFixed(0)} ${(-h).toFixed(0)}"/>`; }
+    let roots = "";
+    for (let i = 0; i < 7; i++) { const x = -1500 + i * 150; roots += `<path d="M${x} 10 C ${x + 60} 120, ${x + 140} ${150 + i * 18}, ${x + 260 + i * 30} ${220 + i * 22}"/>`; }
+    let lichen = "";
+    for (let i = 0; i < 26; i++) lichen += `<circle cx="${(-50 - m() * 10).toFixed(0)}" cy="${(-300 - m() * 760).toFixed(0)}" r="${(6 + m() * 10).toFixed(0)}"/>`;
+    return `<g>
+      <g class="fx fx-storm rain"><g>${rain}</g></g>
+      <g class="fx fx-storm">
+        <path d="M-660 ${Y(2985)} L-44 ${Y(2835)}" stroke="var(--water)" stroke-width="1.4" vector-effect="non-scaling-stroke" stroke-dasharray="10 8" fill="none"/>
+        <text x="-1180" y="${Y(2700)}" class="dim" style="fill:var(--water)">sheltered only to overhang / 4</text>
+        <g fill="var(--water)"><circle cx="-70" cy="-150" r="11"/><circle cx="-80" cy="-90" r="9"/><circle cx="-92" cy="-40" r="7"/></g>
+        <path d="M-44 -200 C -44 -120, -150 -40, -260 -6" stroke="var(--water)" stroke-width="1.6" vector-effect="non-scaling-stroke" fill="none"/>
+      </g>
+      <g class="fx fx-decades">
+        <g class="grow" stroke="var(--moss)" stroke-width="1.3" vector-effect="non-scaling-stroke" fill="none">${moss}</g>
+        <g class="grow late" stroke="var(--moss)" stroke-width="1.2" vector-effect="non-scaling-stroke" fill="none">${plants}</g>
+        <g stroke="var(--ink-soft)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none" stroke-dasharray="3 5">${roots}</g>
+        <g fill="var(--lichen)" opacity=".8">${lichen}</g>
+      </g>
+      <g class="fx fx-dusk">
+        <line x1="-380" y1="-452" x2="-110" y2="-452" stroke="var(--wear)" stroke-width="5" vector-effect="non-scaling-stroke"/>
+        <text x="-1080" y="-560" class="dim">worn where people sat</text>
+      </g>
+    </g>`;
+  }
+
+  function drawing(t, k, big) {
+    const body = {
+      line: hatches(k),
+      wash: hatches(k) + washes(k),
+      texture: textures(k),
+      collage: hatches(k) + collage(),
+    }[t];
+    return `<svg viewBox="${VB}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Section through the pavilion edge, ${TREATMENTS.find((x) => x.id === t).name.toLowerCase()}">${defs(k)}${body}${story(k)}${lines()}${big ? notes() : ""}</svg>`;
+  }
+
+  let treatment = "wash", atm = "assembly";
+  try { treatment = localStorage.getItem("les-treatment") || treatment; } catch {}
+
+  function renderMain(animate) {
+    const sheet = document.getElementById("sheet");
+    sheet.innerHTML = drawing(treatment, "m", true);
+    sheet.classList.toggle("draw-in", !!animate);
+  }
+  function renderThumbs() {
+    document.getElementById("treatments").innerHTML = TREATMENTS.map((t) =>
+      `<button class="treat" type="button" data-t="${t.id}" aria-pressed="${t.id === treatment}"><span class="thumb">${drawing(t.id, "t" + t.id, false)}</span><span class="txt"><b>${t.name}</b><small>${t.desc}</small></span></button>`).join("");
+  }
+  function setCaption() {
+    const c = document.getElementById("caption");
+    c.classList.add("out");
+    setTimeout(() => { c.textContent = CAPTIONS[atm]; c.classList.remove("out"); }, 300);
+  }
+
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest(".treat");
+    if (t) {
+      treatment = t.dataset.t;
+      try { localStorage.setItem("les-treatment", treatment); } catch {}
+      document.querySelectorAll(".treat").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.t === treatment)));
+      renderMain(atm === "assembly");
+      return;
+    }
+    const c = e.target.closest(".chapters button");
+    if (c) {
+      atm = c.dataset.atm;
+      document.documentElement.dataset.atm = atm;
+      document.querySelectorAll(".chapters button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.atm === atm)));
+      if (atm === "assembly") renderMain(true);
+      setCaption();
+    }
+  });
+
+  document.documentElement.dataset.atm = atm;
+  renderThumbs();
+  renderMain(true);
+  setCaption();
+})();
+</script>

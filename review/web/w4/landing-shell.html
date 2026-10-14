@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Living Edge</title>
+<meta name="description" content="Construction sections you can question: rain, heat, roots and thirty years of weather.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500&family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#F2F1EC; --panel:#FAFAF7; --fg:#1B1B1A; --mute:#5F5E59; --rule:#DCD9D1; --signal:#E0482B; --water:#3D6E8F; --ink:#1E1E1E; --chip:#E8E6DF;
+  --sans:"Geist", ui-sans-serif, system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace; --num:"Barlow Condensed", var(--sans); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#A3A19B; --rule:#2C2C2A; --chip:#232321; } }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 var(--sans); }
+a { color:inherit; }
+:root { --gut:max(40px, calc(50vw - 680px)); --navh:64px; }
+.wrap { padding:0 var(--gut); }
+/* nav: one line, 64px */
+nav { position:sticky; top:0; z-index:10; height:64px; display:flex; align-items:center; gap:28px; padding:0 var(--gut); background:var(--bg); border-bottom:1px solid var(--rule); color:var(--fg); transition:background .3s, color .3s, border-color .3s; }
+/* over a night band the bar turns to night too */
+nav.dark { --bg:#111923; --fg:#E6E3DC; --mute:#A3ADB8; --rule:#2A3440; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; text-decoration:none; }
+.brand i { width:14px; height:14px; border:1.5px solid var(--fg); border-radius:2px; box-shadow:inset 0 -5px 0 var(--fg); display:inline-block; }
+nav .links { display:flex; gap:24px; margin-left:auto; color:var(--mute); font:500 12px var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+nav .links a span { color:var(--mute); opacity:.6; margin-right:6px; }
+nav .links a { padding:4px 0; border-bottom:1px solid transparent; }
+nav .links a[aria-current="true"] { color:var(--fg); border-bottom-color:var(--fg); }
+nav .links a { text-decoration:none; }
+nav .links a:hover { color:var(--fg); }
+.cta { display:inline-flex; align-items:center; gap:10px; background:var(--fg); color:var(--bg); border-radius:0; padding:15px 20px; font:500 12px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; text-decoration:none; border:1px solid var(--fg); white-space:nowrap; transition:transform .15s, background .2s, color .2s; cursor:pointer; }
+a.cta::after { content:"\2192"; font-family:var(--sans); font-size:14px; transition:transform .2s; }
+a.cta:hover::after { transform:translateX(3px); }
+.cta:hover { background:color-mix(in srgb, var(--fg) 86%, var(--bg)); }
+.ghost:hover { background:color-mix(in srgb, var(--fg) 8%, transparent); }
+.tlink { display:flex; width:fit-content; gap:8px; margin-top:28px; font:500 12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--fg); text-decoration:none; border-bottom:1px solid var(--fg); padding-bottom:3px; }
+.tlink::after { content:"\2192"; font-family:var(--sans); }
+.eyebrow { display:flex; gap:14px; font:500 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--mute); margin:0 0 22px; }
+.eyebrow b { color:var(--fg); font-weight:500; }
+.cta:active { transform:translateY(1px); }
+.ghost { background:transparent; color:var(--fg); }
+nav .cta { padding:11px 14px; }
+/* hero: pinned while it explodes into its construction layers, reassembles, then turns to a winter night (landing3d.js reads the scroll) */
+.hero { height:360vh; --nk:calc(var(--wn, 0) * 100%);
+  --bg:color-mix(in srgb, #F2F1EC, #111923 var(--nk)); --fg:color-mix(in srgb, #1B1B1A, #E6E3DC var(--nk)); --mute:color-mix(in srgb, #5F5E59, #A3ADB8 var(--nk));
+  --rule:color-mix(in srgb, #DCD9D1, #2A3440 var(--nk)); --ink:color-mix(in srgb, #1E1E1E, #E6E3DC var(--nk)); background:var(--bg); color:var(--fg); }
+.pin { position:sticky; top:64px; height:calc(100dvh - 64px); min-height:640px; display:grid; grid-template-columns:minmax(300px, 4fr) 8fr; gap:24px; padding:28px var(--gut) 32px; }
+.copy { align-self:center; padding-bottom:48px; }
+h1 { font:500 clamp(44px, 5.4vw, 80px)/.96 var(--sans); letter-spacing:-.045em; margin:0 0 24px; }
+h1 em { font-style:italic; font-weight:400; }
+.lede { font-size:18px; line-height:1.55; color:var(--mute); max-width:34ch; margin:0 0 28px; }
+.actions { display:flex; gap:10px; flex-wrap:wrap; }
+.stage { position:relative; container-type:inline-size; overflow:hidden; align-self:stretch; min-height:0; }
+.stage svg, .stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.card { margin-top:36px; padding-top:18px; border-top:1px solid var(--rule); display:grid; grid-template-columns:repeat(3, auto); justify-content:start; gap:4px 28px; }
+.card b { font:300 34px/1 var(--num); font-variant-numeric:tabular-nums; }
+.card small { font:500 11px/1.3 var(--mono); color:var(--mute); }
+.card small sub { vertical-align:baseline; position:relative; top:.3em; }
+.card .bad b, .card .bad small { color:var(--signal); }
+sub { font-size:.75em; line-height:0; }
+.rail { list-style:none; margin:28px 0 0; padding:0; display:grid; gap:2px; font:500 11px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--mute); }
+.rail button { all:unset; box-sizing:border-box; width:100%; display:grid; grid-template-columns:28px 18px 1fr; align-items:center; padding:5px 0; cursor:pointer; color:var(--mute); transition:color .3s, background .3s; }
+.rail button::before { content:""; grid-column:2; grid-row:1; width:10px; height:1px; background:currentColor; transition:width .3s; }
+.rail button span { grid-column:1; grid-row:1; }
+.rail button em { grid-column:3; font-style:normal; }
+.rail button small { font:inherit; }
+.rail button:hover, .rail li.on button { color:var(--fg); }
+.rail li.on button::before { width:16px; height:2px; }
+.rail button:focus-visible { outline:2px solid var(--signal); outline-offset:2px; }
+/* detail lens (circle callout): the threshold magnified, upper left of the drawing */
+.stage canvas#hero-lens { inset:auto; left:6px; top:6px; width:min(220px, 26cqw); height:auto; aspect-ratio:1; border-radius:50%; border:1px solid var(--ink); opacity:calc(1 - var(--xp, 0) * 1.6 - var(--wn, 0) * 2); }
+.stage .wcap { position:absolute; left:32px; top:32px; max-width:36ch; margin:0; font:500 11px/1.5 var(--mono); letter-spacing:.05em; color:#E8E4DC; opacity:calc(var(--wn, 0) * 1.5 - .5); }
+.caption { position:absolute; left:4px; bottom:6px; font:500 11px var(--mono); letter-spacing:.05em; color:var(--ink); opacity:calc(1 - var(--wn, 0) * 1.5); }
+.caption b { color:var(--signal); font-weight:500; }
+/* ---- drawing furniture over every view (research 17 §1, §3): leaders 0.75 px @ 80 %, datums long-dash-dot, 11 px mono ---- */
+.ovl { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.ovl text { font:500 11px var(--mono); letter-spacing:.04em; fill:var(--ink); font-variant-numeric:tabular-nums; paint-order:stroke; stroke:var(--bg); stroke-width:3px; stroke-linejoin:round; }
+.ovl .furn.light text, .ovl .cold text, .ovl .croplabel { stroke:#111923; }
+.ovl path { fill:none; stroke:var(--ink); stroke-width:.75; stroke-opacity:.8; }
+.furn text { fill:var(--ink); }
+.furn path, .furn circle { stroke:var(--ink); }
+.furn .datum { stroke-dasharray:16 3 2 3; }
+.furn .tri { fill:var(--ink); stroke:none; }
+.furn .sb { stroke-width:3; stroke-opacity:1; }
+.furn .sb.fill { stroke:var(--ink); }
+.furn .sb:not(.fill) { stroke:#fff; filter:drop-shadow(0 0 .5px var(--ink)); }
+.furn .ori circle { fill:none; stroke-width:.75; }
+.xnote circle { fill:var(--ink); }
+.xnote circle.tag { fill:none; stroke:var(--ink); stroke-width:.75; }
+.xnote text.k { font-size:11px; }
+.xnote.focus text:not(.k) { fill:var(--signal); }
+.ovl .halo { stroke:var(--bg) !important; stroke-width:3.5 !important; stroke-opacity:1 !important; }
+.conn { stroke:#9a978f !important; stroke-width:1 !important; stroke-opacity:.9 !important; }
+.lensnote .ring { fill:none; stroke:var(--ink); stroke-width:.75; }
+.lensnote text { font-size:11px; }
+.dim path { stroke-width:1; stroke-opacity:1; } .dim .ext { stroke-opacity:.85; } .dim text { font-size:11px; }
+.lsb path { stroke-width:3; stroke-opacity:1; } .lsb path:not(.fill) { stroke:#fff; filter:drop-shadow(0 0 .5px var(--ink)); } .lsb text { font-size:11px; }
+.ytag circle { fill:var(--ink); } .ytag path { stroke:var(--ink); }
+.route { fill:none; stroke:var(--water) !important; stroke-opacity:1 !important; stroke-linejoin:round; stroke-linecap:round; }
+.arrow { stroke:var(--water) !important; stroke-width:1.25 !important; stroke-opacity:1 !important; }
+.drip { fill:none; stroke:var(--water); stroke-width:1; }
+.wind path { stroke:#4a5560; stroke-width:1; } .wind text { fill:#4a5560; }
+.crop { fill:none; stroke:#8b939c; stroke-width:1; stroke-dasharray:none; }
+.croplabel { fill:#aab3bd !important; font-size:11px !important; }
+.cold circle { fill:none; stroke:#f2f4f6; stroke-width:1.2; }
+.cold circle.dot { fill:#f2f4f6; stroke:none; }
+.cold path { fill:none; stroke:#f2f4f6 !important; stroke-width:.8; }
+.cold text { font:500 11px var(--mono); letter-spacing:.04em; fill:#f2f4f6; }
+.cold.bad circle { stroke:#ff6a4d; } .cold.bad circle.dot { fill:#ff6a4d; } .cold.bad path { stroke:#ff6a4d !important; } .cold.bad text { fill:#FF6A4D; }
+/* sections */
+section.band { padding:clamp(96px, 12vh, 140px) 0 120px; scroll-margin-top:var(--navh); border-top:1px solid var(--rule); min-height:100svh; display:grid; align-content:start; }
+#sources { min-height:0; }
+/* entry: the figure rises 8 px and fades in as its band arrives (landing3d.js adds .in) */
+.reveal { opacity:0; transform:translateY(8px); transition:opacity .4s cubic-bezier(.2,.7,0,1), transform .4s cubic-bezier(.2,.7,0,1); }
+.reveal.in { opacity:1; transform:none; }
+@media (min-width: 901px) { .winter > figure { position:sticky; top:88px; } }
+.why details { margin-top:8px; } .why summary { cursor:pointer; font:500 12px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--fg); }
+.why details p { margin:8px 0 0; }
+.axo-cap { margin:12px 0 0; font:500 11px/1.5 var(--mono); letter-spacing:.05em; text-transform:uppercase; color:var(--mute); }
+.axo-cap b { color:var(--fg); font-weight:500; }
+.skip { position:absolute; left:-9999px; top:8px; z-index:20; background:var(--fg); color:var(--bg); padding:10px 14px; font:500 12px var(--mono); }
+.skip:focus { left:16px; }
+.why { margin:18px 0 0; padding:14px 0 0; border-top:1px solid var(--rule); font-size:14px; line-height:1.55; color:var(--mute); }
+.why b { color:var(--fg); font-weight:500; }
+#winter { --bg:#111923; --fg:#E6E3DC; --mute:#A3ADB8; --rule:#2A3440; --ink:#E6E3DC; --chip:#1B2430; --signal:#FF6A4D; background:var(--bg); color:var(--fg); border-top-color:#111923; }
+/* the storm greys the whole band, not a box behind the drawing */
+#rain { --bg:color-mix(in srgb, #F2F1EC, #DCE0E1 calc(var(--sk, 0) * 100%)); background:var(--bg); }
+h2 { font:500 clamp(34px, 4vw, 58px)/1 var(--sans); letter-spacing:-.04em; margin:0 0 18px; max-width:14ch; }
+.sub { color:var(--mute); max-width:56ch; margin:0 0 32px; font-size:17px; }
+.frame { position:relative; aspect-ratio:10200 / 6850; overflow:hidden; }
+.frame canvas { width:100%; height:100%; display:block; }
+/* ageing: drawing 8 / control 4 */
+.age, .rain, .winter { display:grid; grid-template-columns:8fr 4fr; gap:40px; align-items:start; }
+.yr { font:300 clamp(96px, 11vw, 160px)/.9 var(--num); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.yr small { font:400 20px var(--sans); color:var(--mute); margin-left:6px; letter-spacing:0; }
+input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:24px; margin:14px 0 4px; background:linear-gradient(var(--fg), var(--fg)) 0 50% / 100% 1px no-repeat; cursor:pointer; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:4px; height:22px; background:var(--fg); border:0; border-radius:0; }
+input[type=range]::-moz-range-thumb { width:4px; height:22px; background:var(--fg); border:0; border-radius:0; }
+input[type=range]:focus-visible { outline:2px solid var(--signal); outline-offset:4px; }
+.ticks { position:relative; height:24px; }
+.ticks button { position:absolute; transform:translateX(-50%); font:500 12px var(--mono); background:none; border:0; color:var(--mute); padding:4px 0; cursor:pointer; }
+.ticks button[aria-pressed="true"] { color:var(--fg); text-decoration:underline; text-underline-offset:4px; }
+#age-notes { margin-top:22px; border-top:1px solid var(--rule); padding-top:18px; color:var(--mute); font-size:15px; }
+#age-notes p { margin:0 0 10px; }
+#age-notes .aside { font:500 11px var(--mono); letter-spacing:.04em; }
+/* rain: reading left, drawing right */
+.rain { grid-template-columns:4fr 8fr; }
+#rain-btn { touch-action:none; user-select:none; margin:4px 0 26px; }
+#routes { list-style:none; margin:0; padding:18px 0 0; border-top:1px solid var(--rule); display:grid; gap:10px; color:var(--mute); font-size:14px; }
+#routes li { display:grid; grid-template-columns:44px 1fr; align-items:center; gap:10px; }
+#routes li.beyond { font-size:13px; }
+/* the hero's winter legend: the same stepped bar, small */
+.hlegend { position:absolute; left:32px; top:112px; display:grid; grid-template-columns:8px auto; gap:0 8px; opacity:var(--wn, 0); }
+.hlegend .steps { display:flex; flex-direction:column; height:120px; }
+.hlegend .steps i { flex:1; }
+.hlegend .marks { position:relative; font:500 11px var(--mono); color:#c3cbd4; }
+.hlegend .marks span { position:absolute; transform:translateY(-50%); white-space:nowrap; }
+.hlegend .marks span::before { content:""; display:inline-block; width:5px; border-top:1px solid #c3cbd4; vertical-align:middle; margin-right:4px; }
+/* winter: field bubbles (2D insets of the computed field at each junction) */
+.bubbles { position:absolute; left:14px; top:14px; display:flex; flex-direction:column; gap:14px; }
+.bubbles figure { margin:0; }
+.bubbles canvas { width:min(150px, 15cqw); aspect-ratio:1; border-radius:50%; border:1px solid #c3cbd4; display:block; }
+.bubbles figcaption { font:500 11px var(--mono); letter-spacing:.05em; color:#c3cbd4; margin-top:4px; text-align:center; }
+.winter .frame, .age .frame { container-type:inline-size; }
+.agebub { left:auto; right:14px; top:14px; }
+.agebub figcaption { max-width:120px; font-size:11px; line-height:1.35; }
+.agebub canvas { width:96px; border-color:var(--ink); border-width:.75px; }
+.agebub .split { position:relative; }
+.agebub .split i { position:absolute; left:50%; top:0; bottom:0; border-left:1px solid var(--ink); }
+.agebub .split b { position:absolute; top:-16px; font:500 11px var(--mono); color:var(--mute); } .agebub .yr-l { left:0; } .agebub .yr-r { right:0; }
+.agebub figure { margin:16px 0 4px; }
+.bl { stroke:var(--ink) !important; stroke-width:.75 !important; }
+.agebub figcaption { color:var(--mute); }
+.bleader { stroke:#c3cbd4 !important; stroke-width:.75 !important; }
+/* winter */
+.tlegend { display:grid; grid-template-columns:14px 1fr; gap:4px 10px; margin:6px 0 22px; }
+.tlegend .steps { display:flex; flex-direction:column; height:220px; border:1px solid var(--rule); }
+.tlegend .steps i { flex:1; }
+.tlegend .marks { position:relative; height:220px; font:500 11px var(--mono); color:var(--mute); }
+.tlegend .marks span { position:absolute; left:0; transform:translateY(-50%); white-space:nowrap; }
+.tlegend .marks span::before { content:""; display:inline-block; width:8px; border-top:1px solid var(--mute); vertical-align:middle; margin:0 6px 0 -10px; }
+.tlegend .marks .special { left:110px; color:var(--fg); }
+.tlegend .marks .special::before { width:50px; margin-left:-56px; border-top:1.5px solid var(--fg); }
+.tlegend .lcap { grid-column:1 / -1; font:500 11px/1.5 var(--mono); color:var(--mute); margin:6px 0 0; }
+#winter-stats { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:6px 0 24px; }
+#winter-stats b { font:300 44px/1 var(--num); display:block; }
+#winter-stats small { font:500 12px/1.45 var(--mono); color:var(--mute); }
+#winter-stats .bad b, #winter-stats .bad small { color:var(--signal); }
+.method { font-size:13px; color:var(--mute); border-top:1px solid var(--rule); padding-top:14px; margin-top:16px; }
+/* sources: the reviewed entries, grouped, each with its claim and a link */
+.sources { display:grid; grid-template-columns:4fr 8fr; gap:40px; align-items:start; }
+details.src { border-top:1px solid var(--fg); }
+details.src:last-child { border-bottom:1px solid var(--rule); }
+details.src summary { list-style:none; display:grid; grid-template-columns:1fr 88px 32px; align-items:baseline; padding:16px 0; cursor:pointer; font:500 20px/1.2 var(--sans); letter-spacing:-.02em; }
+details.src summary::-webkit-details-marker { display:none; }
+details.src summary b { font:300 32px/1 var(--num); color:var(--mute); text-align:right; }
+details.src summary::after { content:"+"; font:300 24px var(--sans); text-align:right; color:var(--mute); }
+details.src[open] summary::after { content:"\2212"; }
+details.src ol { list-style:none; margin:0; padding:0; border-top:1px solid var(--rule); }
+details.src:not(.all) li:nth-child(n+9) { display:none; }
+details.src.filtering li { display:none; } details.src.filtering li.hit { display:grid; }
+details.src .more { all:unset; display:block; margin:12px 0 20px; font:500 12px var(--mono); letter-spacing:.06em; text-transform:uppercase; border-bottom:1px solid var(--fg); cursor:pointer; }
+details.src.all .more, details.src.filtering .more { display:none; }
+.sources > div:first-child { position:sticky; top:112px; }
+.srcfind { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 20px; }
+.srcfind input { flex:1 1 220px; font:500 13px var(--mono); padding:11px 12px; border:1px solid var(--fg); background:transparent; color:var(--fg); border-radius:0; }
+.srcfind button { font:500 11px var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:8px 10px; border:1px solid var(--rule); background:transparent; color:var(--fg); cursor:pointer; border-radius:0; }
+.srcfind button[aria-pressed="true"] { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+.srccount { font:500 11px var(--mono); color:var(--mute); margin:0 0 12px; }
+details.src li { display:grid; grid-template-columns:minmax(0, 3fr) minmax(0, 5fr) minmax(0, 3fr); gap:20px; padding:12px 0; border-bottom:1px solid var(--rule); font-size:13px; line-height:1.45; }
+details.src p { margin:0; }
+details.src .s { font-weight:500; }
+details.src .c { color:var(--mute); }
+details.src .r { font:500 11px/1.5 var(--mono); }
+details.src .r a { color:var(--fg); text-decoration:underline; text-decoration-color:var(--rule); text-underline-offset:3px; overflow-wrap:anywhere; }
+details.src .r span { display:block; margin-top:6px; color:var(--mute); text-transform:uppercase; letter-spacing:.06em; }
+/* build: counter left, drawing right */
+.build { display:grid; grid-template-columns:4fr 8fr; gap:40px; align-items:start; }
+.build .frame { aspect-ratio:auto; height:calc(100dvh - 160px); min-height:560px; position:sticky; top:112px; }
+.stagebox { min-height:220px; }
+#stage-num { font:300 clamp(96px, 11vw, 160px)/.9 var(--num); }
+/* desktop: the build band pins; its scroll drives the stages (landing3d.js) */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  section#build { height:300vh; min-height:0; display:block; padding:0; }
+  #build .build { position:sticky; top:64px; height:calc(100vh - 64px); align-items:start; padding-top:32px; }
+  #build .build .frame { margin-top:-8px; }
+  #build-btn { margin-right:20px; } #build .tlink { display:inline-flex; vertical-align:middle; }
+  #build .eyebrow { margin-bottom:14px; } #build h2 { margin-bottom:8px; }
+  #build .build .frame { position:relative; top:0; height:calc(100vh - 150px); min-height:0; }
+  #build h2 { font-size:clamp(30px, 3vw, 44px); }
+  #stage-num { font-size:clamp(72px, 7vw, 112px); }
+  #stage-name { min-height:0; margin:8px 0 18px; }
+  .stepper { margin-bottom:14px; }
+  #build .tlink { margin-top:0; }
+  #stage-list { margin-top:16px; }
+}
+#stage-num small { font:300 .35em var(--num); color:var(--mute); }
+.stepper { display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center; margin:0 0 22px; max-width:420px; }
+.stepper button { width:40px; height:40px; border:1px solid var(--fg); background:transparent; color:var(--fg); font:16px var(--sans); cursor:pointer; border-radius:0; }
+.stepper button:hover { background:color-mix(in srgb, var(--fg) 8%, transparent); }
+.stepper input { margin:0; }
+#stage-list { list-style:none; margin:26px 0 0; padding:14px 0 0; border-top:1px solid var(--rule); columns:2; column-gap:24px; font:500 11px/1.3 var(--mono); }
+#stage-list button { all:unset; box-sizing:border-box; display:grid; grid-template-columns:24px 1fr; width:100%; padding:4px 0; color:var(--mute); cursor:pointer; break-inside:avoid; }
+#stage-list button:hover { color:var(--fg); }
+#stage-list button[aria-current="step"] { color:var(--fg); font-weight:600; }
+#stage-list button:focus-visible { outline:2px solid var(--signal); }
+#stage-name { font-size:22px; letter-spacing:-.01em; margin:10px 0 26px; max-width:24ch; min-height:3.2em; }
+footer { padding:0 0 48px; color:var(--mute); border-top:1px solid var(--rule); }
+.tb { display:grid; grid-template-columns:2fr repeat(4, 1fr) 1.1fr; border-left:1px solid var(--rule); border-top:1px solid var(--fg); margin-top:0; }
+.tb a.go { display:flex; flex-direction:column; justify-content:space-between; background:var(--fg); color:var(--bg); text-decoration:none; padding:16px 18px 18px; font:500 12px var(--mono); letter-spacing:.06em; text-transform:uppercase; border-bottom:1px solid var(--fg); }
+.tb a.go small { color:color-mix(in srgb, var(--bg) 70%, var(--fg)); }
+.tb a.go:hover { background:color-mix(in srgb, var(--fg) 86%, var(--bg)); }
+.tb .num { font:300 48px/1 var(--num); color:var(--fg); }
+.tb > div { border-right:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:16px 18px 18px; min-height:96px; }
+.tb small { display:block; font:500 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--mute); margin-bottom:10px; }
+.tb p { margin:0; color:var(--fg); font-size:14px; line-height:1.5; }
+.tb a { color:var(--fg); }
+.tb .big { font:500 22px/1.15 var(--sans); letter-spacing:-.02em; }
+.tb ul { list-style:none; margin:0; padding:0; font-size:14px; line-height:1.7; }
+.tbend { display:flex; justify-content:space-between; align-items:center; gap:20px; padding-top:28px; font:500 11px var(--mono); letter-spacing:.06em; text-transform:uppercase; }
+:focus-visible { outline:2px solid var(--signal); outline-offset:3px; }
+/* embed (the tool's 3D tab): the hero alone, full frame, with its controls */
+.embedctl { display:none; }
+body.embed nav, body.embed .copy, body.embed section, body.embed footer, body.embed .caption, body.embed #hero-lens { display:none; }
+body.embed .hero { height:100dvh; } body.embed .pin { position:relative; top:0; height:100dvh; min-height:0; grid-template-columns:1fr; padding:12px; max-width:none; }
+body.embed .embedctl { display:flex; position:absolute; right:16px; bottom:14px; z-index:3; gap:14px; align-items:center; font:500 11px var(--mono); letter-spacing:.04em; background:color-mix(in srgb, var(--bg) 90%, transparent); padding:8px 12px; border:1px solid var(--rule); }
+body.embed .embedctl input { width:180px; margin:0; }
+body.embed .embedctl button { font:inherit; border:1px solid var(--rule); background:transparent; padding:4px 10px; cursor:pointer; }
+body.embed .embedctl button[aria-pressed="true"] { background:var(--fg); color:var(--bg); }
+body.embed .embedctl { padding:0; gap:0; border:1px solid var(--fg); }
+body.embed .embedctl button { border:0; border-right:1px solid var(--fg); padding:10px 14px; letter-spacing:.06em; }
+body.embed .embedctl button:last-child { border-right:0; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .hero { height:auto; } .pin { position:relative; top:0; } * { transition:none !important; } }
+@media (max-width: 900px) {
+  .wrap, .pin { padding-left:16px; padding-right:16px; }
+  nav { padding:0 16px; gap:14px; } nav .links { display:none; } nav .cta { margin-left:auto; }
+  .hero { height:auto; } .pin { position:relative; top:0; height:auto; min-height:0; grid-template-columns:1fr; } .scrollcue { display:none; }
+  .stage { aspect-ratio:1 / 1; }
+  .age, .build, .rain, .winter { grid-template-columns:1fr; } section.band { padding:72px 0; }
+  :root { --navh:106px; }
+  nav { flex-wrap:wrap; height:auto; padding-top:10px; row-gap:0; }
+  nav .links { display:flex; order:3; width:100%; margin:0; gap:18px; overflow-x:auto; padding:10px 0 10px; scrollbar-width:none; white-space:nowrap; }
+  nav .links a { flex:none; }
+  .copyc, .stagebox { display:contents; }
+  .age, .rain, .winter, .build { row-gap:0; }
+  .copyc > *, .stagebox > * { order:5; }
+  .copyc > .eyebrow, .stagebox > .eyebrow { order:1; } .copyc > h2, .stagebox > h2 { order:2; }
+  .age > figure, .rain > figure, .winter > figure, .build > .frame { order:3; position:sticky; top:var(--navh); z-index:1; background:var(--bg); margin:4px 0 24px; padding-bottom:8px; border-bottom:1px solid var(--rule); }
+  .age > figure .frame, .rain > figure .frame, .winter > figure .frame, .build > .frame { height:min(42svh, 380px); aspect-ratio:auto; }
+  .build > .frame .axo-cap { display:none; }
+  /* no pin on small screens: the rail becomes a three-way switch for the same states */
+  .rail { grid-template-columns:repeat(3, 1fr); gap:0; border:1px solid var(--fg); margin:24px 0 0; }
+  .rail button { grid-template-columns:1fr; justify-items:center; padding:12px 6px; }
+  .rail button::before, .rail button span, .rail button small { display:none; }
+  .rail li + li button { border-left:1px solid var(--fg); }
+  .rail li.on button { background:var(--fg); color:var(--bg); }
+  .tb { grid-template-columns:1fr 1fr; } .tb > div:first-child, .tb a.go { grid-column:1 / -1; } .sources { grid-template-columns:1fr; }
+  details.src li { grid-template-columns:1fr; gap:4px; }
+  /* phones and tablets: the drawing follows the headline, its switch under it */
+  .copy { display:contents; } .copy .eyebrow { order:1; } .copy h1 { order:2; } .stage { order:3; } .rail { order:4; } .lede { order:5; margin-top:24px; } .actions { order:6; } .card { order:7; }
+  .actions .cta { flex:1 1 100%; justify-content:space-between; }
+
+  #stage-list { columns:1; }
+}
+/* small screens: each band's figure stays in view (sticky) while its controls scroll under it */
+@media (max-width: 900px) {
+  section.band { min-height:0; }
+
+  .sources > div:first-child { position:static; }
+}
+/* phones: the drawing keeps its model and caption; the fine annotation waits for a bigger screen */
+@media (max-width: 600px) {
+  :root { --gut:16px; }
+  h1 { font-size:44px; }
+  .stage { aspect-ratio:4 / 5; }
+  #hero-lens, .lensnote, .ovl .furn, .agebub, .bl, .bubbles, .xnote.now, #hero-notes .xnote, #hero-notes .conn, .hlegend { display:none; }
+  .caption { position:static; margin-top:10px; line-height:1.5; }
+  .stage canvas, .stage svg { bottom:64px; height:auto; }
+  .stage .caption { position:absolute; left:0; right:0; bottom:0; height:56px; overflow:hidden; }
+  .card { grid-template-columns:repeat(3, 1fr); gap:4px 16px; }
+  .yr, #stage-num { font-size:96px; }
+}
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<a class="skip" href="#top">Skip to content</a>
+<nav aria-label="Main">
+  <a class="brand" href="#top"><i aria-hidden="true"></i>The Living Edge</a>
+  <div class="links"><a href="#top"><span>01</span>Detail</a><a href="#age"><span>02</span>Ageing</a><a href="#rain"><span>03</span>Rain</a><a href="#winter"><span>04</span>Winter</a><a href="#build"><span>05</span>Build</a><a href="#sources"><span>06</span>Sources</a></div>
+  <a class="cta" href="index.html#tab=draft&amp;w=2000">Open the tool</a>
+</nav>
+<main id="top" tabindex="-1">
+  <div class="hero">
+    <div class="pin">
+      <div class="copy">
+        <p class="eyebrow"><b>01</b><span>Detail 02 &#183; Vancouver &#183; sliding wall to garden</span></p>
+        <h1>See how a building meets the <em>ground</em>.</h1>
+        <p class="lede">Construction sections you can question: rain, heat, roots and thirty years of weather, drawn from sourced research.</p>
+        <div class="actions"><a class="cta" href="index.html#tab=draft&amp;w=2000">Open the tool at this cut</a><a class="cta ghost" href="#age">Watch it age</a></div>
+        <div class="card" aria-label="Results from the model">
+          <div><b>12</b></div><div><b>__CARBON__</b></div><div><b>__FRSI__</b></div>
+          <small>mm threshold</small><small>kgCO₂e per m</small><small>coldest f<sub>Rsi</sub>, head</small>
+        </div>
+        <ol class="rail" id="rail" aria-label="Hero states"><li class="on"><button type="button" data-k="0" aria-pressed="true"><span>01</span><em>Assembled<small>, cut at the sliding panel</small></em></button></li><li><button type="button" data-k="1" aria-pressed="false"><span>02</span><em>Taken apart<small>, layer by layer</small></em></button></li><li><button type="button" data-k="2" aria-pressed="false"><span>03</span><em>Winter night<small>, computed heat</small></em></button></li></ol>
+      </div>
+      <div class="stage" role="img" aria-label="Rendered section-box fragment of a sliding glass wall meeting a garden in Vancouver; scrolling separates it into construction layers, then shows a winter night.">
+        <canvas id="hero-ink"></canvas><canvas id="hero-lens" aria-hidden="true"></canvas><svg id="hero-notes" class="ovl" aria-hidden="true"></svg><svg id="hero-cold" class="ovl" aria-hidden="true"></svg>
+        <div class="hlegend" id="hero-legend" aria-hidden="true"></div>
+        <p class="wcap">WINTER NIGHT &#183; -7&nbsp;&#176;C OUTSIDE, 20&nbsp;&#176;C IN. COLOURS ARE COMPUTED TEMPERATURES THROUGH THE CUT.</p>
+        <div class="caption">AXO 01 &middot; THRESHOLD TO GARDEN &middot; SECTION BOX 5.6 x 4.5 x 1.2 M, CUT AT W 2000 (SLIDING PANEL) &middot; <b>12 MM THRESHOLD</b></div>
+        <div class="embedctl" role="group" aria-label="Model state"><button type="button" data-k="0" aria-pressed="true">Assembled</button><button type="button" data-k="1" aria-pressed="false">Taken apart</button><button type="button" data-k="2" aria-pressed="false">Winter night</button></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="band" id="age">
+    <div class="wrap age">
+      <figure style="margin:0"><div class="frame"><canvas id="age-cv" role="img" aria-label="Rendered section fragment, weathered to the chosen year"></canvas><svg id="age-ovl" class="ovl" aria-hidden="true"></svg>
+        <div class="bubbles agebub" aria-hidden="true"><figure><div class="split"><canvas id="age-b0"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>1 · CEDAR</figcaption></figure><figure><div class="split"><canvas id="age-b1"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>2 · OVER THE CAP</figcaption></figure><figure><div class="split"><canvas id="age-b2"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>3 · DRIP LINE</figcaption></figure></div></div><figcaption class="axo-cap"><b>AXO 02</b> &#183; Ageing &#183; cut at W 2000 &#183; years after completion</figcaption></figure>
+      <div class="copyc">
+        <p class="eyebrow"><b>02</b><span>Ageing &#183; 0&#8211;30 years</span></p>
+        <h2>Thirty years in one drag.</h2>
+        <p class="sub">Cedar silvers, a splash band and an algae line arrive, the bed grows in. Colours and growth come from the reviewed ageing tables (research 10, exterior finish). <a href="#sources">Sources</a></p>
+        <div class="yr"><span id="year-out">0</span><small>years</small></div>
+        <input id="year" type="range" min="0" max="30" step="1" value="0" aria-label="Years after completion">
+        <div class="ticks"><button type="button" data-y="0">0</button><button type="button" data-y="5">5</button><button type="button" data-y="10">10</button><button type="button" data-y="20">20</button><button type="button" data-y="30">30</button></div>
+        <div id="age-notes" aria-live="polite"></div>
+        <a class="tlink" href="index.html#tab=3d&amp;w=2000">Open the 3D model in the tool</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="rain">
+    <div class="wrap rain">
+      <div class="copyc">
+        <p class="eyebrow"><b>03</b><span>Rain &#183; westerly storm</span></p>
+        <h2>Follow every drop.</h2>
+        <p class="sub">Hold the button. A westerly storm: rain falls where the sky and the wind reach, the canopy sheds it at its drip edge, and the routes run on the cut in the direction the water moves.</p>
+        <button class="cta" id="rain-btn" type="button">Hold for rain</button>
+        <ul id="routes"></ul>
+        <a class="tlink" href="index.html#tab=section&amp;w=2000">Trace the water layer in the tool</a>
+      </div>
+      <figure style="margin:0"><div class="frame"><canvas id="rain-cv" role="img" aria-label="Rendered section fragment with wind-driven rain and the drainage routes traced on the cut"></canvas><svg id="rain-ovl" class="ovl" aria-hidden="true"></svg></div><figcaption class="axo-cap"><b>AXO 03</b> &#183; Rain &#183; westerly storm, cut at W 2000 &#183; routes in the direction the water moves</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="band" id="winter" data-night>
+    <div class="wrap winter">
+      <figure style="margin:0"><div class="frame"><canvas id="winter-cv" role="img" aria-label="Rendered section fragment on a winter night with the computed temperature field coloured on the cut"></canvas><svg id="winter-notes" class="ovl" aria-hidden="true"></svg>
+        <div class="bubbles" aria-hidden="true"><figure><canvas id="winter-b1"></canvas><figcaption>HEAD <svg width="44" height="6"><path d="M2 3 H22" stroke="#c3cbd4" stroke-width="3"/><path d="M22 3 H42" stroke="#c3cbd4" stroke-width="1"/></svg> 50 MM</figcaption></figure><figure><canvas id="winter-b0"></canvas><figcaption>THRESHOLD <svg width="44" height="6"><path d="M2 3 H22" stroke="#c3cbd4" stroke-width="3"/><path d="M22 3 H42" stroke="#c3cbd4" stroke-width="1"/></svg> 50 MM</figcaption></figure></div></div><figcaption class="axo-cap"><b>AXO 04</b> &#183; Winter &#183; &#8722;7 / 20&#160;&#176;C, ISO 13788 &#183; computed field on the cut</figcaption></figure>
+      <div class="copyc">
+        <p class="eyebrow"><b>04</b><span>Winter &#183; computed heat</span></p>
+        <h2>Where the heat leaks.</h2>
+        <p class="sub">A still night at -7 &#176;C against a 20 &#176;C room. Every colour on the cut is a computed temperature; the rings mark the coldest inside surface of each junction.</p>
+        <div class="tlegend" id="tlegend" aria-hidden="true"></div>
+        <div id="winter-stats"></div>
+        <div class="why"><p style="margin:0"><b>Why the head is cold.</b> The coldest point (6.1&#160;&#176;C) is on the door frame&#8217;s own head profile, not the installation. This screening uses a generic frame; certified frames reach 0.62&#8211;0.72 there, and the product&#8217;s certificate governs.</p>
+          <details><summary>Read the research</summary><p>Research 13 (&#167;5.2) found the installation junction at f<sub>Rsi</sub> 0.91 once the steel lintel was replaced by glulam with a two-piece flashing (0.67 with the steel), and the frame head itself at 0.62&#8211;0.72, governed by the product&#8217;s Passive House certificate. Confirm in THERM with the chosen product.</p></details></div>
+        <a class="tlink" href="index.html#tab=thermal&amp;case=head">Run the head case in the tool</a>
+        <p style="margin:24px 0 0"><button class="cta ghost" id="field-btn" type="button" aria-pressed="true">Hide the field</button></p>
+        <p class="method">2D steady conduction through this cut, 5 mm mesh, ISO 13788 surface resistances. A screening, not a certified THERM run. Hygiene line f<sub>Rsi</sub> 0.70 (Passive House Institute).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="build">
+    <div class="wrap build">
+      <div class="stagebox">
+        <p class="eyebrow"><b>05</b><span>Build &#183; 15 stages</span></p>
+        <h2>Built in the order it goes up.</h2>
+        <div id="stage-num">15</div>
+        <p id="stage-name" aria-live="polite"></p>
+        <div class="stepper"><button type="button" id="b-prev" aria-label="Previous stage">&#8592;</button><input id="b-step" type="range" min="1" max="15" step="1" value="15" aria-label="Build stage"><button type="button" id="b-next" aria-label="Next stage">&#8594;</button></div>
+        <button class="cta" id="build-btn" type="button">Play the build</button>
+        <a class="tlink" href="index.html#tab=draft&amp;w=2000">Read every part in the tool</a>
+        <ol id="stage-list" aria-label="Build stages"></ol>
+      </div>
+      <div class="frame"><canvas id="build-cv" role="img" aria-label="Rendered section fragment assembling stage by stage, later stages ghosted"></canvas><svg id="build-ovl" class="ovl" aria-hidden="true"></svg><p class="axo-cap" style="position:absolute;left:0;bottom:0;margin:0"><b>AXO 05</b> &#183; Build &#183; later stages ghosted</p></div>
+    </div>
+  </section>
+  <section class="band" id="sources">
+    <div class="wrap sources">
+      <div>
+        <p class="eyebrow"><b>06</b><span>Sources &#183; __NSOURCES__ reviewed entries</span></p>
+        <h2>Every number has a source.</h2>
+        <p class="sub">The structured entries behind the model: codes, materials, assemblies, climate and planting. Each gives its claim, where it comes from, what kind of source it is (code, standard, guide, paper, manufacturer, dataset) and how it was used. The junction notes (research 06&#8211;15) are cited part by part in the tool.</p>
+        <a class="tlink" href="index.html#tab=draft&amp;w=2000">Click any part in the tool for its sources</a>
+      </div>
+      <div>
+        <div class="srcfind" role="search"><input id="src-q" type="search" placeholder="Search 212 entries: VBBL, cedar, f_Rsi …" aria-label="Search the sources"><button type="button" data-t="" aria-pressed="true">All</button><button type="button" data-t="Code" aria-pressed="false">Code</button><button type="button" data-t="Standard" aria-pressed="false">Standard</button><button type="button" data-t="Paper" aria-pressed="false">Paper</button><button type="button" data-t="Guide" aria-pressed="false">Guide</button><button type="button" data-t="Manufacturer" aria-pressed="false">Manufacturer</button><button type="button" data-t="Other" aria-pressed="false">Other</button></div>
+        <p class="srccount">Each row: source type &#183; how it is used (<b>used in calculation</b>: the value drives the model or a check; <b>guidance</b>: it shapes a choice; <b>illustrative</b>: context only).</p>
+        <p class="srccount" id="src-count" aria-live="polite"></p>
+        __SOURCES__
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">
+  <div class="tb">
+    <div><small>Project</small><p class="big">The Living Edge</p><p>A study tool for building edges in Vancouver: one sourced model, drawn live as sections, layers, renders and analysis.</p></div>
+    <div><small>Detail</small><p class="num">02</p><p>Sliding wall to garden, flush threshold</p></div>
+    <div><small>Method</small><p>2D steady conduction, ISO 13788. Ageing from reviewed tables. <a href="#winter">Read the method</a></p></div>
+    <div><small>Sources</small><p class="num">__NSOURCES__</p><p><a href="#sources">Reviewed entries</a>; every part in the tool names its source.</p></div>
+    <div><small>In the tool</small><ul><li><a href="index.html#tab=draft&amp;w=2000">Draft sheet</a></li><li><a href="index.html#tab=section&amp;w=2000">Control layers</a></li><li><a href="index.html#tab=3d&amp;w=2000">3D model</a></li><li><a href="index.html#tab=thermal">Thermal</a></li></ul></div>
+    <a class="go" href="index.html#tab=draft&amp;w=2000"><small>Tool</small><span>Open the tool &#8594;</span></a>
+  </div>
+  <div class="tbend"><span>Scale: bar &#183; Rev 5 &#183; 2026-10-14</span><span>The Living Edge &#183; Vancouver</span></div>
+</div></footer>
+<script>window.LANDING = __DATA__;</script>
+<script>
+__JS__
+</script>
+<script type="module">
+__AXO__
+</script>
+</body>
+</html>

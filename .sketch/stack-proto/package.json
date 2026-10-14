@@ -1,0 +1,27 @@
+{
+  "name": "living-edge-stack-proto",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5174 --strictPort",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "clipper2-ts": "^2.0.1-18",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
+    "lindenmayer": "^1.5.4",
+    "motion": "^14.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "simplex-noise": "^4.0.3",
+    "suncalc": "^2.1.1",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.4"
+  }
+}

@@ -1,0 +1,807 @@
+{
+ "L": 900,
+ "parts": [
+  {
+   "id": "footing",
+   "name": "Concrete footing",
+   "role": "concrete",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -175,
+     -900
+    ],
+    [
+     375,
+     -900
+    ],
+    [
+     375,
+     -1150
+    ],
+    [
+     -175,
+     -1150
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "fwall",
+   "name": "Concrete foundation wall",
+   "role": "concrete",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     0,
+     200
+    ],
+    [
+     200,
+     200
+    ],
+    [
+     200,
+     -900
+    ],
+    [
+     0,
+     -900
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "rock",
+   "name": "Drain rock and perforated drain",
+   "role": "drainage",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -520,
+     -790
+    ],
+    [
+     -5,
+     -790
+    ],
+    [
+     -5,
+     -900
+    ],
+    [
+     -175,
+     -900
+    ],
+    [
+     -175,
+     -1150
+    ],
+    [
+     -520,
+     -1150
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "backfill",
+   "name": "Free-draining backfill",
+   "role": "ground",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -1300,
+     -200
+    ],
+    [
+     -300,
+     -200
+    ],
+    [
+     -300,
+     -150
+    ],
+    [
+     -5,
+     -150
+    ],
+    [
+     -5,
+     -790
+    ],
+    [
+     -520,
+     -790
+    ],
+    [
+     -520,
+     -1150
+    ],
+    [
+     -1300,
+     -1150
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "base",
+   "name": "Slab on grade",
+   "role": "ground",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     200,
+     50
+    ],
+    [
+     900,
+     50
+    ],
+    [
+     900,
+     -150
+    ],
+    [
+     200,
+     -150
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "xps",
+   "name": "Slab on grade",
+   "role": "thermal",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     200,
+     100
+    ],
+    [
+     900,
+     100
+    ],
+    [
+     900,
+     50
+    ],
+    [
+     200,
+     50
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "slab",
+   "name": "Slab on grade",
+   "role": "concrete",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     200,
+     200
+    ],
+    [
+     900,
+     200
+    ],
+    [
+     900,
+     100
+    ],
+    [
+     200,
+     100
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "sill",
+   "name": "Sill gasket and sill plate",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     12,
+     244
+    ],
+    [
+     152,
+     244
+    ],
+    [
+     152,
+     206
+    ],
+    [
+     12,
+     206
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "frame",
+   "name": "Studs with batt insulation",
+   "role": "thermal",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     12,
+     1462
+    ],
+    [
+     152,
+     1462
+    ],
+    [
+     152,
+     244
+    ],
+    [
+     12,
+     244
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "plate",
+   "name": "Studs with batt insulation",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     12,
+     1500
+    ],
+    [
+     152,
+     1500
+    ],
+    [
+     152,
+     1462
+    ],
+    [
+     12,
+     1462
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "roof",
+   "name": "Roof sheathing and membrane",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -651,
+     1757
+    ],
+    [
+     900,
+     1757
+    ],
+    [
+     900,
+     1735
+    ],
+    [
+     -651,
+     1735
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "joist",
+   "name": "Roof joists",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -632,
+     1735
+    ],
+    [
+     900,
+     1735
+    ],
+    [
+     900,
+     1500
+    ],
+    [
+     -632,
+     1500
+    ]
+   ],
+   "runs": [
+    [
+     60,
+     98
+    ],
+    [
+     466,
+     504
+    ],
+    [
+     862,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "sheath",
+   "name": "Sheathing",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     0,
+     1500
+    ],
+    [
+     12,
+     1500
+    ],
+    [
+     12,
+     244
+    ],
+    [
+     0,
+     244
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     790
+    ]
+   ]
+  },
+  {
+   "id": "flash",
+   "name": "Base flashing with drip",
+   "role": "water",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "runs": [
+    [
+     0,
+     720
+    ]
+   ],
+   "type": "sheet",
+   "t": 2,
+   "path": [
+    [
+     -3,
+     345
+    ],
+    [
+     -3,
+     233
+    ],
+    [
+     -59,
+     233
+    ],
+    [
+     -69,
+     216
+    ]
+   ]
+  },
+  {
+   "id": "strap",
+   "name": "Strapping, drained cavity",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -21,
+     1500
+    ],
+    [
+     -2,
+     1500
+    ],
+    [
+     -2,
+     252
+    ],
+    [
+     -21,
+     252
+    ]
+   ],
+   "runs": [
+    [
+     90,
+     154
+    ],
+    [
+     496,
+     560
+    ]
+   ]
+  },
+  {
+   "id": "boardc",
+   "name": "Cement board carrier",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -33,
+     1500
+    ],
+    [
+     -21,
+     1500
+    ],
+    [
+     -21,
+     252
+    ],
+    [
+     -33,
+     252
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     610
+    ]
+   ]
+  },
+  {
+   "id": "render",
+   "name": "Lime render, 20 mm",
+   "role": "cladding",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -53,
+     1500
+    ],
+    [
+     -33,
+     1500
+    ],
+    [
+     -33,
+     252
+    ],
+    [
+     -53,
+     252
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     510
+    ]
+   ]
+  },
+  {
+   "id": "soffit",
+   "name": "Larch soffit and fascia",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -632,
+     1500
+    ],
+    [
+     -53,
+     1500
+    ],
+    [
+     -53,
+     1481
+    ],
+    [
+     -632,
+     1481
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "fascia",
+   "name": "Larch soffit and fascia",
+   "role": "frame",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -651,
+     1762
+    ],
+    [
+     -632,
+     1762
+    ],
+    [
+     -632,
+     1472
+    ],
+    [
+     -651,
+     1472
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "gravel",
+   "name": "Gravel strip",
+   "role": "drainage",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -300,
+     -6
+    ],
+    [
+     -5,
+     0
+    ],
+    [
+     -5,
+     -150
+    ],
+    [
+     -300,
+     -150
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "topsoil",
+   "name": "Topsoil, graded away",
+   "role": "ground",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -1300,
+     -26
+    ],
+    [
+     -300,
+     -6
+    ],
+    [
+     -300,
+     -200
+    ],
+    [
+     -1300,
+     -200
+    ]
+   ],
+   "runs": [
+    [
+     0,
+     900
+    ]
+   ]
+  },
+  {
+   "id": "seat",
+   "name": "Oak seat on posts",
+   "role": "furniture",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -470,
+     450
+    ],
+    [
+     -85,
+     450
+    ],
+    [
+     -85,
+     405
+    ],
+    [
+     -470,
+     405
+    ]
+   ],
+   "runs": [
+    [
+     110,
+     760
+    ]
+   ]
+  },
+  {
+   "id": "leg",
+   "name": "Oak seat on posts",
+   "role": "furniture",
+   "junction": "v0",
+   "src": [
+    "stack-proto detail.js (unsourced)"
+   ],
+   "poly": [
+    [
+     -420,
+     405
+    ],
+    [
+     -375,
+     405
+    ],
+    [
+     -375,
+     -120
+    ],
+    [
+     -420,
+     -120
+    ]
+   ],
+   "runs": [
+    [
+     190,
+     235
+    ],
+    [
+     640,
+     685
+    ]
+   ]
+  }
+ ],
+ "views": []
+}

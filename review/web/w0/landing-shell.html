@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Living Edge</title>
+<meta name="description" content="Construction sections you can question: rain, heat, roots and thirty years of weather.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500&family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#F2F1EC; --panel:#FAFAF7; --fg:#1B1B1A; --mute:#5F5E59; --rule:#DCD9D1; --signal:#E0482B; --water:#3D6E8F; --ink:#1E1E1E; --chip:#E8E6DF;
+  --sans:"Geist", ui-sans-serif, system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace; --num:"Barlow Condensed", var(--sans); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#A3A19B; --rule:#2C2C2A; --chip:#232321; } }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 var(--sans); }
+a { color:inherit; }
+.wrap { max-width:1400px; margin:0 auto; padding:0 32px; }
+/* nav: one line, 64px */
+nav { position:sticky; top:0; z-index:10; height:64px; display:flex; align-items:center; gap:28px; padding:0 32px; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--rule); }
+.brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; text-decoration:none; }
+.brand i { width:14px; height:14px; border:1.5px solid var(--fg); border-radius:2px; box-shadow:inset 0 -5px 0 var(--fg); display:inline-block; }
+nav .links { display:flex; gap:22px; margin-left:auto; color:var(--mute); font-size:14px; }
+nav .links a { text-decoration:none; }
+nav .links a:hover { color:var(--fg); }
+.cta { display:inline-flex; align-items:center; gap:8px; background:var(--fg); color:var(--bg); border-radius:999px; padding:10px 18px; font-weight:500; font-size:15px; text-decoration:none; border:1px solid var(--fg); white-space:nowrap; transition:transform .15s; cursor:pointer; font-family:inherit; }
+.cta:active { transform:translateY(1px); }
+.ghost { background:transparent; color:var(--fg); }
+nav .cta { padding:8px 16px; font-size:14px; }
+/* hero: pinned while it explodes into its construction layers, reassembles, then turns to a winter night (landing3d.js reads the scroll) */
+.hero { height:420vh; --nk:calc(var(--wn, 0) * 100%);
+  --bg:color-mix(in srgb, #F2F1EC, #111923 var(--nk)); --fg:color-mix(in srgb, #1B1B1A, #E6E3DC var(--nk)); --mute:color-mix(in srgb, #5F5E59, #A3ADB8 var(--nk));
+  --rule:color-mix(in srgb, #DCD9D1, #2A3440 var(--nk)); --ink:color-mix(in srgb, #1E1E1E, #E6E3DC var(--nk)); background:var(--bg); color:var(--fg); }
+.pin { position:sticky; top:64px; height:calc(100dvh - 64px); min-height:640px; display:grid; grid-template-columns:minmax(300px, 4fr) 8fr; gap:24px; padding:28px 32px 32px; max-width:1520px; margin:0 auto; }
+.copy { align-self:center; padding-bottom:48px; }
+h1 { font:500 clamp(40px, 5vw, 68px)/1.02 var(--sans); letter-spacing:-.035em; margin:0 0 20px; }
+h1 em { font-style:italic; font-weight:400; }
+.lede { font-size:18px; line-height:1.55; color:var(--mute); max-width:34ch; margin:0 0 28px; }
+.actions { display:flex; gap:10px; flex-wrap:wrap; }
+.stage { position:relative; container-type:inline-size; overflow:hidden; align-self:stretch; min-height:0; }
+.stage svg, .stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.card { margin-top:36px; padding-top:18px; border-top:1px solid var(--rule); display:grid; grid-template-columns:repeat(3, auto); justify-content:start; gap:4px 28px; }
+.card b { font:300 34px/1 var(--num); font-variant-numeric:tabular-nums; }
+.card small { font:500 11px/1.3 var(--mono); color:var(--mute); }
+.card .bad b, .card .bad small { color:var(--signal); }
+.scrollcue { margin-top:28px; font:500 11px var(--mono); letter-spacing:.05em; color:var(--mute); opacity:calc(1 - var(--xp, 0) * 3); }
+/* detail lens (circle callout): the threshold magnified, upper left of the drawing */
+.stage canvas#hero-lens { inset:auto; left:6px; top:6px; width:min(220px, 26cqw); height:auto; aspect-ratio:1; border-radius:50%; border:1px solid var(--ink); opacity:calc(1 - var(--xp, 0) * 1.6 - var(--wn, 0) * 2); }
+.stage .wcap { position:absolute; left:32px; top:32px; max-width:36ch; margin:0; font:500 11px/1.5 var(--mono); letter-spacing:.05em; color:#E8E4DC; opacity:calc(var(--wn, 0) * 1.5 - .5); }
+.caption { position:absolute; left:4px; bottom:6px; font:500 11px var(--mono); letter-spacing:.05em; color:var(--ink); opacity:calc(1 - var(--wn, 0) * 1.5); }
+.caption b { color:var(--signal); font-weight:500; }
+/* ---- drawing furniture over every view (research 17 §1, §3): leaders 0.75 px @ 80 %, datums long-dash-dot, 11 px mono ---- */
+.ovl { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.ovl text { font:500 11px var(--mono); letter-spacing:.04em; fill:var(--ink); font-variant-numeric:tabular-nums; paint-order:stroke; stroke:var(--bg); stroke-width:3px; stroke-linejoin:round; }
+.ovl .furn.light text, .ovl .cold text, .ovl .croplabel { stroke:#111923; }
+.ovl path { fill:none; stroke:var(--ink); stroke-width:.75; stroke-opacity:.8; }
+.furn text { fill:var(--ink); }
+.furn path, .furn circle { stroke:var(--ink); }
+.furn .datum { stroke-dasharray:16 3 2 3; }
+.furn .tri { fill:var(--ink); stroke:none; }
+.furn .sb { stroke-width:3; stroke-opacity:1; }
+.furn .sb.fill { stroke:var(--ink); }
+.furn .sb:not(.fill) { stroke:#fff; filter:drop-shadow(0 0 .5px var(--ink)); }
+.furn .ori circle { fill:none; stroke-width:.75; }
+.xnote circle { fill:var(--ink); }
+.xnote circle.tag { fill:none; stroke:var(--ink); stroke-width:.75; }
+.xnote text.k { font-size:10px; }
+.xnote.focus text:not(.k) { fill:var(--signal); }
+.ovl .halo { stroke:var(--bg) !important; stroke-width:3.5 !important; stroke-opacity:1 !important; }
+.conn { stroke:#9a978f !important; stroke-width:1 !important; stroke-opacity:.9 !important; }
+.lensnote .ring { fill:none; stroke:var(--ink); stroke-width:.75; }
+.lensnote text { font-size:10px; }
+.dim path { stroke-width:1; stroke-opacity:1; } .dim .ext { stroke-opacity:.85; } .dim text { font-size:11px; }
+.lsb path { stroke-width:3; stroke-opacity:1; } .lsb path:not(.fill) { stroke:#fff; filter:drop-shadow(0 0 .5px var(--ink)); } .lsb text { font-size:9px; }
+.ytag circle { fill:var(--ink); } .ytag path { stroke:var(--ink); }
+.route { fill:none; stroke:var(--water) !important; stroke-opacity:1 !important; stroke-linejoin:round; stroke-linecap:round; }
+.arrow { stroke:var(--water) !important; stroke-width:1.25 !important; stroke-opacity:1 !important; }
+.drip { fill:none; stroke:var(--water); stroke-width:1; }
+.wind path { stroke:#4a5560; stroke-width:1; } .wind text { fill:#4a5560; }
+.crop { fill:none; stroke:#8b939c; stroke-width:1; stroke-dasharray:none; }
+.croplabel { fill:#aab3bd !important; font-size:10px !important; }
+.cold circle { fill:none; stroke:#f2f4f6; stroke-width:1.2; }
+.cold circle.dot { fill:#f2f4f6; stroke:none; }
+.cold path { fill:none; stroke:#f2f4f6 !important; stroke-width:.8; }
+.cold text { font:500 11px var(--mono); letter-spacing:.04em; fill:#f2f4f6; }
+.cold.bad circle { stroke:#ff6a4d; } .cold.bad circle.dot { fill:#ff6a4d; } .cold.bad path { stroke:#ff6a4d !important; } .cold.bad text { fill:#ff8a70; }
+/* sections */
+section.band { padding:120px 0; scroll-margin-top:88px; }
+#winter { --bg:#111923; --fg:#E6E3DC; --mute:#A3ADB8; --rule:#2A3440; --ink:#E6E3DC; --chip:#1B2430; background:var(--bg); color:var(--fg); }
+h2 { font:500 clamp(32px, 3.6vw, 48px)/1.05 var(--sans); letter-spacing:-.03em; margin:0 0 14px; }
+.sub { color:var(--mute); max-width:56ch; margin:0 0 32px; font-size:17px; }
+.frame { position:relative; aspect-ratio:10200 / 6850; overflow:hidden; }
+.frame canvas { width:100%; height:100%; display:block; }
+/* ageing: drawing 8 / control 4 */
+.age, .rain, .winter { display:grid; grid-template-columns:8fr 4fr; gap:40px; align-items:start; }
+.yr { font:300 clamp(96px, 11vw, 160px)/.9 var(--num); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.yr small { font:400 20px var(--sans); color:var(--mute); margin-left:6px; letter-spacing:0; }
+input[type=range] { width:100%; accent-color:var(--fg); margin:18px 0 8px; }
+.ticks { position:relative; height:24px; }
+.ticks button { position:absolute; transform:translateX(-50%); font:500 12px var(--mono); background:none; border:0; color:var(--mute); padding:4px 0; cursor:pointer; }
+.ticks button[aria-pressed="true"] { color:var(--fg); text-decoration:underline; text-underline-offset:4px; }
+#age-notes { margin-top:22px; border-top:1px solid var(--rule); padding-top:18px; color:var(--mute); font-size:15px; }
+#age-notes p { margin:0 0 10px; }
+#age-notes .aside { font:500 11px var(--mono); letter-spacing:.04em; }
+/* rain: reading left, drawing right */
+.rain { grid-template-columns:4fr 8fr; }
+#rain-btn { touch-action:none; user-select:none; margin:4px 0 26px; }
+#routes { list-style:none; margin:0; padding:18px 0 0; border-top:1px solid var(--rule); display:grid; gap:10px; color:var(--mute); font-size:14px; }
+#routes li { display:grid; grid-template-columns:44px 1fr; align-items:center; gap:10px; }
+#routes li.beyond { font-size:13px; }
+/* the hero's winter legend: the same stepped bar, small */
+.hlegend { position:absolute; right:48px; top:32px; display:grid; grid-template-columns:8px auto; gap:0 8px; opacity:var(--wn, 0); }
+.hlegend .steps { display:flex; flex-direction:column; height:120px; }
+.hlegend .steps i { flex:1; }
+.hlegend .marks { position:relative; font:500 10px var(--mono); color:#c3cbd4; }
+.hlegend .marks span { position:absolute; transform:translateY(-50%); white-space:nowrap; }
+.hlegend .marks span::before { content:""; display:inline-block; width:5px; border-top:1px solid #c3cbd4; vertical-align:middle; margin-right:4px; }
+/* winter: field bubbles (2D insets of the computed field at each junction) */
+.bubbles { position:absolute; left:14px; top:14px; display:flex; flex-direction:column; gap:14px; }
+.bubbles figure { margin:0; }
+.bubbles canvas { width:min(150px, 15cqw); aspect-ratio:1; border-radius:50%; border:1px solid #c3cbd4; display:block; }
+.bubbles figcaption { font:500 10px var(--mono); letter-spacing:.05em; color:#c3cbd4; margin-top:4px; text-align:center; }
+.winter .frame, .age .frame { container-type:inline-size; }
+.agebub { left:auto; right:14px; top:14px; }
+.agebub figcaption { max-width:110px; font-size:9px; line-height:1.35; }
+.agebub canvas { width:96px; border-color:var(--ink); border-width:.75px; }
+.agebub .split { position:relative; }
+.agebub .split i { position:absolute; left:50%; top:0; bottom:0; border-left:1px solid var(--ink); }
+.agebub .split b { position:absolute; top:-14px; font:500 9px var(--mono); color:var(--mute); } .agebub .yr-l { left:0; } .agebub .yr-r { right:0; }
+.agebub figure { margin:16px 0 4px; }
+.bl { stroke:var(--ink) !important; stroke-width:.75 !important; }
+.agebub figcaption { color:var(--mute); }
+.bleader { stroke:#c3cbd4 !important; stroke-width:.75 !important; }
+/* winter */
+.tlegend { display:grid; grid-template-columns:14px 1fr; gap:4px 10px; margin:6px 0 22px; }
+.tlegend .steps { display:flex; flex-direction:column; height:220px; border:1px solid var(--rule); }
+.tlegend .steps i { flex:1; }
+.tlegend .marks { position:relative; height:220px; font:500 11px var(--mono); color:var(--mute); }
+.tlegend .marks span { position:absolute; left:0; transform:translateY(-50%); white-space:nowrap; }
+.tlegend .marks span::before { content:""; display:inline-block; width:8px; border-top:1px solid var(--mute); vertical-align:middle; margin:0 6px 0 -10px; }
+.tlegend .marks .special { left:110px; color:var(--fg); }
+.tlegend .marks .special::before { width:50px; margin-left:-56px; border-top:1.5px solid var(--fg); }
+.tlegend .lcap { grid-column:1 / -1; font:500 11px/1.5 var(--mono); color:var(--mute); margin:6px 0 0; }
+#winter-stats { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:6px 0 24px; }
+#winter-stats b { font:300 44px/1 var(--num); display:block; }
+#winter-stats small { font:500 11px/1.4 var(--mono); color:var(--mute); }
+#winter-stats .bad b, #winter-stats .bad small { color:var(--signal); }
+.method { font-size:13px; color:var(--mute); border-top:1px solid var(--rule); padding-top:14px; margin-top:16px; }
+/* build: counter left, drawing right */
+.build { display:grid; grid-template-columns:4fr 8fr; gap:40px; align-items:center; }
+.stagebox { min-height:220px; }
+#stage-num { font:300 clamp(96px, 11vw, 160px)/.9 var(--num); }
+#stage-num small { font:300 .35em var(--num); color:var(--mute); }
+#stage-name { font-size:22px; letter-spacing:-.01em; margin:10px 0 26px; max-width:24ch; min-height:3.2em; }
+footer { border-top:1px solid var(--rule); padding:40px 0 60px; color:var(--mute); }
+footer .wrap { display:flex; align-items:center; gap:20px; justify-content:space-between; flex-wrap:wrap; }
+:focus-visible { outline:2px solid var(--signal); outline-offset:3px; }
+/* embed (the tool's 3D tab): the hero alone, full frame, with its controls */
+.embedctl { display:none; }
+body.embed nav, body.embed .copy, body.embed section, body.embed footer, body.embed .caption, body.embed #hero-lens { display:none; }
+body.embed .hero { height:100dvh; } body.embed .pin { position:relative; top:0; height:100dvh; min-height:0; grid-template-columns:1fr; padding:12px; max-width:none; }
+body.embed .embedctl { display:flex; position:absolute; right:16px; bottom:14px; z-index:3; gap:14px; align-items:center; font:500 11px var(--mono); letter-spacing:.04em; background:color-mix(in srgb, var(--bg) 90%, transparent); padding:8px 12px; border:1px solid var(--rule); }
+body.embed .embedctl input { width:180px; margin:0; }
+body.embed .embedctl button { font:inherit; border:1px solid var(--rule); background:transparent; padding:4px 10px; cursor:pointer; }
+body.embed .embedctl button[aria-pressed="true"] { background:var(--fg); color:var(--bg); }
+@media (max-width: 900px) {
+  .wrap, .pin { padding-left:16px; padding-right:16px; }
+  nav { padding:0 16px; gap:14px; } nav .links { display:none; } nav .cta { margin-left:auto; }
+  .hero { height:auto; } .pin { position:relative; top:0; height:auto; min-height:0; grid-template-columns:1fr; } .scrollcue { display:none; }
+  .stage { aspect-ratio:1 / 1; }
+  .age, .build, .rain, .winter { grid-template-columns:1fr; } section.band { padding:72px 0; }
+}
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+<nav aria-label="Main">
+  <a class="brand" href="#top"><i aria-hidden="true"></i>The Living Edge</a>
+  <div class="links"><a href="#age">Ageing</a><a href="#rain">Rain</a><a href="#winter">Winter</a><a href="#build">Build</a></div>
+  <a class="cta" href="index.html">Open the tool</a>
+</nav>
+<main id="top">
+  <div class="hero">
+    <div class="pin">
+      <div class="copy">
+        <h1>See how a building meets the <em>ground</em>.</h1>
+        <p class="lede">Construction sections you can question: rain, heat, roots and thirty years of weather, drawn from sourced research.</p>
+        <div class="actions"><a class="cta" href="index.html">Open the tool</a><a class="cta ghost" href="#age">Watch it age</a></div>
+        <div class="card" aria-label="Results from the model">
+          <div><b>12</b></div><div><b>__CARBON__</b></div><div><b>__FRSI__</b></div>
+          <small>mm threshold</small><small>kgCO₂e per m</small><div><small>coldest f<sub>Rsi</sub>, head</small></div>
+        </div>
+        <p class="scrollcue">SCROLL TO TAKE IT APART</p>
+      </div>
+      <div class="stage" role="img" aria-label="Rendered section-box fragment of a sliding glass wall meeting a garden in Vancouver; scrolling separates it into construction layers, then shows a winter night.">
+        <canvas id="hero-ink"></canvas><canvas id="hero-lens" aria-hidden="true"></canvas><svg id="hero-notes" class="ovl" aria-hidden="true"></svg><svg id="hero-cold" class="ovl" aria-hidden="true"></svg>
+        <div class="hlegend" id="hero-legend" aria-hidden="true"></div>
+        <p class="wcap">WINTER NIGHT &#183; -7&nbsp;&#176;C OUTSIDE, 20&nbsp;&#176;C IN. COLOURS ARE COMPUTED TEMPERATURES THROUGH THE CUT.</p>
+        <div class="caption">AXO 01 &middot; THRESHOLD TO GARDEN &middot; SECTION BOX 5.6 x 4.5 x 1.2 M, CUT AT W 2000 (SLIDING PANEL) &middot; <b>12 MM THRESHOLD</b></div>
+        <div class="embedctl"><label>TAKE APART <input id="embed-x" type="range" min="0" max="1" step="0.01" value="0"></label><button id="embed-n" type="button" aria-pressed="false">WINTER NIGHT</button></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="band" id="age">
+    <div class="wrap age">
+      <div class="frame"><canvas id="age-cv" role="img" aria-label="Rendered section fragment, weathered to the chosen year"></canvas><svg id="age-ovl" class="ovl" aria-hidden="true"></svg>
+        <div class="bubbles agebub" aria-hidden="true"><figure><div class="split"><canvas id="age-b0"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>1 · CEDAR</figcaption></figure><figure><div class="split"><canvas id="age-b1"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>2 · OVER THE CAP</figcaption></figure><figure><div class="split"><canvas id="age-b2"></canvas><i></i><b class="yr-l">YR 0</b><b class="yr-r">YR 30</b></div><figcaption>3 · DRIP LINE</figcaption></figure></div></div>
+      <div>
+        <h2>Thirty years in one drag.</h2>
+        <p class="sub">Cedar silvers, a splash band and an algae line arrive, the bed grows in. Colours and growth come from the reviewers' ageing tables.</p>
+        <div class="yr"><span id="year-out">0</span><small>years</small></div>
+        <input id="year" type="range" min="0" max="30" step="1" value="0" aria-label="Years after completion">
+        <div class="ticks"><button type="button" data-y="0">0</button><button type="button" data-y="1">1</button><button type="button" data-y="5">5</button><button type="button" data-y="10">10</button><button type="button" data-y="20">20</button><button type="button" data-y="30">30</button></div>
+        <div id="age-notes" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="rain">
+    <div class="wrap rain">
+      <div>
+        <h2>Follow every drop.</h2>
+        <p class="sub">Hold the button. A westerly storm: rain falls where the sky and the wind reach, the canopy sheds it at its drip edge, and the routes run on the cut in the direction the water moves.</p>
+        <button class="cta" id="rain-btn" type="button">Hold for rain</button>
+        <ul id="routes"></ul>
+      </div>
+      <div class="frame"><canvas id="rain-cv" role="img" aria-label="Rendered section fragment with wind-driven rain and the drainage routes traced on the cut"></canvas><svg id="rain-ovl" class="ovl" aria-hidden="true"></svg></div>
+    </div>
+  </section>
+
+  <section class="band" id="winter">
+    <div class="wrap winter">
+      <div class="frame"><canvas id="winter-cv" role="img" aria-label="Rendered section fragment on a winter night with the computed temperature field coloured on the cut"></canvas><svg id="winter-notes" class="ovl" aria-hidden="true"></svg>
+        <div class="bubbles" aria-hidden="true"><figure><canvas id="winter-b1"></canvas><figcaption>HEAD <svg width="44" height="6"><path d="M2 3 H22" stroke="#c3cbd4" stroke-width="3"/><path d="M22 3 H42" stroke="#c3cbd4" stroke-width="1"/></svg> 50 MM</figcaption></figure><figure><canvas id="winter-b0"></canvas><figcaption>THRESHOLD <svg width="44" height="6"><path d="M2 3 H22" stroke="#c3cbd4" stroke-width="3"/><path d="M22 3 H42" stroke="#c3cbd4" stroke-width="1"/></svg> 50 MM</figcaption></figure></div></div>
+      <div>
+        <h2>Where the heat leaks.</h2>
+        <p class="sub">A still night at -7 &#176;C against a 20 &#176;C room. Every colour on the cut is a computed temperature; the rings mark the coldest inside surface of each junction.</p>
+        <div class="tlegend" id="tlegend" aria-hidden="true"></div>
+        <div id="winter-stats"></div>
+        <button class="cta ghost" id="field-btn" type="button" aria-pressed="true">Hide the field</button>
+        <p class="method">2D steady conduction through this cut, 5 mm mesh, ISO 13788 surface resistances. A screening, not a certified THERM run. Hygiene line f<sub>Rsi</sub> 0.70 (Passive House Institute).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="build">
+    <div class="wrap build">
+      <div class="stagebox">
+        <h2>Built in the order it goes up.</h2>
+        <div id="stage-num">15</div>
+        <p id="stage-name" aria-live="polite"></p>
+        <button class="cta" id="build-btn" type="button">Build it</button>
+      </div>
+      <div class="frame"><canvas id="build-cv" role="img" aria-label="Rendered section fragment assembling stage by stage, later stages ghosted"></canvas><svg id="build-ovl" class="ovl" aria-hidden="true"></svg></div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>The Living Edge. A study tool for building edges in Vancouver.</span><a class="cta" href="index.html">Open the tool</a></div></footer>
+<script>window.LANDING = __DATA__;</script>
+<script>
+__JS__
+</script>
+<script type="module">
+__AXO__
+</script>
+</body>
+</html>

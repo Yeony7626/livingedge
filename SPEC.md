@@ -592,6 +592,230 @@ Resume rule for a new session: read `BUILD_LOG.md`, find the lowest-numbered pha
 
 ---
 
+## 10. Library strategy and runtime composition
+
+```yaml
+status: proposed            # a build agent must not act on this section until a human changes this to approved
+amends: [section 2, section 3, phase 2, phase 3, phase 4, out of scope]   # see 10.10 for the exact contract changes
+```
+
+### 10.1 Principle
+
+Research happens offline, once, and is reviewed. At runtime the tool only composes from approved library content. A user request never triggers web research.
+
+Why: one researched and reviewed junction took hours of agent time and millions of tokens, and its sources needed human approval. Doing that per request would be slow and costly, give different results run to run, and show the user unreviewed claims. That defeats the credibility test the tool exists for.
+
+### 10.2 Library layers
+
+Each layer references only the layers above it. Code reads them only from `library/` (non-negotiable 12).
+
+| Layer | Holds | File |
+|---|---|---|
+| Evidence | Sourced claims with verification level | `library/evidence.json` (exists) |
+| Requirements | Code rules as `<path> <op> <value>` expressions | `library/requirements.json` (exists) |
+| Materials | Properties, hatch, ageing behaviour, and optional carbon factor | `library/materials/*.json` |
+| Assemblies | Layer stacks (wall, floor, roof, ground), each declaring the control layers it carries | `library/assemblies/*.json` |
+| **Junction templates** | Fully resolved parametric details joining assemblies, plus site elements (bench, shrub pocket, rain garden) | `library/junctions/*.json` + generators in `core/junctions/*.ts` |
+
+### 10.3 Junction template
+
+A template is the unit the agent composes. It owns its geometry. The LLM never writes coordinates.
+
+```ts
+export type ControlLayer = "water_shedding" | "drainage_plane" | "air" | "vapour" | "thermal" | "capillary_break" | "soil_gas";
+
+export interface Port {                 // where a template meets a neighbour (assembly or template)
+  id: string;                           // e.g. "wall_above", "floor_inside", "ground_outside"
+  accepts: string[];                    // assembly ids or tags allowed on the other side
+  datum: { x_mm: number; y_mm: number };
+  carries: Partial<Record<ControlLayer, { plane_x_mm?: number; plane_y_mm?: number; transfer: "lap" | "seal" | "tape" | "bond" | "abut" }>>;
+}
+
+export interface Param {
+  name: string;                         // e.g. "paver_drop_mm", "overhang_mm"
+  unit: "mm" | "deg" | "pct";
+  default: number;
+  min: number; max: number;             // bounds already include every requirement that applies
+  free: boolean;                        // false = derived by the generator, never set by the LLM
+  requirement_refs: string[];           // requirements that set min/max
+}
+
+export interface PartSpec {             // one physical part, as in the authoring spec (.sketch/rhino/detail01.mjs)
+  id: string;
+  material_id: string;
+  role: ControlLayer | "structure" | "finish" | "ground" | "fastener" | "furniture" | "planting";
+  build_step: number;
+  replaceable: boolean;
+  embeds?: string[];                    // parts it may legitimately overlap (bolt in concrete)
+}
+
+export interface JunctionTemplate {
+  id: string;                           // "threshold.sliding.flush-pavers"
+  version: string;                      // semver; a model pins id@version
+  status: "draft" | "reviewed" | "approved";
+  applies: { wall?: string[]; ground?: string[]; floor?: string[]; roof?: string[]; orientation_deg?: [number, number] };
+  ports: Port[];
+  params: Param[];
+  parts: PartSpec[];
+  generator: string;                    // core/junctions/<file>.ts, a pure function (params) -> part polygons and runs
+  trace: Record<ControlLayer, string[]>;// the control-layer pen test as data: ordered part ids, continuous
+  rationale: { part_id: string; why: string; evidence_refs: string[] }[];   // feeds the explainer and the sequence captions
+  ageing: { part_id: string; mechanism: string; evidence_ref?: string; maintenance?: string }[];
+  review: { laps: number; reviewers: string[]; approved_by?: string; approved_at?: string; files: string[] };
+}
+```
+
+Rules:
+- `trace` is checked by code. Every control layer must run continuously part to part, using `PartSpec` contacts and port transfers. The pen test becomes a test, not prose.
+- Params with `free: false` are computed by the generator, e.g. drip nose = cladding face − 12. The LLM sees only free params, with their bounds.
+- A template is used at runtime only when `status: approved`. Drafts are allowed only in draft mode (10.6).
+
+### 10.4 Runtime workflow (agent logic)
+
+Each step is one small typed decision. Code narrows the choices before the LLM sees them, and code checks every LLM output before the next step.
+
+| # | Node | Kind | Input → output | Why this shape works for an agent |
+|---|---|---|---|---|
+| 1 | intent-parser | llm | text → `Slots` (closed vocabularies: wall, ground, floor, roof, orientation, uses, ambitions, user constraints) | Enums come from the library; the model can't invent a category |
+| 2 | gap-check | code | `Slots` → clarify question or continue | Asks only for critical slots (section 7 phase 3 notes); everything else gets an editable default |
+| 3 | candidates | code | `Slots` + library → ≤ 5 compositions per edge, filtered by `applies`, port compatibility and hard requirements | Removes impossible options before the LLM ranks |
+| 4 | composer | llm | candidates → `CompositionPlan` (picks one composition, sets free params inside bounds, gives reason codes) | The output schema is generated per request with the candidate ids and param bounds as enums and ranges |
+| 5 | instantiate | code | plan → parts with geometry, from each template's generator | Deterministic; same plan, same bytes (non-negotiable 9) |
+| 6 | validate | code | geometry → `ValidationReport`: schema, requirements, clash / floating / contact, trace continuity, port matching | Every error is typed with a path and the allowed fixes |
+| 7 | repair | llm | report → revised plan (≤ 2 rounds); after that, clarify or return a gap | Bounded loop, structured errors; no free-form retries |
+| 8 | explainer | llm | model + used templates' `rationale` and evidence → `{ text, evidence_refs[] }[]` | A code check rejects any `evidence_ref` that isn't attached to a used template or material |
+
+```ts
+export interface CompositionPlan {
+  edge: { template: string; version: string; params: Record<string, number>; reasons: string[] }[];   // ordered along the section
+  site: { template: string; version: string; params: Record<string, number>; reasons: string[] }[];   // bench, shrub pocket, rain garden
+  assumptions: Assumption[];
+}
+
+export interface ValidationIssue {
+  code: "PORT_MISMATCH" | "TRACE_BREAK" | "CLASH" | "FLOATING" | "REQUIREMENT" | "PARAM_BOUNDS" | "SCHEMA";
+  path: string;                         // e.g. "edge[1].ports.ground_outside.drainage_plane"
+  detail: string;
+  fixes: { action: "set_param" | "swap_template" | "ask_user"; target: string; value?: number | string }[];
+}
+```
+
+### 10.5 Edits
+
+A text or handle edit becomes a plan change: a param change or a template swap, applied through `core/patch.ts` and re-run from step 5. Handles are bound to free params, so dragging the overhang changes `overhang_mm` inside its bounds. A requirement can never be dragged past, because the bounds already contain it (non-negotiable 5).
+
+### 10.6 Gaps: what the tool does when the library can't answer
+
+- **Covered:** the plan uses only approved templates. Normal output.
+- **Near miss:** a covered composition differs from the request on one slot (e.g. "brick" asked, "timber rainscreen" covered). The tool says so and offers the nearest covered option.
+- **Gap:** nothing compatible. Return `{ kind: "gap", missing: string[], nearest: CompositionPlan | null }` and write a backlog entry (`library/backlog.json`: request text, missing slots, count).
+- **Draft mode.** Defined below.
+
+**Draft mode.** An opt-in way to answer a request the approved library can't cover, using templates that are researched and modelled but not human-approved. It never invents geometry or materials.
+- **Entry.** Offered only after a `gap` or `near_miss` result, as a choice the tester must make ("show an unreviewed draft"). It is never the default and is never entered automatically. It lasts for that request and its edits only.
+- **Content.** Templates with `status: draft` or `reviewed` may be used. Steps 3–7 of 10.4 run unchanged: same validators, same bounded repair. A draft that fails validation is not shown.
+- **Tags.** Every value is tagged `illustrative`, whatever its source, and engines (decades, storm) tag all output `illustrative`. Embodied carbon is shown as a range, not a figure.
+- **Visible.** Every 2D, 3D, sequence and timeline view carries an "Unreviewed draft" watermark. The explainer cites research drafts by file and section, labelled as not approved.
+- **Logged.** Draft sessions and their ratings are logged with `draft: true`, so credibility ratings of drafts and approved output can be compared. That comparison is one of the user test's questions.
+- **Availability.** On in the user test, offered only after a gap. Off in any public deployment until a human decides otherwise.
+
+### 10.7 Offline authoring pipeline (how the library grows)
+
+This is the process run for Details 01 and 02, made repeatable:
+
+1. **Brief.** A backlog item or a scope-matrix cell becomes a research brief: the junction, its neighbours, the targets (look from outside, thermal, moisture, sustainability, people, ecology) and the region.
+2. **Research.** Agents write `research/NN-*.md` with layer tables in construction order, control-layer pen tests, failure modes, 0/5/15/30 ageing, and every number tagged SOURCED or INFERRED.
+3. **Author.** Write the template data and its generator. Build it in Rhino through the authoring pipeline (`.sketch/rhino`: spec → build → packet) for 3D QA, Make2D drawings and exterior renders.
+4. **Automated checks:** clash, floating, contact, trace continuity, effective RSI per assembly, and embodied carbon per metre (shown to users at runtime, see 10.9).
+5. **Review laps.** A panel of reviewer agents with fixed roles reviews each lap: above-grade envelope, ground and foundation, landscape and people, sustainability, exterior appearance. Each lap's version is kept side by side, and findings come back as typed items with fixes. Default 3 laps; 5 for high-stakes templates.
+6. **Approve.** A human approves; the template gets `status: approved` and a `review` record, and its evidence entries go through `research/review.json` as today.
+7. **Regress.** Run the eval set (10.8) for every prompt that touches the template.
+
+### 10.8 Evals
+
+`fixtures/evals/*.json`: one prompt per scope-matrix cell, plus near misses, gaps and vague prompts, each with the expected template ids and param ranges. Run with replayed LLM recordings and networking disabled. Tracked per library version:
+- selection accuracy
+- validator pass rate on the first try
+- mean repair rounds
+- gap and near-miss correctness
+- explainer citation validity
+
+### 10.9 Embodied carbon (runtime)
+
+Decided by the human: v1 shows embodied carbon.
+- **Computed by code** (`core/carbon.ts`), never by an LLM (non-negotiable 3). It runs after `instantiate` and after every edit.
+- **Quantities** come from the instantiated parts: cross-section area × run length, or count × volume for discrete parts. **Factors** come from each part's material, A1–A3 fossil kgCO2e per kg, with stored biogenic carbon reported separately and never netted.
+- **Output:** a total per metre of edge, a breakdown by element (wall, floor, ground, roof edge, site) and by material, and the change after each edit.
+- **Confidence:**
+  - `calculated` only when the material's factor carries an `evidence_ref` to a product or industry EPD read in full (`verification: full`);
+  - `qualitative` when the factor comes from a database or guide (CLF, ICE);
+  - `illustrative` in draft mode, shown as a range.
+- **Scope:** A1–A3 only in v1. Maintenance (B2) and end of life (C, D) come later, through the decades engine.
+
+### 10.10 Contract changes (applied when this section is approved)
+
+- **Section 3:** `DetailModel` gains `composition: CompositionPlan`. `geometry.section` becomes the output of `instantiate`, keyed by part id. `assembly.layers` is derived from template parts. Phase 1 has passed, so this needs a schema v3 phase.
+- **Phase 2:** adds `library/junctions/*.json`, `core/junctions/*.ts` and `library/backlog.json`. Acceptance adds: every approved template's trace is continuous, and its ports match its `applies` assemblies.
+- **Phase 3:** `section-generator` (llm) is replaced by `candidates` (code), `composer` (llm), `instantiate` (code) and `repair` (llm, bounded). Acceptance adds the eval set and the gap result.
+- **Phase 4:** `core/geometry.ts` consumes instantiated parts, and hatches come from each part's material.
+- **New phase (after 4):** `core/carbon.ts` and its panel (10.9). Materials gain `carbon: { a1a3_per_kg, biogenic_per_kg, density, evidence_ref }`.
+- **Section 2:** non-negotiable 3 adds embodied carbon to the list of code-only results.
+- **Out of scope:** "embodied carbon" is removed.
+
+### 10.11 Release scope matrix (draft — edit the "v1?" column)
+
+Vancouver only. Edge = wall above × ground outside × floor inside × roof edge. Site elements attach to the ground.
+
+**Assemblies**
+
+| Id | Assembly | Source | v1? |
+|---|---|---|---|
+| W1 | Timber rainscreen: 2×6 + dense-pack cellulose, wood-fibre or stone-wool EI, 19 mm cavity, cedar channel siding | 09, user decision | yes |
+| W2 | Stucco rainscreen (Part 9), 50 mm stone wool, 19 mm cavity | 06, 07, Detail 01 | later |
+| W3 | Large sliding / folding glazed wall | 11 (in progress), Detail 02 | yes |
+| W4 | Fixed glazed window wall | 11 (shares the sliding-threshold research) | yes |
+| G1 | Gravel strip + planted soil, 5 % fall | 07 F, 08 I | yes |
+| G2 | Permeable pavers, near-flush accessible at a threshold, lined near the building | 08, 08b (in progress) | yes |
+| G3 | Permeable pavers stepped down from a solid wall (plinth ≥ 200 mm clear) | 08 H | yes |
+| F1 | Low-carbon slab on insulation, stem wall | 07 D, 09 | yes |
+| F2 | Best alternative floor (hemp / lime / FGA, or as research decides) | 12 (in progress) | yes |
+| F3 | Raised timber floor on screw piles | 09, 12 | later |
+| R1 | Exterior-insulated low-slope roof, 500–600 mm eave | 06 B, 09 | yes |
+| R2 | Same with extensive biodiverse green roof | 09 | yes |
+
+**Junction and site templates**
+
+| Template | Joins | Research | Modelled | Review laps | v1? |
+|---|---|---|---|---|---|
+| base.rainscreen-timber.gravel | W1 × G1 × F1/F2 | 06 A, 07, 09, 10 | — | — | yes |
+| base.rainscreen-stucco.gravel | W2 × G1 × F1 | 06 A, 07 | Detail 01 v2 | 2 | later |
+| base.rainscreen-timber.pavers-step | W1 × G3 × F1/F2 | 08 H | — | — | yes |
+| threshold.sliding.flush-pavers | W3 × G2 × F1/F2 | 11, 12, 08b | — | — | yes |
+| sill.fixed-glazing.pavers-step | W4 × G3 × F1/F2 | 11 | — | — | yes |
+| slab-edge.stem-exterior-insulated | F1 × foundation | 07 D, E | Detail 01 v2 | 2 | yes |
+| slab-edge.alt-floor | F2 × foundation | 12 | — | — | yes |
+| footing.drain | foundation × drain envelope | 07 E | Detail 01 v2 | 2 | yes |
+| eave.exterior-insulated | W1/W2/W3 × R1 | 06 B | Detail 01 v2 | 2 | yes |
+| eave.green-roof | W1/W3 × R2 | 09 | — | — | yes |
+| head.sliding-wall | W3 × R1/R2 | 11 | — | — | yes |
+| site.bench-piers | G1/G3 | 06 C, 08 K | Detail 01 v2 | 2 | yes |
+| site.shrub-pocket-pavers | G2/G3 | 08b | — | — | yes |
+| site.planting-bed-tree | G1 | 08 I | — | — | yes |
+| site.rain-garden-5m | any (downspout conveyance + garden ≥ 5 m) | 08 J | — | — | yes |
+
+**Compatibility rules** (coded as `applies` and requirements, listed here for review):
+- A moisture-sensitive cladding (W1, W2) never meets G2 directly. Paving at the wall needs a plinth with at least 200 mm clear to the cladding, which is G3.
+- G2 is allowed only at a threshold of W3 (or W4) with a channel drain and a lined zone.
+- Infiltration (rain garden, unlined pavers) starts ≥ 5 m from the building.
+- Woody planting stays outside the drain-rock envelope.
+
+**Decisions:**
+- Embodied carbon is shown in v1: yes (human, 2026-10-13), see 10.9.
+- W4 and `sill.fixed-glazing.pavers-step` ship in v1; W2 and `base.rainscreen-stucco.gravel` come later (human, 2026-10-13).
+- Draft mode (10.6) is on in the user test, offered only after a gap (human, 2026-10-13).
+
+---
+
 ## Out of scope for this build
 
-Hygrothermal simulation (WUFI-style physics), embodied carbon, construction scheduling beyond build order, species-level ecology, detail families other than the ground–façade edge, regions other than Vancouver (the library structure supports adding them), user accounts, multi-user editing. Do not add scaffolding for these.
+Hygrothermal simulation (WUFI-style physics), embodied carbon (pending: section 10.9 brings it in scope once section 10 is approved), construction scheduling beyond build order, species-level ecology, detail families other than the ground–façade edge, regions other than Vancouver (the library structure supports adding them), user accounts, multi-user editing. Do not add scaffolding for these.

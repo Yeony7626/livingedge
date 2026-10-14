@@ -1,0 +1,359 @@
+{
+ "_note": "density kg/m3, a1a3 = fossil A1-A3 kgCO2e/kg, biogenic kgCO2e/kg (negative = stored, reported separately), k W/mK. Per-RSI factors from research/09 §3.1 converted with factor/(k*density) [I]. src gives the 09 key; [I] marks a conversion or an assumed property.",
+ "concrete-lowcarbon": {
+  "density": 2400,
+  "a1a3": 0.0463,
+  "k": 1.7,
+  "src": "09 CLF-G Lafarge 25 MPa 56 d 111 kg/m3 [S2]; k [I]"
+ },
+ "concrete-exposed": {
+  "density": 2400,
+  "a1a3": 0.0857,
+  "k": 1.7,
+  "src": "09 E-CBC 25 MPa air GUL+25% SCM 205.65 kg/m3 [S]; k [I]"
+ },
+ "concrete-baseline": {
+  "density": 2400,
+  "a1a3": 0.0915,
+  "k": 1.7,
+  "src": "09 E-CBC 25 MPa baseline 219.70 kg/m3 [S]"
+ },
+ "rebar": {
+  "density": 7850,
+  "a1a3": 0.85,
+  "k": 50,
+  "src": "09 CLF-G CRSI average [S2]"
+ },
+ "graphite-eps": {
+  "density": 20,
+  "a1a3": 2.39,
+  "k": 0.0307,
+  "src": "09 CLF-G 1.47/RSI [S2]; Neopor R-4.7/in, 20 kg/m3 [I]"
+ },
+ "xps-hfo": {
+  "density": 30,
+  "a1a3": 7.56,
+  "k": 0.029,
+  "src": "09 E-OCX FOAMULAR NGX 6.58/RSI [S]; R-5/in, 30 kg/m3 [I]"
+ },
+ "polyiso-lowgwp": {
+  "density": 32,
+  "a1a3": 2.05,
+  "k": 0.0258,
+  "src": "09 GAF EnergyGuard 1.69/RSI [S2]; R-5.6/in, 32 kg/m3 [I]"
+ },
+ "comfortboard-80": {
+  "density": 128,
+  "a1a3": 1.057,
+  "k": 0.0343,
+  "src": "09 E-RW 4.64/RSI, RSI 0.74 per 25.4 mm, 128 kg/m3 [S]"
+ },
+ "comfortbatt": {
+  "density": 40,
+  "a1a3": 1.02,
+  "k": 0.035,
+  "src": "09 E-RW 1.43/RSI [S]; 40 kg/m3, k [I]"
+ },
+ "fibreglass-batt": {
+  "density": 12,
+  "a1a3": 2.1,
+  "k": 0.04,
+  "src": "09 CLF-G NAIMA 1.01/RSI [S2]; 12 kg/m3, k [I]"
+ },
+ "cellulose-dense": {
+  "density": 56,
+  "a1a3": 0.513,
+  "biogenic": -1.83,
+  "k": 0.039,
+  "src": "09 CLF-G CIMA 1.12/RSI [S2]; OEK biogenic -82.47/m3 at 45 kg/m3 [S2]; 56 kg/m3 dense-pack, k [I]"
+ },
+ "woodfibre-board": {
+  "density": 169,
+  "a1a3": 0.449,
+  "biogenic": -1.66,
+  "k": 0.042,
+  "src": "09 E-GTX GUTEX 75.8 / -280 per m3 at 169 kg/m3 [S]; k mid of 0.037-0.047 [I]"
+ },
+ "plywood": {
+  "density": 484,
+  "a1a3": 0.453,
+  "biogenic": -1.77,
+  "k": 0.12,
+  "src": "09 E-PLY 219.32 kg/m3 at 484 [S]; biogenic OEK -10.29/m2 at 12 mm [S2/I]"
+ },
+ "softwood-lumber": {
+  "density": 471,
+  "a1a3": 0.0881,
+  "biogenic": -1.667,
+  "k": 0.118,
+  "src": "SOURCED CWC EPD 845 (ASTM, 4 Feb 2025) Table 5 BC: GWP-fossil A1-A3 41.5 kgCO2e/m3; 428 kg od/m3; 785.4 kgCO2/m3 stored (C3/C4); per kg at 471 = 428 od x 1.10 MC [I]. https://cwc.ca/wp-content/uploads/2025/02/CWC-lumber-EPD-2025-Feb-4.pdf; k 0.0085 RSI/mm (09 §0.3)"
+ },
+ "cedar-siding": {
+  "density": 370,
+  "a1a3": 0.305,
+  "biogenic": -0.85,
+  "k": 0.1,
+  "src": "09 E-WRC 1.42 fossil, -3.95 biogenic per m2 at 4.65 kg/m2 [S]; density, k [I]"
+ },
+ "oak": {
+  "density": 700,
+  "a1a3": 0.14,
+  "biogenic": -1.6,
+  "k": 0.17,
+  "src": "placeholder as softwood lumber [I]"
+ },
+ "gypsum": {
+  "density": 671,
+  "a1a3": 0.2795,
+  "k": 0.16,
+  "src": "SOURCED Gypsum Association industry EPD 10270 (NSF; 28 Apr 2020-15 Apr 2026, EXPIRED): 5/8 Type X, 277 kgCO2e A1-A3 per 92.9 m2 = 991 kg at 15.9 mm. https://info.nsf.org/Certified/Sustain/ProdCert/EPD10270.pdf; k [I]"
+ },
+ "stucco": {
+  "density": 1900,
+  "a1a3": 0.2,
+  "k": 0.72,
+  "src": "09 ICE-mortar 1:3 proxy [S2]; density, k [I]"
+ },
+ "sbs": {
+  "density": 1100,
+  "a1a3": 1.3,
+  "k": 0.2,
+  "src": "S2 (One Click LCA listings of ASTM EPDs): Holcim SBS Hot Torch FR EPD-906 (2025) 7.11 kgCO2e/m2 at 4.98 kg/m2 = 1.43/kg; GAF Ruberoid Energy Cap HW 5.88 at 4.78 kg/m2 = 1.23/kg; EU Soprema 0.75, BMI base 0.67/kg. North American supply -> 1.3 [I]",
+  "rsl": 35
+ },
+ "stainless": {
+  "density": 8000,
+  "a1a3": 5,
+  "k": 16,
+  "src": "INFERRED generic austenitic 304/316 of unstated origin: midpoint of European average 2.8 kgCO2/kg (Outokumpu 2023, S2) and global average 7 kgCO2e/kg (Outokumpu citing CRU/worldstainless 2023-24, S2); range 1.8-7; fabrication excluded. Use stainless-epd when the spec names an EPD-backed mill"
+ },
+ "steel-prefinished": {
+  "density": 7850,
+  "a1a3": 2.68,
+  "k": 50,
+  "src": "09 prefinished coil 2.60-2.75 [S2]"
+ },
+ "aluminium": {
+  "density": 2700,
+  "a1a3": 6.57,
+  "k": 160,
+  "src": "SOURCED Aluminum Association extruded aluminum EPD UL 4786092064.102.1 (2014, extended to 16 Aug 2022, EXPIRED): 6,570 kgCO2e/t A1-A3, D -4,130. https://www.aluminum.org/sites/default/files/2022-04/102.1_AluminumAssocication_EPD_ExtrudedAluminum.pdf; imported extrusions can be 2-3x [I]"
+ },
+ "glass": {
+  "density": 2500,
+  "a1a3": 1.43,
+  "k": 1,
+  "src": "SOURCED (S2) NGA industry flat glass EPD 2019, 1,430 kgCO2e/t (expired Dec 2024); Vitro 2023 EPD 1,350 kg/t. Plain float only - use igu-triple for IGU panes"
+ },
+ "membrane-poly": {
+  "density": 940,
+  "a1a3": 2.5,
+  "k": 0.4,
+  "src": "generic polyethylene [I]"
+ },
+ "aggregate": {
+  "density": 1600,
+  "a1a3": 0.005,
+  "k": 2,
+  "src": "SOURCED (S2): California Buy Clean crushed aggregate 1.94 kg/t; UEPG EU average 5 kg/t; Holcim UK granite 5.19 kg/t (12 AGG, S*); bulk density [I]; A4 haul often exceeds A1-A3"
+ },
+ "soil": {
+  "density": 1500,
+  "a1a3": 0,
+  "k": 1.5,
+  "src": "not counted"
+ },
+ "fibreglass": {
+  "density": 1900,
+  "a1a3": 4.16,
+  "k": 0.3,
+  "src": "SOURCED Wagners pultruded GFRP EPD S-P-10246 (proxy, Australian grid): 16.3 kgCO2e/m at 3.92 kg/m. Cross-check: Cascadia (Langley BC) fibreglass frame 84.91 kgCO2e per m2 of window with 5.67 m of lineal per m2 (UBC SEEDS 2022-018, Zargar, TRACI; incl. paint, gaskets, foam, shear blocks, energy) = ~15 kgCO2e per m of profile all-in [S/I]. Replace with the door maker's EPD"
+ },
+ "glulam": {
+  "density": 482,
+  "a1a3": 0.2585,
+  "biogenic": -1.698,
+  "k": 0.12,
+  "src": "SOURCED Kalesnikoff glulam EPD 296 (ASTM; South Slocan BC; 16 Mar 2022-16 Mar 2027): A1-A3 fossil 124.50 kgCO2e/m3, 481.68 kg/m3 (446 od), 817.67 kgCO2/m3 stored (C3/C4). https://kalesnikoff.com/wp-content/uploads/2022/05/Kalesnikoff-Glulam-EPD-.pdf; k [I]"
+ },
+ "softwood-pt": {
+  "density": 520,
+  "a1a3": 0.15,
+  "biogenic": -1.51,
+  "k": 0.118,
+  "src": "INFERRED: CWC BC lumber 0.088 + MCA/CA treatment and re-drying ~0.06; no treated-wood EPD found; density incl. retention + MC [I]"
+ },
+ "igu-triple": {
+  "density": 2500,
+  "a1a3": 1.8,
+  "k": 1,
+  "src": "INFERRED per kg of glass, triple tempered low-e argon: Pilkington Insulight Triple 4/12/4/12/4 EPD-IES-0002592 47.8 kgCO2e/m2 (2023) and ift 2017 40.4; Saint-Gobain Climatop 4-14-4-14-4 49.6 (S2, One Click LCA) = 1.35-1.65/kg on EU float; + North American float (NGA 1,430 kg/t, S2, expired Dec 2024; Vitro 2023 1,350) and tempering of two lites -> 1.8. Valid for 4/4/4 to 6/4/6; thin-centre triples keep ~6-8 kg/m2 of fixed per-m2 items",
+  "rsl": 30
+ },
+ "hdpe": {
+  "density": 950,
+  "a1a3": 2.15,
+  "k": 0.45,
+  "src": "SOURCED (proxy) PPI EPD 1045, 4in DR11 HDPE conduit, 1 kg, valid to 24 Jul 2030: GWP 2.15 kgCO2e/kg (A1 1.66, A2 0.137, A3 0.359). Used for geomembrane, root barrier, drain board, corrugated pipe [I]"
+ },
+ "pvc-pipe": {
+  "density": 1400,
+  "a1a3": 2.23,
+  "k": 0.16,
+  "src": "SOURCED Uni-Bell PVC Pipe Association EPD10047 (NSF, 21 Mar 2023, 5 yr): 8in DR35 ASTM D3034 sewer 4,310 kgCO2e / 1,931 kg per 1,000 ft; pressure 2.29-2.55; density [I]"
+ },
+ "ldpe-film": {
+  "density": 920,
+  "a1a3": 2.3,
+  "k": 0.33,
+  "src": "INFERRED: LDPE resin + film blowing, ~PPI HDPE 2.15 + 0.15"
+ },
+ "geotextile-pp": {
+  "density": 910,
+  "a1a3": 2.3,
+  "k": 0.1,
+  "src": "INFERRED: PP nonwoven; model as mass-equivalent sheet t = (g/m2)/910"
+ },
+ "polymer-concrete": {
+  "density": 2300,
+  "a1a3": 0.555,
+  "k": 1.5,
+  "src": "SOURCED ACO DRAIN Multiline Seal in V150S Type 10.0, IBU EPD-ACO-20250409-CBK1-DE (18 Mar 2026-17 Mar 2031): GWP-fossil A1-A3 18.8 kgCO2e per running metre at 33.9 kg/rm (polymer concrete 89-96 %, galvanised edge rail 4-10 %); density, k [I]"
+ },
+ "concrete-paver": {
+  "density": 2350,
+  "a1a3": 0.15,
+  "k": 1.7,
+  "src": "INFERRED: dry-cast paver mix 316 cement + 79 fly ash /m3 (Expocrete EPD10067, Balzac AB, S, expired) at current GUL factors + plant; bounds 0.225 (Expocrete 539 kgCO2e/m3, 2015) and 0.088 (Marshalls UK 12.2 kgCO2e/m2 at 138 kg/m2, S2). Replace with the BC supplier's EPD The spec's 'low-carbon' label is not reflected here; replace with the supplier's EPD (Abbotsford Concrete Products, Mutual Materials) before claiming it. (R4 lap 2)"
+ },
+ "cellular-glass": {
+  "density": 200,
+  "a1a3": 1.44,
+  "k": 0.058,
+  "src": "SOURCED FOAMGLAS EU S3 1.438 kgCO2e/kg (09 §3.1, S2); PERINSUL HL 200 kg/m3, lambdaD 0.058 (12 §3.4, PER, S). EU-made; not the North American 22.7/RSI factor"
+ },
+ "ccspf-hfo": {
+  "density": 32,
+  "a1a3": 5.5,
+  "k": 0.024,
+  "src": "INFERRED from SPFA HFO ccSPF 4.2 kgCO2e per m2 RSI-1 (S2 summary, stages unstated) / 0.77 kg per m2-RSI"
+ },
+ "gr-media": {
+  "density": 1000,
+  "a1a3": 0.08,
+  "k": 0.6,
+  "src": "INFERRED: extensive substrate with ~60 % expanded clay/shale; Leca EPDs ~0.125 kgCO2e/kg (S2, One Click LCA); dry bulk density [I]"
+ },
+ "gr-media-pumice": {
+  "density": 1000,
+  "a1a3": 0.02,
+  "k": 0.6,
+  "src": "INFERRED: pumice-based substrate (mined, screened, Pacific NW/BC) + compost"
+ },
+ "soil-imported": {
+  "density": 1400,
+  "a1a3": 0.005,
+  "k": 1.5,
+  "src": "INFERRED: imported growing / bioretention medium (screened soil, sand, compost under cut-off); aggregate-like"
+ },
+ "reclaimed-stone": {
+  "density": 2600,
+  "a1a3": 0.01,
+  "k": 2.5,
+  "src": "INFERRED: salvaged granite setts/slabs or salvaged pavers; cleaning, re-sawing, local haul only (cut-off rule)"
+ },
+ "concrete-f2-40scm": {
+  "density": 2400,
+  "a1a3": 0.0744,
+  "k": 1.7,
+  "src": "SOURCED Concrete BC EPD 348 25 MPa air F-2 GUL+40 % SCM 178.62 kgCO2e/m3 (09 §3.1, S); k [I]"
+ },
+ "rebar-eaf-pnw": {
+  "density": 7850,
+  "a1a3": 0.53,
+  "k": 50,
+  "src": "SOURCED (S2) Nucor Seattle rebar via CLF-G (09 §3.1)"
+ },
+ "pu-structural": {
+  "density": 320,
+  "a1a3": 4,
+  "k": 0.054,
+  "src": "INFERRED 4.0/kg rigid PU. Armatherm 500 EPD EPD-IES-0026744 (EN 15804+A2, USA, 14 Nov 2025 - 14 Nov 2030) exists - paste its A1-A3 value. Grade 500-320: BBA fck 6.3 MPa, lambda 0.054 (S2)"
+ },
+ "cork": {
+  "density": 110,
+  "a1a3": 0.2,
+  "biogenic": -1.4,
+  "k": 0.04,
+  "src": "INFERRED: expanded insulation corkboard; R2 P5; generic EPD values 0.1-0.4 fossil, large biogenic — needs Amorim EPD"
+ },
+ "steel-section": {
+  "density": 7850,
+  "a1a3": 1.22,
+  "k": 50,
+  "src": "S2: Buy Clean California hot-rolled sections GWP limit 1.01 mill gate / 1.22 incl. US-average fabrication (AISC/STI/CRSI/AISI quick guide, 8 Mar 2022) = AISC fabricated hot-rolled sections industry EPD (31 Mar 2021, 5 yr: EXPIRED); US EAF mills (Nucor, SDI, Gerdau). Imported BOF sections 2.0-2.5 [I]"
+ },
+ "epdm": {
+  "density": 1150,
+  "a1a3": 3,
+  "k": 0.25,
+  "src": "S2 (One Click LCA listing): Holcim/Firestone RubberGard 60 mil non-reinforced EPDM, ASTM EPD-900: 4.69 kgCO2e/m2 at 1.37 mm (~1.58 kg/m2) = 3.0/kg; 45 mil 3.48, 90 mil 6.85 /m2. Carlisle Sure-Seal TDS is in the RCABC RPM (S2). FLL root resistance: check the product certificate",
+  "rsl": 45
+ },
+ "butyl-sealant": {
+  "density": 1400,
+  "a1a3": 3,
+  "k": 0.25,
+  "src": "INFERRED: butyl / MS sealants generic"
+ },
+ "vegetation": {
+  "density": 300,
+  "a1a3": 0,
+  "k": 0.5,
+  "src": "living material, not counted"
+ },
+ "cedar-soffit": {
+  "density": 370,
+  "a1a3": 0.305,
+  "biogenic": -0.85,
+  "k": 0.1,
+  "src": "as cedar-siding (honey-oiled soffit boards, sheltered; only the finish colour differs) [I]"
+ },
+ "stainless-epd": {
+  "density": 7900,
+  "a1a3": 2.2,
+  "k": 16,
+  "rsl": 100,
+  "src": "SOURCED Outokumpu cold-rolled austenitic (304/304L/304LN/321/316L) EPD-IES-0017264 (EN 15804+A2, 7 Nov 2024 - 7 Nov 2029): GWP-fossil A1-A3 1,830 kgCO2e/t (total 1,870), D -113; mills Tornio, Avesta, Krefeld, Calvert AL. https://www.outokumpu.com/en/sustainability/sustainable-stainless-steel/epds ; + ~0.35 cutting, welding, pickling [I]"
+ },
+ "steel-reclaimed": {
+  "density": 7850,
+  "a1a3": 0.1,
+  "k": 50,
+  "src": "INFERRED from S2: EMR reusable structural steel EPD 46.6 kgCO2e/t A1-A3 (2022); Cleveland Steel & Tubes recovered I-beam EPD 69.8 kgCO2e/t (A1 = 0 by cut-off); + BC re-fabrication, testing and haul -> 0.1. Grade/test per IStructE 'Reusing structural steel' guide (2023)"
+ },
+ "pu-structural-160": {
+  "density": 160,
+  "a1a3": 4,
+  "k": 0.0375,
+  "src": "Armatherm 500-080 class: CS 210 psi = 1.45 MPa, lambda 0.26 Btu-in = 0.0375 (US data sheet V3, S2); ~160 kg/m3 (older UK sheet lowest grade: 2.0 MPa, lambda 0.031) [S2/I]. Engineer to confirm long-term stress and creep under the track"
+ },
+ "pu-foam-tape": {
+  "density": 200,
+  "a1a3": 4,
+  "k": 0.05,
+  "rsl": 25,
+  "src": "INFERRED: pre-compressed acrylic-impregnated PU foam tape, ~60 kg/m3 foam at 3-4x compression; factor as rigid PU"
+ },
+ "parge-charcoal": {
+  "density": 1800,
+  "a1a3": 0.2,
+  "k": 0.8,
+  "src": "INFERRED: mineral silicate parge/render coat ~10 mm, cement-lime base; dark pigment (R5 lap 2 N3)"
+ },
+ "door-unit-woodalu": {
+  "density": 1000,
+  "a1a3": 1,
+  "src": "CARRIER (quantity entered as kgCO2e/1000 per m of opening): research 14 §7 ENERsign primus wood-Al lift-and-slide, A1-A3 excl. glass: frame 10-21 (mid 15) + hardware 3-7.5 (5) + SIEGENIA drive ~7 = 27 kgCO2e/m2 of opening x 2.785 m = 75 kgCO2e per m [I from S*: Nordic wood-Al EPDs 52-63/m2 incl. glass]. No product EPD: require EN 15804+A2 EPD in tender"
+ }
+}

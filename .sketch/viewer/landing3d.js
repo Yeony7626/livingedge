@@ -201,10 +201,12 @@ watch(heroCv, {
     rail.forEach((li, i) => { li.classList.toggle("on", i === railK); li.firstElementChild.setAttribute("aria-pressed", i === railK); });
     hero.night(wn);
     hero.fx.uTherm.value = wn;
+    if (embed && hero.aim(orbit.az, orbit.el)) stack = null;   // a new angle re-solves the exploded gaps
     if (!stack) stack = stackLifts();
     hero.groups.forEach((g, i) => hero.lift(g, stack.lift[i] * f, (g.def.side ?? 0) * f));
     homeGhosts(0);
     hero.fit(...hero.size(), stack.top * f, colW() * f);
+    if (embed) zoomPan();
     if (!reduceMotion && !unpinned()) {
       lean += (leanTo - lean) * 0.06;
       if (Math.abs(lean) > 1e-4) { const c = new THREE.Vector3(((BOX.x[0] + BOX.x[1]) / 2) * S, ((BOX.y[0] + BOX.y[1]) / 2) * S, ((BOX.w[0] + BOX.w[1]) / 2) * S); hero.camera.position.sub(c).applyAxisAngle(new THREE.Vector3(0, 1, 0), lean).add(c); hero.camera.lookAt(c); hero.camera.updateMatrixWorld(); }
@@ -227,7 +229,7 @@ function stackLifts() {
     return b;
   });
   const vy = (b) => { let lo = Infinity, hi = -Infinity; for (const x of [b.min.x, b.max.x]) for (const y of [b.min.y, b.max.y]) for (const z of [b.min.z, b.max.z]) { const v = new THREE.Vector3(x, y, z).applyMatrix4(hero.camera.matrixWorldInverse); lo = Math.min(lo, v.y); hi = Math.max(hi, v.y); } return [lo, hi]; };
-  const cosEl = Math.cos((28 * Math.PI) / 180), order = [0, 1, 3, 4, 5];
+  const cosEl = Math.max(0.3, Math.cos((hero.view.el * Math.PI) / 180)), order = [0, 1, 3, 4, 5];
   let res = null, gapM = 0;
   for (let pass = 0; pass < 3; pass++) {   // the exploded framing zooms out, so solve the gap at that framing
     hero.fit(...hero.size(), res ? res.top : 0, res ? colW() : 0);
@@ -724,7 +726,60 @@ watch(buildCv, {
 });
 
 // ================= embed (the tool's 3D tab): the hero alone, explode and winter on controls =================
+// orbit stays in the section box's open quadrant (az -90..0, el 0..85), so every cut face keeps facing the camera
+const ORBIT0 = { az: -36, el: 28 }, orbit = { ...ORBIT0, zoom: 1, pan: [0, 0] };   // pan: view-space metres
+function zoomPan() {
+  const c = hero.camera, hw = (c.right - c.left) / 2 / orbit.zoom, hh = (c.top - c.bottom) / 2 / orbit.zoom;
+  const x = (c.left + c.right) / 2 + orbit.pan[0], y = (c.top + c.bottom) / 2 + orbit.pan[1];
+  Object.assign(c, { left: x - hw, right: x + hw, top: y + hh, bottom: y - hh });
+  c.updateProjectionMatrix();
+}
 if (embed) {   // the same three states as the landing's rail
+  const turn = (daz, del) => { orbit.az = Math.min(0, Math.max(-90, orbit.az + daz)); orbit.el = Math.min(85, Math.max(0, orbit.el + del)); };
+  const panBy = (dx, dy) => { const m = (hero.camera.right - hero.camera.left) / hero.size()[0]; orbit.pan[0] -= dx * m; orbit.pan[1] += dy * m; };
+  function zoomAt(cx, cy, k) {   // keeps the point under the cursor still
+    const z = Math.min(Math.max(orbit.zoom * k, 0.6), 12), r = heroCv.getBoundingClientRect(), c = hero.camera;
+    k = z / orbit.zoom; orbit.zoom = z;
+    orbit.pan[0] += ((cx - r.left) / r.width - 0.5) * (c.right - c.left) * (1 - 1 / k);
+    orbit.pan[1] += (0.5 - (cy - r.top) / r.height) * (c.top - c.bottom) * (1 - 1 / k);
+  }
+  const reset = () => Object.assign(orbit, { ...ORBIT0, zoom: 1, pan: [0, 0] });
+  // one pointer: drag orbits, shift- or right-drag pans; two pointers: pan and pinch
+  const ptrs = new Map();
+  let moved = 0;
+  heroCv.addEventListener("pointerdown", (e) => { heroCv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (ptrs.size === 1) moved = 0; });
+  heroCv.addEventListener("pointermove", (e) => {
+    const p = ptrs.get(e.pointerId);
+    if (!p) return;
+    const dx = e.clientX - p.x, dy = e.clientY - p.y;
+    moved += Math.abs(dx) + Math.abs(dy);
+    if (ptrs.size === 1) { if (e.shiftKey || e.buttons & 6) panBy(dx, dy); else turn(-dx * 0.3, dy * 0.3); }
+    else {
+      const [a, b] = [...ptrs.values()], d0 = Math.hypot(a.x - b.x, a.y - b.y);
+      Object.assign(p, { x: e.clientX, y: e.clientY });
+      panBy(dx / 2, dy / 2);
+      zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, Math.hypot(a.x - b.x, a.y - b.y) / Math.max(d0, 1));
+    }
+    Object.assign(p, { x: e.clientX, y: e.clientY });
+  });
+  for (const t of ["pointerup", "pointercancel"]) heroCv.addEventListener(t, (e) => ptrs.delete(e.pointerId));
+  heroCv.addEventListener("wheel", (e) => { e.preventDefault(); zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015)); }, { passive: false });
+  heroCv.addEventListener("contextmenu", (e) => e.preventDefault());
+  heroCv.addEventListener("dblclick", reset);
+  document.getElementById("view-reset").addEventListener("click", reset);
+  heroEl.querySelector(".stage").removeAttribute("role");   // interactive here, not a picture
+  Object.assign(heroCv, { tabIndex: 0 });
+  heroCv.setAttribute("aria-label", "3D section-box axo. Arrow keys orbit, shift and arrows pan, plus and minus zoom, 0 resets the view.");
+  heroCv.addEventListener("keydown", (e) => {
+    const r = heroCv.getBoundingClientRect(), mid = [r.left + r.width / 2, r.top + r.height / 2];
+    const arrows = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }, a = arrows[e.key];
+    if (a) e.shiftKey ? panBy(a[0] * 30, a[1] * 30) : turn(-a[0] * 5, a[1] * 5);
+    else if (e.key === "+" || e.key === "=") zoomAt(...mid, 1.25);
+    else if (e.key === "-") zoomAt(...mid, 0.8);
+    else if (e.key === "0" || e.key === "Home") reset();
+    else return;
+    e.preventDefault();
+  });
   const bs = [...document.querySelectorAll(".embedctl button")];
   bs.forEach((b) => b.addEventListener("click", () => { pick = +b.dataset.k; bs.forEach((o) => o.setAttribute("aria-pressed", o === b)); }));
   const selectedMeshes = [];
@@ -753,6 +808,7 @@ if (embed) {   // the same three states as the landing's rail
   });
   const ray = new THREE.Raycaster();
   heroCv.addEventListener("click", (e) => {
+    if (moved > 4) return;   // the end of a drag, not a pick
     const r = heroCv.getBoundingClientRect();
     ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, 1 - (e.clientY - r.top) / r.height * 2), hero.camera);
     const candidates = hero.groups.flatMap((g) => g.node.children.filter((m) => m.userData.partId));

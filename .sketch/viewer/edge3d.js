@@ -142,8 +142,9 @@ export function innerPoint(poly) {   // a point inside a cut polygon (plane coor
   return [(x0 + x1) / 2, y];
 }
 
-// ---------- seen lines: silhouettes and creases for the fixed view direction ----------
-function classify(g, sil, crease) {
+// ---------- seen lines: silhouettes and creases, re-split whenever the view direction changes ----------
+// feature edges, kept once: any edge that can ever be a silhouette or crease (coplanar diagonals dropped)
+function featureEdges(g, out) {
   const pos = g.attributes.position, idx = g.index, n = idx ? idx.count : pos.count;
   const key = (i) => `${Math.round(pos.getX(i) * 1e5)},${Math.round(pos.getY(i) * 1e5)},${Math.round(pos.getZ(i) * 1e5)}`;
   const edges = new Map(), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
@@ -159,15 +160,19 @@ function classify(g, sil, crease) {
       edges.get(ek).ns.push(nn);
     }
   }
-  const cos20 = Math.cos((30 * Math.PI) / 180);   // crease threshold 30 deg (research 18 c5)
-  for (const e of edges.values()) {
-    const [n1, n2] = e.ns, f1 = n1.dot(VIEWDIR) > 0, f2 = n2 ? n2.dot(VIEWDIR) > 0 : !f1;
+  for (const e of edges.values()) if (!e.ns[1] || e.ns[0].dot(e.ns[1]) < 0.99999) out.push(e);
+}
+const cos30 = Math.cos((30 * Math.PI) / 180);   // crease threshold 30 deg (research 18 c5)
+function splitEdges(edges, dir, sil, crease) {
+  for (const e of edges) {
+    const [n1, n2] = e.ns, f1 = n1.dot(dir) > 0, f2 = n2 ? n2.dot(dir) > 0 : !f1;
     if (f1 !== f2) sil.push(e.a, e.b);
-    else if (f1 && n2 && n1.dot(n2) < cos20) crease.push(e.a, e.b);
+    else if (f1 && n2 && n1.dot(n2) < cos30) crease.push(e.a, e.b);
   }
 }
 const LIFT = 0.001;
-const toCam = (x, y, z) => [x + VIEWDIR.x * LIFT, y + VIEWDIR.y * LIFT, z + VIEWDIR.z * LIFT];
+let liftDir = VIEWDIR;   // seen lines sit 1 mm toward the current camera
+const toCam = (x, y, z) => [x + liftDir.x * LIFT, y + liftDir.y * LIFT, z + liftDir.z * LIFT];
 const LO = [XL * S, YB * S + RAG, W0 * S], HI = [1e9, YT * S, WC * S];
 function clipSeg(a, b) {   // Liang-Barsky against the section box (lines stop above the ragged soil band)
   let t0 = 0, t1 = 1;
@@ -181,8 +186,7 @@ function clipSeg(a, b) {   // Liang-Barsky against the section box (lines stop a
   const at = (t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   return [at(t0), at(t1)];
 }
-function fadedLines(pts, width, opacity, planes) {
-  if (!pts.length) return null;
+function fadedGeom(pts) {
   const pos = [], col = [], seen = new Set(), key = (p) => p.map((v) => Math.round(v * 2000)).join(",");
   for (let i = 0; i + 1 < pts.length; i += 2) {
     const s = clipSeg(pts[i], pts[i + 1]);
@@ -196,8 +200,11 @@ function fadedLines(pts, width, opacity, planes) {
       col.push(c.r, c.g, c.b);
     }
   }
-  if (!pos.length) return null;
-  return new LineSegments2(new LineSegmentsGeometry().setPositions(pos).setColors(col), new LineMaterial({ vertexColors: true, linewidth: width, transparent: opacity < 1, opacity, clippingPlanes: planes }));
+  return pos.length ? new LineSegmentsGeometry().setPositions(pos).setColors(col) : null;
+}
+function fadedLines(pts, width, opacity, planes) {
+  const geo = fadedGeom(pts);
+  return geo && new LineSegments2(geo, new LineMaterial({ vertexColors: true, linewidth: width, transparent: opacity < 1, opacity, clippingPlanes: planes }));
 }
 const lifted = (segs) => { const o = []; for (let i = 0; i < segs.length; i += 3) o.push(...toCam(segs[i], segs[i + 1], segs[i + 2])); return o; };
 const flatLines = (segs, color, width, planes) => segs.length ? new LineSegments2(new LineSegmentsGeometry().setPositions(lifted(segs)), new LineMaterial({ color, linewidth: width, clippingPlanes: planes, depthTest: false })) : null;
@@ -407,11 +414,11 @@ export function buildModel(parts) {
   const items = [];
   for (const p of parts) {
     if (p.type === "revolve") continue;
-    const geoms = solids(p), sil = [], crease = [];
+    const geoms = solids(p), sil = [], crease = [], edges = [];
     if (p.mat === "igu-triple") for (const g of geoms) { const e = new THREE.EdgesGeometry(g, 20).attributes.position.array; for (let i = 0; i < e.length; i += 6) crease.push([e[i], e[i + 1], e[i + 2]], [e[i + 3], e[i + 4], e[i + 5]]); }
-    else for (const g of geoms) classify(g, sil, crease);
+    else { for (const g of geoms) featureEdges(g, edges); splitEdges(edges, VIEWDIR, sil, crease); }
     const cs = caps(p).map((c) => ({ ...c, thin: thinness(c.poly) < 3, geom: capGeometry(c.plane, c.poly) }));
-    if (geoms.length || cs.length) items.push({ p, geoms, sil, crease, caps: cs });
+    if (geoms.length || cs.length) items.push({ p, geoms, sil, crease, edges, glassCrease: p.mat === "igu-triple" ? crease : null, caps: cs });
   }
   return { items };
 }
@@ -551,7 +558,7 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
     scene.add(g.node);
     return g;
   });
-  const acc = groups.map(() => ({ sil: [], crease: [], cut: { w: [], y: [], x: [] } }));
+  const acc = groups.map(() => ({ sil: [], crease: [], edges: [], glass: [], cut: { w: [], y: [], x: [] } }));
   const noAO = [];   // line and particle meshes: hidden from the AO normal pass (they are not surfaces)
   for (const it of model.items) {
     const gi = groupOf(it.p);
@@ -560,7 +567,10 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
     if (!g.mats.has(key)) g.mats.set(key, rendered(it.p.mat, g, fx));
     const mat = g.mats.get(key), glass = it.p.mat === "igu-triple";
     for (const geo of it.geoms) { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; m.userData.mat = mat; m.userData.partId = it.p.id; m.userData.soil = /^soil|aggregate/.test(it.p.mat ?? ""); g.node.add(m); }
-    a.sil.push(...it.sil); a.crease.push(...it.crease);
+    for (const s of it.sil) a.sil.push(s);
+    for (const s of it.crease) a.crease.push(s);
+    for (const e of it.edges) a.edges.push(e);
+    if (it.glassCrease) for (const s of it.glassCrease) a.glass.push(s);
     for (const c of it.caps) {
       const sliver = !c.thin && (() => { let A = 0, P = 0; c.poly.forEach(([x, y], i) => { const [x2, y2] = c.poly[(i + 1) % c.poly.length]; A += x * y2 - x2 * y; P += Math.hypot(x2 - x, y2 - y); }); return (Math.abs(A) / Math.max(P, 1e-9)) < 25; })();
       const cap = new THREE.Mesh(c.geom, cutMaterial(it.p, c.plane, g, c.thin, fx, sliver));
@@ -594,8 +604,33 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
     }
     const cl = g.linePlanes.slice(4);
     [["crease", fadedLines(a.crease, 0.75, 0.45, g.linePlanes)], ["sil", fadedLines(a.sil, 1.25, 1, g.linePlanes)], ["beyond", flatLines(beyond, INK, 0.5, cl)], ["joint", flatLines(joint, INK, 0.5, cl)], ["inner", flatLines(inner, INK, 0.75, cl)], ["outer", flatLines(outer, OUTER_INK, 1.5, cl)], ["ground", flatLines(ground, INK, 3, cl)]]   // the threshold keeps its red hatch; its outline is ink like every cut
-      .filter(([, o]) => o).forEach(([role, o], i) => { o.renderOrder = 2 + i; o.material.userData.role = role; g.node.add(o); g.lineMats.push(o.material); noAO.push(o); });
+      .filter(([, o]) => o).forEach(([role, o], i) => { o.renderOrder = 2 + i; o.material.userData.role = role; g.node.add(o); g.lineMats.push(o.material); noAO.push(o); g[role] = o; });
   });
+  // re-split silhouettes and creases for a new view direction (orbit); cut lines are view-independent
+  const viewDir = VIEWDIR.clone();
+  function relines() {
+    liftDir = viewDir;
+    groups.forEach((g, gi) => {
+      const sil = [], crease = [...acc[gi].glass];
+      splitEdges(acc[gi].edges, viewDir, sil, crease);
+      for (const [role, pts] of [["sil", sil], ["crease", crease]]) {
+        const o = g[role], geo = o && fadedGeom(pts);
+        if (!o) continue;
+        o.visible = !!geo;
+        if (geo) { o.geometry.dispose(); o.geometry = geo; }
+      }
+    });
+    liftDir = VIEWDIR;
+  }
+  const view = { az: VIEW.az, el: VIEW.el };
+  function aim(az, el) {
+    if (az === view.az && el === view.el) return false;
+    Object.assign(view, { az, el });
+    const a = (az * Math.PI) / 180, e = (el * Math.PI) / 180;
+    viewDir.set(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e));
+    relines();
+    return true;
+  }
   const plants = meadowIn >= 0 && groups[meadowIn] ? meadow() : null;
   if (plants) groups[meadowIn].node.add(plants.group);
 
@@ -662,7 +697,7 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
   // parallel camera fitted to the block (plus `top` metres of headroom), leaving `colW` px on the right for labels
   function fit(W, H, top = 0, colW = col) {
     const c = new THREE.Vector3(((XL + BOX.x[1]) / 2) * S, ((YB + YT) / 2) * S, ((W0 + WC) / 2) * S);
-    camera.position.copy(c).addScaledVector(VIEWDIR, 50);
+    camera.position.copy(c).addScaledVector(viewDir, 50);
     camera.lookAt(c);
     camera.updateMatrixWorld();
     const b = { x: [Infinity, -Infinity], y: [Infinity, -Infinity] };
@@ -779,5 +814,5 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
       if (o.material === g.ghostMat || o.userData.mat) { o.userData.mat ??= o.material; o.material = on ? g.ghostMat : o.userData.mat; o.castShadow = !on && !o.userData.mat.userData.glass; }
     });
   }
-  return { scene, groups, camera, renderer, plants, fx, weather, night, noAO, gtao, ghost, lift, fit, render, resize, project, anchor, size: () => size };
+  return { scene, groups, camera, renderer, plants, fx, weather, night, noAO, gtao, ghost, lift, fit, aim, view, render, resize, project, anchor, size: () => size };
 }

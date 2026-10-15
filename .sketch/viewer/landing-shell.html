@@ -307,6 +307,12 @@ body.embed .embedctl button[aria-pressed="true"] { background:var(--fg); color:v
 body.embed .embedctl { padding:0; gap:0; border:1px solid var(--fg); }
 body.embed .embedctl button { border:0; border-right:1px solid var(--fg); padding:10px 14px; letter-spacing:.06em; }
 body.embed .embedctl button:last-child { border-right:0; }
+.viewctl { display:none; }
+body.embed #hero-ink { cursor:grab; touch-action:none; } body.embed #hero-ink:active { cursor:grabbing; } body.embed #hero-ink:focus-visible { outline-offset:-2px; }
+body.embed .viewctl { display:flex; position:absolute; left:16px; bottom:14px; z-index:3; gap:12px; align-items:center; font:500 11px var(--mono); letter-spacing:.04em; color:var(--mute); }
+body.embed .viewctl button { font:inherit; color:var(--fg); letter-spacing:.06em; border:1px solid var(--fg); background:color-mix(in srgb, var(--bg) 90%, transparent); padding:10px 14px; cursor:pointer; }
+@media (max-width: 1099px) { body.embed .viewctl .hint { display:none; } }
+@media (max-width: 600px) { body.embed .viewctl { top:12px; bottom:auto; left:auto; right:16px; } body.embed #selection-status { max-width:calc(100% - 150px); } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } .hero { height:auto; } .pin { position:relative; top:0; } * { transition:none !important; } }
 @media (max-width: 900px) {
   .wrap, .pin { padding-left:16px; padding-right:16px; }
@@ -392,6 +398,7 @@ body.embed .embedctl button:last-child { border-right:0; }
         <p class="wcap">Winter night &#183; &#8722;7&nbsp;&#176;C outside, 20&nbsp;&#176;C in. Colours are computed temperatures through the cut.</p>
         <div class="caption"><span class="k">AXO 01</span> &middot; Threshold to garden &middot; section box 6.8 &#215; 4.5 &#215; 1.2&nbsp;m, cut at W&nbsp;2000 (sliding panel) &middot; <b>12&nbsp;mm threshold</b></div>
         <div class="embedctl" role="group" aria-label="Model state"><button type="button" data-k="0" aria-pressed="true">Assembled</button><button type="button" data-k="1" aria-pressed="false">Taken apart</button><button type="button" data-k="2" aria-pressed="false">Winter night</button></div>
+        <div class="viewctl"><button type="button" id="view-reset">Reset view</button><span class="hint">Drag to orbit &#183; shift-drag to pan &#183; scroll to zoom</span></div>
       </div>
     </div>
   </div>

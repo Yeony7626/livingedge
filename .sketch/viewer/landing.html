@@ -84,6 +84,8 @@ sub { font-size:.75em; line-height:0; }
 .furn text { fill:var(--ink); }
 .furn path, .furn circle { stroke:var(--ink); }
 .furn .datum { stroke-dasharray:16 3 2 3; stroke-opacity:.55; }
+.furn .level-leader { stroke-opacity:.7; stroke-linejoin:round; }
+.xnote .assembly-note { font-size:12px; letter-spacing:.01em; }
 .furn .tri { fill:var(--ink); stroke:none; }
 .furn .sb { stroke-width:3; stroke-opacity:1; }
 .furn .sb.fill { stroke:var(--ink); }
@@ -293,6 +295,11 @@ footer { padding:0 0 48px; color:var(--mute); border-top:1px solid var(--rule); 
 .embedctl { display:none; }
 body.embed nav, body.embed .copy, body.embed section, body.embed footer, body.embed .caption, body.embed #hero-lens { display:none; }
 body.embed .hero { height:100dvh; } body.embed .pin { position:relative; top:0; height:100dvh; min-height:0; grid-template-columns:1fr; padding:12px; max-width:none; }
+body.embed .stage { min-width:0; width:100%; aspect-ratio:auto; }
+body.embed #hero-ink { cursor:pointer; }
+#selection-status { position:absolute; top:8px; left:12px; right:12px; width:fit-content; max-width:calc(100% - 24px); margin:0; padding:8px 10px; background:var(--bg); color:var(--ink); font:12px/1.5 var(--mono); z-index:3; }
+body.embed .stage canvas, body.embed .stage svg { height:calc(100% - 48px); }
+body.embed .embedctl { max-width:calc(100% - 24px); }
 body.embed .embedctl { display:flex; position:absolute; right:16px; bottom:14px; z-index:3; gap:14px; align-items:center; font:500 11px var(--mono); letter-spacing:.04em; background:color-mix(in srgb, var(--bg) 90%, transparent); padding:8px 12px; border:1px solid var(--rule); }
 body.embed .embedctl input { width:180px; margin:0; }
 body.embed .embedctl button { font:inherit; border:1px solid var(--rule); background:transparent; padding:4px 10px; cursor:pointer; }
@@ -383,7 +390,7 @@ body.embed .embedctl button:last-child { border-right:0; }
         <canvas id="hero-ink"></canvas><canvas id="hero-lens" aria-hidden="true"></canvas><svg id="hero-notes" class="ovl" aria-hidden="true"></svg><svg id="hero-cold" class="ovl" aria-hidden="true"></svg>
         <div class="hlegend" id="hero-legend" aria-hidden="true"></div>
         <p class="wcap">Winter night &#183; &#8722;7&nbsp;&#176;C outside, 20&nbsp;&#176;C in. Colours are computed temperatures through the cut.</p>
-        <div class="caption"><span class="k">AXO 01</span> &middot; Threshold to garden &middot; section box 5.6 &#215; 4.5 &#215; 1.2&nbsp;m, cut at W&nbsp;2000 (sliding panel) &middot; <b>12&nbsp;mm threshold</b></div>
+        <div class="caption"><span class="k">AXO 01</span> &middot; Threshold to garden &middot; section box 6.8 &#215; 4.5 &#215; 1.2&nbsp;m, cut at W&nbsp;2000 (sliding panel) &middot; <b>12&nbsp;mm threshold</b></div>
         <div class="embedctl" role="group" aria-label="Model state"><button type="button" data-k="0" aria-pressed="true">Assembled</button><button type="button" data-k="1" aria-pressed="false">Taken apart</button><button type="button" data-k="2" aria-pressed="false">Winter night</button></div>
       </div>
     </div>
@@ -694,7 +701,7 @@ const thinness = (poly) => {
 // builds), drawn the way the user's references draw construction axos.
 //   - Surfaces: sunlit materials with drawn texture (granite planks, cedar courses, concrete, soil, gravel).
 //   - Cut faces: pale card with hairline hatch per material; the 12 mm threshold hatched in the signal colour.
-//   - Line-weight hierarchy (px): cut outline 2.2 > silhouette 1.1 > joint inside the cut 0.9 > crease 0.5 >
+//   - Line-weight hierarchy at detail scale (CSS px): cut 2.25 > silhouette 1.1 > internal cut 0.9 > crease 0.5 >
 //     hatch (hairline, in the shader). Seen lines fade from ink toward grey with depth behind the cut.
 //   - Soil ends in a ragged break line, never a hard box bottom.
 // buildModel() makes geometry once; createView() makes a scene of it for one canvas, with parts split into groups
@@ -713,7 +720,7 @@ const thinness = (poly) => {
 RectAreaLightUniformsLib.init();
 
 const S = 0.001;
-const BOX = { x: [-4300, 1300], y: [-760, 3700], w: [800, 2000] };   // mm; the cut face w = WC lies in the sliding panel (rail runs 165-2340), between joists
+const BOX = { x: [-4300, 2500], y: [-760, 3700], w: [800, 2000] };   // fit the full slab/ceiling ends; cut face w = WC lies in the sliding panel
 const [XL] = BOX.x, [YB, YT] = BOX.y, [W0, WC] = BOX.w;
 const CUTW = WC;
 const VIEW = { az: -36, el: 28 };
@@ -1163,11 +1170,11 @@ function meadow() {
 const sRGBColor = (hex) => { const c = new THREE.Color(); c.setStyle(hex, THREE.LinearSRGBColorSpace); return c; };
 // ---------- line weight (research 18 c3): CSS px per role, per zoom band; p = CSS px per model mm ----------
 const LINE_BANDS = [
-  { p: 0.06, ground: 2.5, outer: 1.25, inner: 0.6, joint: 0, sil: 0.75, crease: 0, beyond: 0.5, hatch: 0 },
-  { p: 0.15, ground: 3.5, outer: 1.75, inner: 0.75, joint: 0.5, sil: 0.85, crease: 0.75, beyond: 0.5, hatch: 0.5 },
-  { p: 0.45, ground: 4.0, outer: 2.0, inner: 0.9, joint: 0.6, sil: 1.1, crease: 0.75, beyond: 0.5, hatch: 0.55 },
+  { p: 0.06, ground: 1.5, outer: 1.5, inner: 0.6, joint: 0, sil: 0.75, crease: 0, beyond: 0.35, hatch: 0 },
+  { p: 0.15, ground: 2.25, outer: 2, inner: 0.75, joint: 0.45, sil: 1, crease: 0.45, beyond: 0.35, hatch: 0.35 },
+  { p: 0.45, ground: 2.5, outer: 2.25, inner: 0.9, joint: 0.6, sil: 1.1, crease: 0.5, beyond: 0.4, hatch: 0.45 },
 ];
-const ALPHA = { inner: 0.75, joint: 0.7, sil: 0.85, crease: 0.45, beyond: 0.35 };
+const ALPHA = { inner: 0.8, joint: 0.6, sil: 0.8, crease: 0.4, beyond: 0.3 };
 const OUTER_INK = new THREE.Color("#2A2620");   // warm ink for the rendered cut (reviewers, run 1)
 const hatchK = { value: 1 }, cardK = { value: 1.75 };
 function lineBand(p) {
@@ -1251,11 +1258,13 @@ function createView({ canvas, model, groups: defs = [{}], groupOf = () => 0, mea
     const g = groups[gi], a = acc[gi], key = it.p.mat ?? "";
     if (!g.mats.has(key)) g.mats.set(key, rendered(it.p.mat, g, fx));
     const mat = g.mats.get(key), glass = it.p.mat === "igu-triple";
-    for (const geo of it.geoms) { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; m.userData.mat = mat; m.userData.soil = /^soil|aggregate/.test(it.p.mat ?? ""); g.node.add(m); }
+    for (const geo of it.geoms) { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; m.userData.mat = mat; m.userData.partId = it.p.id; m.userData.soil = /^soil|aggregate/.test(it.p.mat ?? ""); g.node.add(m); }
     a.sil.push(...it.sil); a.crease.push(...it.crease);
     for (const c of it.caps) {
       const sliver = !c.thin && (() => { let A = 0, P = 0; c.poly.forEach(([x, y], i) => { const [x2, y2] = c.poly[(i + 1) % c.poly.length]; A += x * y2 - x2 * y; P += Math.hypot(x2 - x, y2 - y); }); return (Math.abs(A) / Math.max(P, 1e-9)) < 25; })();
-      g.node.add(new THREE.Mesh(c.geom, cutMaterial(it.p, c.plane, g, c.thin, fx, sliver)));
+      const cap = new THREE.Mesh(c.geom, cutMaterial(it.p, c.plane, g, c.thin, fx, sliver));
+      cap.userData.partId = it.p.id;
+      g.node.add(cap);
       a.cut[c.plane].push({ poly: c.poly, focus: FOCUS_IDS.has(it.p.id), mat: it.p.mat ?? "", soil: /^soil/.test(it.p.mat ?? ""), thin: !!c.thin });
       if (c.plane === "w") {
         const area = Math.abs(c.poly.reduce((s, [x, y], k) => { const [x2, y2] = c.poly[(k + 1) % c.poly.length]; return s + x * y2 - x2 * y; }, 0)) / 2;
@@ -1360,12 +1369,15 @@ function createView({ canvas, model, groups: defs = [{}], groupOf = () => 0, mea
       const v = new THREE.Vector3(x * S, y, w * S).applyMatrix4(camera.matrixWorldInverse);
       b.x = [Math.min(b.x[0], v.x), Math.max(b.x[1], v.x)]; b.y = [Math.min(b.y[0], v.y), Math.max(b.y[1], v.y)];
     }
-    const regionW = Math.max(W - colW, W * 0.55), A = regionW / H;
+    // Assembled drawings need an actual paper margin for level notes, not labels painted over the planting.
+    const leftCol = W > 600 && top === 0 && colW === 0 ? 160 : 0;
+    const regionW = Math.max(W - colW - leftCol, W * 0.45), A = regionW / H;
     let w = b.x[1] - b.x[0], h = b.y[1] - b.y[0];
     if (w / h > A) h = w / A; else w = h * A;
     w *= 1 + margin * 2; h *= 1 + margin * 2;
     const cx = (b.x[0] + b.x[1]) / 2, cy = (b.y[0] + b.y[1]) / 2;
-    Object.assign(camera, { left: cx - w / 2, right: cx - w / 2 + (w * W) / regionW, top: cy + h / 2, bottom: cy - h / 2 });
+    const left = cx - w / 2 - leftCol * w / regionW;
+    Object.assign(camera, { left, right: left + (w * W) / regionW, top: cy + h / 2, bottom: cy - h / 2 });
     camera.updateProjectionMatrix();
   }
   const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));
@@ -1502,10 +1514,20 @@ function furniture(view, { datums = true, scale = true, compass = true, light = 
       const e = [a[0] + u[0] * ext, a[1] + u[1] * ext];
       return { label, a, b, e, u };
     }).sort((m, n) => m.e[1] - n.e[1]);
-    ds.forEach((d, k) => { d.ty = k ? Math.max(d.e[1], ds[k - 1].ty + 14 * ds[k - 1].label.split("\n").length + 1) : d.e[1]; });   // labels never stack on one another
+    // Keep a shared text column; displaced labels retain an explicit connection to their true level.
+    const labelX = Math.min(...ds.map((d) => d.e[0])) - 16;
+    ds.forEach((d, k) => { d.ty = k ? Math.max(d.e[1], ds[k - 1].ty + 15 * ds[k - 1].label.split("\n").length + 9) : d.e[1]; });
+    const overflow = Math.max(0, ds.at(-1).ty + 15 * ds.at(-1).label.split("\n").length - (H - 76));
+    ds.forEach((d) => { d.ty -= overflow; });
     for (const d of ds) {
-      s += `<path d="M${d.e[0]} ${d.e[1]} L${d.b[0]} ${d.b[1]}" class="datum"/><path d="M${d.e[0]} ${d.e[1] - 1} l-4.5 -7 h9 z" class="tri"/>`
-        + d.label.split("\n").map((l, i) => `<text x="${d.e[0] - 9}" y="${d.ty + 4 + i * 14}" text-anchor="end">${l}</text>`).join("");
+      if (d.label.includes("HEAD")) {
+        const p = view.project(V3(150, 2785));
+        s += `<path d="M${p[0] - 44} ${p[1]} H${p[0] - 4}" class="datum"/><path d="M${p[0] - 44} ${p[1]} l-3.5 -6 h7 z" class="tri"/><text x="${p[0] - 54}" y="${p[1] + 4}" text-anchor="end">${d.label}</text>`;
+        continue;
+      }
+      s += `<path d="M${d.e[0]} ${d.e[1]} L${d.b[0]} ${d.b[1]}" class="datum"/><path d="M${d.e[0]} ${d.e[1] - 1} l-3.5 -6 h7 z" class="tri"/>`
+        + `<path d="M${labelX + 6} ${d.ty} H${labelX + 12} L${d.e[0]} ${d.e[1]}" class="level-leader"/>`
+        + d.label.split("\n").map((l, i) => `<text x="${labelX}" y="${d.ty + 4 + i * 15}" text-anchor="end">${l}</text>`).join("");
     }
   }
   // under the east end of the block's bottom front edge, parallel to it and 28 px below: never on the cut, never off the frame
@@ -1532,6 +1554,15 @@ function leader(ax, ay, lx, ly) {
   return (lx - kx) * dir > 0 ? `M${ax} ${ay} L${kx} ${ly} H${lx}` : `M${ax} ${ay} L${lx} ${ly}`;
 }
 const setSvg = (svg, view, inner) => { const [W, H] = view.size(); svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.innerHTML = inner; };
+function wrapNote(text, limit) {
+  const lines = [""];
+  for (const word of text.replace(/(\d+) MM/g, "$1\u00a0MM").split(" ")) {
+    const i = lines.length - 1;
+    if (lines[i] && lines[i].length + word.length + 1 > limit) lines.push(word);
+    else lines[i] += (lines[i] ? " " : "") + word;
+  }
+  return lines;
+}
 
 // ================= hero: construction layers lifted apart by scroll, then a winter night =================
 const GAP = 0.5;   // equal steps between layers (research 17 §5)
@@ -1594,7 +1625,7 @@ function lensMarks(lb, hb) {
     + `<g class="lsb"><path d="M${s0[0]} ${s0[1]} L${s1[0]} ${s1[1]}" class="fill"/><path d="M${s1[0]} ${s1[1]} L${s2[0]} ${s2[1]}"/><text x="${s2[0] + 6}" y="${s2[1] + 3}">50 MM</text><text x="${s0[0] + 6}" y="${s0[1] + 3}">0</text></g>`;
 }
 // scroll phases through the pinned hero: explode (0.06-0.30), reassemble (0.46-0.62), winter night (0.70-0.86)
-const unpinned = () => embed || reduceMotion || matchMedia("(max-width: 900px)").matches, colW = () => (matchMedia("(max-width: 600px)").matches ? 0 : 300);
+const unpinned = () => embed || reduceMotion || matchMedia("(max-width: 900px)").matches, colW = () => (matchMedia("(max-width: 600px)").matches ? 0 : 280);
 let pick = 0, hp = [0, 0];
 // the rail: on a pinned hero it scrolls to that state; unpinned (phones, reduced motion) it switches the state in place
 rail.forEach((li, k) => li.querySelector("button").addEventListener("click", () => {
@@ -1622,13 +1653,15 @@ function heroNotes(f, wn) {
       const ip = innerPoint(a.poly), xs = crossings(a.poly, 1, ip[1]), home = V3(...(l.right && xs.length ? [xs[xs.length - 1][1] - 150, ip[1]] : ip)), top = hero.project(home.clone().add(new THREE.Vector3(g.dx ?? 0, g.dy, 0)));
       return { l, a: top, home: hero.project(home), dy: g.dy + Math.abs(g.dx ?? 0) };
     }).filter(Boolean).sort((m, n) => n.a[1] - m.a[1]);
-    const colX = W - 250, ys = pts.map((n) => n.a[1]);
+    const colX = W - 234, ys = pts.map((n) => Math.min(H - 86, n.a[1]));
     for (let k = 1; k < ys.length; k++) ys[k] = Math.min(ys[k], ys[k - 1] - 52);   // bottom-up: each tag at least 52 px above the last
+    const shift = Math.max(0, 30 - ys.at(-1));
+    for (let k = 0; k < ys.length; k++) ys[k] += shift;
     const o = Math.min(1, (f - 0.02) * 2.5);
     pts.forEach((n, k) => {
       if (n.dy > 0.001) s += `<path d="M${n.home[0]} ${n.home[1]} L${n.a[0]} ${n.a[1]}" class="conn" style="opacity:${o}"/>`;
       s += `<g class="xnote${n.l.focus ? " focus" : ""}" style="opacity:${o}"><circle cx="${n.a[0]}" cy="${n.a[1]}" r="3"/><path d="${leader(n.a[0], n.a[1], colX - 34, ys[k])}"/>`
-        + `<circle cx="${colX - 25}" cy="${ys[k]}" r="9" class="tag"/><text class="k" x="${colX - 25}" y="${ys[k] + 3.5}" text-anchor="middle">${n.l.tag}</text><rect x="${colX - 2}" y="${ys[k] - 6}" width="12" height="12" fill="${n.l.tint}" stroke="#1E1E1E" stroke-width=".75"/><text x="${colX + 16}" y="${ys[k] + 3.5}">${n.l.name.toUpperCase()}</text></g>`;
+        + `<circle cx="${colX - 25}" cy="${ys[k]}" r="9" class="tag"/><text class="k" x="${colX - 25}" y="${ys[k] + 3.5}" text-anchor="middle">${n.l.tag}</text><text class="assembly-note" x="${colX}" y="${ys[k] + 4}">${wrapNote(n.l.name.toUpperCase(), 27).map((line, i) => `<tspan x="${colX}" dy="${i ? 15 : 0}">${line}</tspan>`).join("")}</text></g>`;
     });
   }
   const lb = lensCv.getBoundingClientRect(), hb = notes.getBoundingClientRect(), lo = Math.max(0, 1 - f * 1.6 - wn * 2);
@@ -2177,6 +2210,39 @@ watch(buildCv, {
 if (embed) {   // the same three states as the landing's rail
   const bs = [...document.querySelectorAll(".embedctl button")];
   bs.forEach((b) => b.addEventListener("click", () => { pick = +b.dataset.k; bs.forEach((o) => o.setAttribute("aria-pressed", o === b)); }));
+  const selectedMeshes = [];
+  function markPart(id) {
+    for (const mesh of selectedMeshes) { mesh.removeFromParent(); mesh.material.dispose(); }
+    selectedMeshes.length = 0;
+    let found = false;
+    for (const g of hero.groups) {
+      for (const mesh of [...g.node.children]) if (id && mesh.userData.partId === id) {
+        const mat = new THREE.MeshBasicMaterial({ color: "#E0482B", transparent: true, opacity: 0.55, depthTest: false, depthWrite: false, side: THREE.DoubleSide, clippingPlanes: g.planes });
+        const mark = new THREE.Mesh(mesh.geometry, mat);
+        mark.renderOrder = 20;
+        g.node.add(mark); selectedMeshes.push(mark); found = true;
+      }
+    }
+    document.body.dataset.selectedPart = id ?? "";
+    let status = document.getElementById("selection-status");
+    if (!status) { status = document.createElement("p"); status.id = "selection-status"; status.setAttribute("role", "status"); heroEl.querySelector(".stage").appendChild(status); }
+    const part = DATA.parts.find((p) => p.id === id);
+    status.textContent = id ? (found ? `Selected: ${part?.name ?? id}` : "Selected part is outside this fixed 3D fragment. Inspect it in Draft.") : "";
+    status.hidden = !id;
+  }
+  addEventListener("message", (e) => {
+    if (e.source !== parent || e.origin !== location.origin || e.data?.type !== "livingedge:select") return;
+    markPart(typeof e.data.id === "string" ? e.data.id : null);
+  });
+  const ray = new THREE.Raycaster();
+  heroCv.addEventListener("click", (e) => {
+    const r = heroCv.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, 1 - (e.clientY - r.top) / r.height * 2), hero.camera);
+    const candidates = hero.groups.flatMap((g) => g.node.children.filter((m) => m.userData.partId));
+    const hit = ray.intersectObjects(candidates, false).find((h) => (h.object.material.clippingPlanes ?? []).every((p) => p.distanceToPoint(h.point) >= -0.001));
+    if (hit) { markPart(hit.object.userData.partId); parent.postMessage({ type: "livingedge:picked", id: hit.object.userData.partId }, location.origin); }
+  });
+  parent.postMessage({ type: "livingedge:ready" }, location.origin);
 }
 // entry: band figures rise into place once
 if (!reduceMotion && "IntersectionObserver" in window) {

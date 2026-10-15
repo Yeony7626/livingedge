@@ -2,7 +2,7 @@
 // builds), drawn the way the user's references draw construction axos.
 //   - Surfaces: sunlit materials with drawn texture (granite planks, cedar courses, concrete, soil, gravel).
 //   - Cut faces: pale card with hairline hatch per material; the 12 mm threshold hatched in the signal colour.
-//   - Line-weight hierarchy (px): cut outline 2.2 > silhouette 1.1 > joint inside the cut 0.9 > crease 0.5 >
+//   - Line-weight hierarchy at detail scale (CSS px): cut 2.25 > silhouette 1.1 > internal cut 0.9 > crease 0.5 >
 //     hatch (hairline, in the shader). Seen lines fade from ink toward grey with depth behind the cut.
 //   - Soil ends in a ragged break line, never a hard box bottom.
 // buildModel() makes geometry once; createView() makes a scene of it for one canvas, with parts split into groups
@@ -21,7 +21,7 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 RectAreaLightUniformsLib.init();
 
 export const S = 0.001;
-export const BOX = { x: [-4300, 1300], y: [-760, 3700], w: [800, 2000] };   // mm; the cut face w = WC lies in the sliding panel (rail runs 165-2340), between joists
+export const BOX = { x: [-4300, 2500], y: [-760, 3700], w: [800, 2000] };   // fit the full slab/ceiling ends; cut face w = WC lies in the sliding panel
 const [XL] = BOX.x, [YB, YT] = BOX.y, [W0, WC] = BOX.w;
 export const CUTW = WC;
 const VIEW = { az: -36, el: 28 };
@@ -471,11 +471,11 @@ function meadow() {
 const sRGBColor = (hex) => { const c = new THREE.Color(); c.setStyle(hex, THREE.LinearSRGBColorSpace); return c; };
 // ---------- line weight (research 18 c3): CSS px per role, per zoom band; p = CSS px per model mm ----------
 const LINE_BANDS = [
-  { p: 0.06, ground: 2.5, outer: 1.25, inner: 0.6, joint: 0, sil: 0.75, crease: 0, beyond: 0.5, hatch: 0 },
-  { p: 0.15, ground: 3.5, outer: 1.75, inner: 0.75, joint: 0.5, sil: 0.85, crease: 0.75, beyond: 0.5, hatch: 0.5 },
-  { p: 0.45, ground: 4.0, outer: 2.0, inner: 0.9, joint: 0.6, sil: 1.1, crease: 0.75, beyond: 0.5, hatch: 0.55 },
+  { p: 0.06, ground: 1.5, outer: 1.5, inner: 0.6, joint: 0, sil: 0.75, crease: 0, beyond: 0.35, hatch: 0 },
+  { p: 0.15, ground: 2.25, outer: 2, inner: 0.75, joint: 0.45, sil: 1, crease: 0.45, beyond: 0.35, hatch: 0.35 },
+  { p: 0.45, ground: 2.5, outer: 2.25, inner: 0.9, joint: 0.6, sil: 1.1, crease: 0.5, beyond: 0.4, hatch: 0.45 },
 ];
-const ALPHA = { inner: 0.75, joint: 0.7, sil: 0.85, crease: 0.45, beyond: 0.35 };
+const ALPHA = { inner: 0.8, joint: 0.6, sil: 0.8, crease: 0.4, beyond: 0.3 };
 const OUTER_INK = new THREE.Color("#2A2620");   // warm ink for the rendered cut (reviewers, run 1)
 export const hatchK = { value: 1 }, cardK = { value: 1.75 };
 function lineBand(p) {
@@ -559,11 +559,13 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
     const g = groups[gi], a = acc[gi], key = it.p.mat ?? "";
     if (!g.mats.has(key)) g.mats.set(key, rendered(it.p.mat, g, fx));
     const mat = g.mats.get(key), glass = it.p.mat === "igu-triple";
-    for (const geo of it.geoms) { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; m.userData.mat = mat; m.userData.soil = /^soil|aggregate/.test(it.p.mat ?? ""); g.node.add(m); }
+    for (const geo of it.geoms) { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; m.userData.mat = mat; m.userData.partId = it.p.id; m.userData.soil = /^soil|aggregate/.test(it.p.mat ?? ""); g.node.add(m); }
     a.sil.push(...it.sil); a.crease.push(...it.crease);
     for (const c of it.caps) {
       const sliver = !c.thin && (() => { let A = 0, P = 0; c.poly.forEach(([x, y], i) => { const [x2, y2] = c.poly[(i + 1) % c.poly.length]; A += x * y2 - x2 * y; P += Math.hypot(x2 - x, y2 - y); }); return (Math.abs(A) / Math.max(P, 1e-9)) < 25; })();
-      g.node.add(new THREE.Mesh(c.geom, cutMaterial(it.p, c.plane, g, c.thin, fx, sliver)));
+      const cap = new THREE.Mesh(c.geom, cutMaterial(it.p, c.plane, g, c.thin, fx, sliver));
+      cap.userData.partId = it.p.id;
+      g.node.add(cap);
       a.cut[c.plane].push({ poly: c.poly, focus: FOCUS_IDS.has(it.p.id), mat: it.p.mat ?? "", soil: /^soil/.test(it.p.mat ?? ""), thin: !!c.thin });
       if (c.plane === "w") {
         const area = Math.abs(c.poly.reduce((s, [x, y], k) => { const [x2, y2] = c.poly[(k + 1) % c.poly.length]; return s + x * y2 - x2 * y; }, 0)) / 2;
@@ -668,12 +670,15 @@ export function createView({ canvas, model, groups: defs = [{}], groupOf = () =>
       const v = new THREE.Vector3(x * S, y, w * S).applyMatrix4(camera.matrixWorldInverse);
       b.x = [Math.min(b.x[0], v.x), Math.max(b.x[1], v.x)]; b.y = [Math.min(b.y[0], v.y), Math.max(b.y[1], v.y)];
     }
-    const regionW = Math.max(W - colW, W * 0.55), A = regionW / H;
+    // Assembled drawings need an actual paper margin for level notes, not labels painted over the planting.
+    const leftCol = W > 600 && top === 0 && colW === 0 ? 160 : 0;
+    const regionW = Math.max(W - colW - leftCol, W * 0.45), A = regionW / H;
     let w = b.x[1] - b.x[0], h = b.y[1] - b.y[0];
     if (w / h > A) h = w / A; else w = h * A;
     w *= 1 + margin * 2; h *= 1 + margin * 2;
     const cx = (b.x[0] + b.x[1]) / 2, cy = (b.y[0] + b.y[1]) / 2;
-    Object.assign(camera, { left: cx - w / 2, right: cx - w / 2 + (w * W) / regionW, top: cy + h / 2, bottom: cy - h / 2 });
+    const left = cx - w / 2 - leftCol * w / regionW;
+    Object.assign(camera, { left, right: left + (w * W) / regionW, top: cy + h / 2, bottom: cy - h / 2 });
     camera.updateProjectionMatrix();
   }
   const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));

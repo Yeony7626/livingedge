@@ -31,10 +31,20 @@ function furniture(view, { datums = true, scale = true, compass = true, light = 
       const e = [a[0] + u[0] * ext, a[1] + u[1] * ext];
       return { label, a, b, e, u };
     }).sort((m, n) => m.e[1] - n.e[1]);
-    ds.forEach((d, k) => { d.ty = k ? Math.max(d.e[1], ds[k - 1].ty + 14 * ds[k - 1].label.split("\n").length + 1) : d.e[1]; });   // labels never stack on one another
+    // Keep a shared text column; displaced labels retain an explicit connection to their true level.
+    const labelX = Math.min(...ds.map((d) => d.e[0])) - 16;
+    ds.forEach((d, k) => { d.ty = k ? Math.max(d.e[1], ds[k - 1].ty + 15 * ds[k - 1].label.split("\n").length + 9) : d.e[1]; });
+    const overflow = Math.max(0, ds.at(-1).ty + 15 * ds.at(-1).label.split("\n").length - (H - 76));
+    ds.forEach((d) => { d.ty -= overflow; });
     for (const d of ds) {
-      s += `<path d="M${d.e[0]} ${d.e[1]} L${d.b[0]} ${d.b[1]}" class="datum"/><path d="M${d.e[0]} ${d.e[1] - 1} l-4.5 -7 h9 z" class="tri"/>`
-        + d.label.split("\n").map((l, i) => `<text x="${d.e[0] - 9}" y="${d.ty + 4 + i * 14}" text-anchor="end">${l}</text>`).join("");
+      if (d.label.includes("HEAD")) {
+        const p = view.project(V3(150, 2785));
+        s += `<path d="M${p[0] - 44} ${p[1]} H${p[0] - 4}" class="datum"/><path d="M${p[0] - 44} ${p[1]} l-3.5 -6 h7 z" class="tri"/><text x="${p[0] - 54}" y="${p[1] + 4}" text-anchor="end">${d.label}</text>`;
+        continue;
+      }
+      s += `<path d="M${d.e[0]} ${d.e[1]} L${d.b[0]} ${d.b[1]}" class="datum"/><path d="M${d.e[0]} ${d.e[1] - 1} l-3.5 -6 h7 z" class="tri"/>`
+        + `<path d="M${labelX + 6} ${d.ty} H${labelX + 12} L${d.e[0]} ${d.e[1]}" class="level-leader"/>`
+        + d.label.split("\n").map((l, i) => `<text x="${labelX}" y="${d.ty + 4 + i * 15}" text-anchor="end">${l}</text>`).join("");
     }
   }
   // under the east end of the block's bottom front edge, parallel to it and 28 px below: never on the cut, never off the frame
@@ -61,6 +71,15 @@ function leader(ax, ay, lx, ly) {
   return (lx - kx) * dir > 0 ? `M${ax} ${ay} L${kx} ${ly} H${lx}` : `M${ax} ${ay} L${lx} ${ly}`;
 }
 const setSvg = (svg, view, inner) => { const [W, H] = view.size(); svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.innerHTML = inner; };
+function wrapNote(text, limit) {
+  const lines = [""];
+  for (const word of text.replace(/(\d+) MM/g, "$1\u00a0MM").split(" ")) {
+    const i = lines.length - 1;
+    if (lines[i] && lines[i].length + word.length + 1 > limit) lines.push(word);
+    else lines[i] += (lines[i] ? " " : "") + word;
+  }
+  return lines;
+}
 
 // ================= hero: construction layers lifted apart by scroll, then a winter night =================
 const GAP = 0.5;   // equal steps between layers (research 17 §5)
@@ -123,7 +142,7 @@ function lensMarks(lb, hb) {
     + `<g class="lsb"><path d="M${s0[0]} ${s0[1]} L${s1[0]} ${s1[1]}" class="fill"/><path d="M${s1[0]} ${s1[1]} L${s2[0]} ${s2[1]}"/><text x="${s2[0] + 6}" y="${s2[1] + 3}">50 MM</text><text x="${s0[0] + 6}" y="${s0[1] + 3}">0</text></g>`;
 }
 // scroll phases through the pinned hero: explode (0.06-0.30), reassemble (0.46-0.62), winter night (0.70-0.86)
-const unpinned = () => embed || reduceMotion || matchMedia("(max-width: 900px)").matches, colW = () => (matchMedia("(max-width: 600px)").matches ? 0 : 300);
+const unpinned = () => embed || reduceMotion || matchMedia("(max-width: 900px)").matches, colW = () => (matchMedia("(max-width: 600px)").matches ? 0 : 280);
 let pick = 0, hp = [0, 0];
 // the rail: on a pinned hero it scrolls to that state; unpinned (phones, reduced motion) it switches the state in place
 rail.forEach((li, k) => li.querySelector("button").addEventListener("click", () => {
@@ -151,13 +170,15 @@ function heroNotes(f, wn) {
       const ip = innerPoint(a.poly), xs = crossings(a.poly, 1, ip[1]), home = V3(...(l.right && xs.length ? [xs[xs.length - 1][1] - 150, ip[1]] : ip)), top = hero.project(home.clone().add(new THREE.Vector3(g.dx ?? 0, g.dy, 0)));
       return { l, a: top, home: hero.project(home), dy: g.dy + Math.abs(g.dx ?? 0) };
     }).filter(Boolean).sort((m, n) => n.a[1] - m.a[1]);
-    const colX = W - 250, ys = pts.map((n) => n.a[1]);
+    const colX = W - 234, ys = pts.map((n) => Math.min(H - 86, n.a[1]));
     for (let k = 1; k < ys.length; k++) ys[k] = Math.min(ys[k], ys[k - 1] - 52);   // bottom-up: each tag at least 52 px above the last
+    const shift = Math.max(0, 30 - ys.at(-1));
+    for (let k = 0; k < ys.length; k++) ys[k] += shift;
     const o = Math.min(1, (f - 0.02) * 2.5);
     pts.forEach((n, k) => {
       if (n.dy > 0.001) s += `<path d="M${n.home[0]} ${n.home[1]} L${n.a[0]} ${n.a[1]}" class="conn" style="opacity:${o}"/>`;
       s += `<g class="xnote${n.l.focus ? " focus" : ""}" style="opacity:${o}"><circle cx="${n.a[0]}" cy="${n.a[1]}" r="3"/><path d="${leader(n.a[0], n.a[1], colX - 34, ys[k])}"/>`
-        + `<circle cx="${colX - 25}" cy="${ys[k]}" r="9" class="tag"/><text class="k" x="${colX - 25}" y="${ys[k] + 3.5}" text-anchor="middle">${n.l.tag}</text><rect x="${colX - 2}" y="${ys[k] - 6}" width="12" height="12" fill="${n.l.tint}" stroke="#1E1E1E" stroke-width=".75"/><text x="${colX + 16}" y="${ys[k] + 3.5}">${n.l.name.toUpperCase()}</text></g>`;
+        + `<circle cx="${colX - 25}" cy="${ys[k]}" r="9" class="tag"/><text class="k" x="${colX - 25}" y="${ys[k] + 3.5}" text-anchor="middle">${n.l.tag}</text><text class="assembly-note" x="${colX}" y="${ys[k] + 4}">${wrapNote(n.l.name.toUpperCase(), 27).map((line, i) => `<tspan x="${colX}" dy="${i ? 15 : 0}">${line}</tspan>`).join("")}</text></g>`;
     });
   }
   const lb = lensCv.getBoundingClientRect(), hb = notes.getBoundingClientRect(), lo = Math.max(0, 1 - f * 1.6 - wn * 2);
@@ -706,6 +727,39 @@ watch(buildCv, {
 if (embed) {   // the same three states as the landing's rail
   const bs = [...document.querySelectorAll(".embedctl button")];
   bs.forEach((b) => b.addEventListener("click", () => { pick = +b.dataset.k; bs.forEach((o) => o.setAttribute("aria-pressed", o === b)); }));
+  const selectedMeshes = [];
+  function markPart(id) {
+    for (const mesh of selectedMeshes) { mesh.removeFromParent(); mesh.material.dispose(); }
+    selectedMeshes.length = 0;
+    let found = false;
+    for (const g of hero.groups) {
+      for (const mesh of [...g.node.children]) if (id && mesh.userData.partId === id) {
+        const mat = new THREE.MeshBasicMaterial({ color: "#E0482B", transparent: true, opacity: 0.55, depthTest: false, depthWrite: false, side: THREE.DoubleSide, clippingPlanes: g.planes });
+        const mark = new THREE.Mesh(mesh.geometry, mat);
+        mark.renderOrder = 20;
+        g.node.add(mark); selectedMeshes.push(mark); found = true;
+      }
+    }
+    document.body.dataset.selectedPart = id ?? "";
+    let status = document.getElementById("selection-status");
+    if (!status) { status = document.createElement("p"); status.id = "selection-status"; status.setAttribute("role", "status"); heroEl.querySelector(".stage").appendChild(status); }
+    const part = DATA.parts.find((p) => p.id === id);
+    status.textContent = id ? (found ? `Selected: ${part?.name ?? id}` : "Selected part is outside this fixed 3D fragment. Inspect it in Draft.") : "";
+    status.hidden = !id;
+  }
+  addEventListener("message", (e) => {
+    if (e.source !== parent || e.origin !== location.origin || e.data?.type !== "livingedge:select") return;
+    markPart(typeof e.data.id === "string" ? e.data.id : null);
+  });
+  const ray = new THREE.Raycaster();
+  heroCv.addEventListener("click", (e) => {
+    const r = heroCv.getBoundingClientRect();
+    ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, 1 - (e.clientY - r.top) / r.height * 2), hero.camera);
+    const candidates = hero.groups.flatMap((g) => g.node.children.filter((m) => m.userData.partId));
+    const hit = ray.intersectObjects(candidates, false).find((h) => (h.object.material.clippingPlanes ?? []).every((p) => p.distanceToPoint(h.point) >= -0.001));
+    if (hit) { markPart(hit.object.userData.partId); parent.postMessage({ type: "livingedge:picked", id: hit.object.userData.partId }, location.origin); }
+  });
+  parent.postMessage({ type: "livingedge:ready" }, location.origin);
 }
 // entry: band figures rise into place once
 if (!reduceMotion && "IntersectionObserver" in window) {

@@ -184,13 +184,17 @@ const NOTES = { "01": "codes", "02": "materials", "03": "assembly and climate", 
 const srcName = (s) => { const m = /^(\d\db?)\s+(.*)$/.exec(s); return m && NOTES[m[1]] ? `research ${m[1]} (${NOTES[m[1]]}) ${m[2]}` : s; };
 function keySchedule() {
   state.selected = null;
+  DRAFT.sel = null;
+  highlight3D();
   const keys = DRAFT.keys ?? [];
-  if (state.view === "3d") { info.innerHTML = '<p class="hint">Use the switch on the model: assembled, taken apart, winter night. Parts and their sources are on the Draft sheet.</p>'; return; }
+  if (state.view === "3d") { info.innerHTML = '<p class="hint">Click a component in the model to inspect its material and sources. Selection follows you back to Draft and Layers.</p>'; return; }
   info.innerHTML = keys.length ? `<p class="hint" style="margin:0 0 8px">Parts tagged on this sheet. Choose one for what it is, why it is there and where it comes from.</p><ol class="keys">${keys.map((k) => `<li><button type="button" data-id="${k.id}"><b>${k.tag}</b><span>${k.name}</span></button></li>`).join("")}</ol>` : '<p class="hint">Click a part to see what it is, why it is there and where it comes from.</p>';
   info.querySelectorAll(".keys button").forEach((b) => (b.onclick = () => select(b.dataset.id)));
 }
 function select(id) {
+  if (!byId.has(id)) return;
   state.selected = id; deepLink?.({ part: id });
+  DRAFT.sel = id;
   const p = byId.get(id);
   const m = mats[p.mat];
   info.innerHTML = `<h3>${p.name}</h3>
@@ -199,7 +203,8 @@ function select(id) {
     ${p.note ? `<p>${p.note}</p>` : ""}
     <p class="src">Sources: ${(p.src ?? []).map(srcName).join("; ") || "none recorded"}</p><p><button type="button" class="back">All parts</button></p>`;
   info.querySelector(".back").onclick = () => keySchedule();
-  if (state.view === "section") drawSection(); else if (state.view === "3d") highlight3D();
+  if (state.view === "draft" || state.view === "section") drawDraft();
+  highlight3D();
 }
 
 // ---------- floating result card: the mode's headline number, rolling to its new value ----------
@@ -352,6 +357,7 @@ function build3D() {
   three = { meshes };
 }
 function highlight3D() {
+  document.getElementById("axo")?.contentWindow?.postMessage({ type: "livingedge:select", id: state.selected }, location.origin);
   if (!three) return;
   const dim = state.layers.size > 0;
   for (const m of three.meshes) {
@@ -404,7 +410,9 @@ function showView(v) {
   document.getElementById("draft").hidden = v !== "draft" && v !== "section";
   DRAFT.mode = v;
   document.getElementById("three").hidden = v !== "3d";
-  document.querySelectorAll(".for-section").forEach((el) => (el.hidden = v === "thermal"));
+  document.querySelectorAll(".for-section").forEach((el) => (el.hidden = v === "thermal" || v === "3d"));
+  document.getElementById("three-ui").hidden = v !== "3d";
+  for (const id of ["print", "svgout"]) document.getElementById(id).hidden = v === "3d";
   document.getElementById("thermal-ui").hidden = v !== "thermal";
   // 3D: the landing's rendered section-box axo (same engine, same drawing standard), embedded with its own controls
   if (v === "3d" && !document.getElementById("axo")) document.getElementById("three").innerHTML = '<iframe id="axo" src="landing.html?embed=hero" title="Rendered section-box axo of the threshold to garden" style="border:0;width:100%;height:100%;display:block"></iframe>';
@@ -421,6 +429,12 @@ function showView(v) {
   highlight3D();
 }
 document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => showView(b.dataset.tab)));
+addEventListener("message", (e) => {
+  const frame = document.getElementById("axo");
+  if (e.origin !== location.origin || e.source !== frame?.contentWindow) return;
+  if (e.data?.type === "livingedge:ready") highlight3D();
+  if (e.data?.type === "livingedge:picked" && byId.has(e.data.id)) select(e.data.id);
+});
 function keySchedule0() { if (state.selected == null) keySchedule(); }
 document.querySelector(".tabs").addEventListener("keydown", (e) => {
   const tabs = [...document.querySelectorAll("[data-tab]")], i = tabs.indexOf(document.activeElement);

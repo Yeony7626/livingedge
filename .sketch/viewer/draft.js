@@ -62,7 +62,7 @@ function stripAxis(poly) {
 function drawDraft() {
   const box = draftHost.getBoundingClientRect();
   const W = Math.max(box.width, 320), H = Math.max(box.height, 300);
-  const narrow = W < 700, COL = narrow ? 34 : Math.min(250, Math.max(190, W * 0.34)), PAD = 28, LC = W > 1000 ? 236 : 0, FX = PAD + LC, FW = W - COL - PAD * 2 - 16 - LC, FH = H - PAD * 2 - 44;
+  const narrow = W < 860, COL = narrow ? 34 : Math.min(250, Math.max(190, W * 0.34)), PAD = 28, LC = W > 1000 ? 236 : 0, FX = PAD + LC, FW = W - COL - PAD * 2 - 16 - LC, FH = H - PAD * 2 - (narrow ? 80 : 44);
   // keep the window's aspect equal to the frame's (no distortion), centred on the requested window
   const win = DRAFT.win, cxm = (win.x[0] + win.x[1]) / 2, cym = (win.y[0] + win.y[1]) / 2;
   let ww = win.x[1] - win.x[0], wh = win.y[1] - win.y[0];
@@ -147,7 +147,7 @@ function drawDraft() {
   const MINOR = /tape|seal|foil|back-fill|screen|clip|stool|ledge|gasket|skirt|weep|transition|subflash|rebar|soilgas|geotextile|dampproof|airseal|gap-fill|tray-ledge|slot/;
   const ROLE_W = { frame: 1.3, water: 1.2, thermal: 1.1, cladding: 1.1, ground: 1.0, metal: 0.9, concrete: 0.8, drainage: 0.6, air: 0.5 };
   const importance = (p) => (MINOR.test(p.id) ? 0.12 : ROLE_W[p.role] ?? 0.6);
-  const rowsFit = Math.max(6, Math.min(12, Math.floor(FH / 30)));
+  const rowsFit = Math.max(4, Math.min(narrow ? 8 : 12, Math.floor(FH / 36)));
   const byPart = new Map();
   for (const l of labels) if (!byPart.has(l.p.id) || byPart.get(l.p.id).area < l.area) byPart.set(l.p.id, l);
   let chosen = [...byPart.values()]
@@ -176,7 +176,7 @@ function drawDraft() {
     const edge = l.left ? FX + 8 : KX - 8, gut = l.left ? FX - 6 : KX + 6, tx = l.left ? FX - 30 : COLX + 8;
     ann += `<polyline points="${l.pxx.toFixed(1)},${l.py.toFixed(1)} ${edge},${l.py.toFixed(1)} ${gut},${l.ly.toFixed(1)} ${l.left ? tx + 10 : tx - 10},${l.ly.toFixed(1)}" fill="none" stroke="${PAPER}" stroke-width="2.5" stroke-linejoin="round"/>` + `<polyline points="${l.pxx.toFixed(1)},${l.py.toFixed(1)} ${edge},${l.py.toFixed(1)} ${gut},${l.ly.toFixed(1)} ${l.left ? tx + 10 : tx - 10},${l.ly.toFixed(1)}" fill="none" stroke="${c}" stroke-width="${on ? 1 : 0.5}"/>`;
     ann += `<circle cx="${l.pxx.toFixed(1)}" cy="${l.py.toFixed(1)}" r="2" fill="${c}"/>`;
-    ann += `<circle cx="${tx}" cy="${l.ly.toFixed(1)}" r="10" fill="${PAPER}" stroke="${c}" stroke-width=".75"/><text x="${tx}" y="${(l.ly + 3.5).toFixed(1)}" text-anchor="middle" style="${M};font-size:9px" fill="${c}">${tagOf(l.p)}</text>`;
+    ann += `<g data-id="${l.p.id}" style="cursor:pointer"><circle cx="${tx}" cy="${l.ly.toFixed(1)}" r="10" fill="${PAPER}" stroke="${c}" stroke-width=".75"/><text x="${tx}" y="${(l.ly + 3.5).toFixed(1)}" text-anchor="middle" style="${M};font-size:9px" fill="${c}">${tagOf(l.p)}</text></g>`;
     DRAFT.keys.push({ tag: tagOf.last, id: l.p.id, name: l.p.name });
     if (!narrow) lines.forEach((t, k) => (ann += `<text data-id="${l.p.id}" x="${l.left ? tx - 16 : tx + 16}" y="${(l.ly + 4 + (k - (lines.length - 1) / 2) * 13).toFixed(1)}" text-anchor="${l.left ? "end" : "start"}" style="${M};cursor:pointer" fill="${c}">${t}</text>`));
   });
@@ -199,7 +199,8 @@ function drawDraft() {
   // orientation: exterior (garden, west) left, interior (east) right
   ann += `<g stroke="${INK}" stroke-width=".75" fill="none"><path d="M${FX + 24} ${PAD - 12} H${FX + 84} M${FX + 30} ${PAD - 16} L${FX + 24} ${PAD - 12} L${FX + 30} ${PAD - 8} M${FX + 78} ${PAD - 16} L${FX + 84} ${PAD - 12} L${FX + 78} ${PAD - 8}"/></g><text x="${FX + 12}" y="${PAD - 8}" style="${M}" fill="${INK}">W</text><text x="${FX + 90}" y="${PAD - 8}" style="${M}" fill="${INK}">E</text>`;
   // title block under the schedule column
-  ann += `<line x1="${FX + FW * 0.45}" y1="${PAD + FH + 9}" x2="${W - 16}" y2="${PAD + FH + 9}" stroke="${INK}" stroke-width=".75"/>`
+  if (narrow) ann += `<text x="${FX}" y="${H - 30}" style="${M}" fill="${INK}">DETAIL 02 · ${layersMode ? "LAYERS" : "SECTION"} · W ${DRAFT.w}</text><text x="${FX}" y="${H - 14}" style="${M}" fill="${MUTE}">REV 5 · 2026-10-14 · SCALE: BAR</text>`;
+  else ann += `<line x1="${FX + FW * 0.45}" y1="${PAD + FH + 9}" x2="${W - 16}" y2="${PAD + FH + 9}" stroke="${INK}" stroke-width=".75"/>`
     + `<text x="${W - 16}" y="${PAD + FH + 24}" text-anchor="end" style="${M}" fill="${INK}">THE LIVING EDGE &#183; DETAIL 02${W > 700 ? ` &#183; ${DRAFT.w < 0 ? "JAMB WALL BASE" : "THRESHOLD TO GARDEN"}, VANCOUVER` : ""}</text>`
     + `<text x="${W - 16}" y="${PAD + FH + 38}" text-anchor="end" style="${M}" fill="${MUTE}">${W > 700 ? (layersMode ? "CONTROL LAYERS AT " : "SECTION AT ") : ""}W ${DRAFT.w} &#183; ${W > 700 ? "SCALE: BAR &#183; " : ""}REV 5 &#183; 2026-10-14</text>`;   // phones: the short block, clear of the scale bar
   // scale bar: a round length near 1/5 of the frame

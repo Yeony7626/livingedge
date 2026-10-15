@@ -84,6 +84,8 @@ sub { font-size:.75em; line-height:0; }
 .furn text { fill:var(--ink); }
 .furn path, .furn circle { stroke:var(--ink); }
 .furn .datum { stroke-dasharray:16 3 2 3; stroke-opacity:.55; }
+.furn .level-leader { stroke-opacity:.7; stroke-linejoin:round; }
+.xnote .assembly-note { font-size:12px; letter-spacing:.01em; }
 .furn .tri { fill:var(--ink); stroke:none; }
 .furn .sb { stroke-width:3; stroke-opacity:1; }
 .furn .sb.fill { stroke:var(--ink); }
@@ -293,6 +295,11 @@ footer { padding:0 0 48px; color:var(--mute); border-top:1px solid var(--rule); 
 .embedctl { display:none; }
 body.embed nav, body.embed .copy, body.embed section, body.embed footer, body.embed .caption, body.embed #hero-lens { display:none; }
 body.embed .hero { height:100dvh; } body.embed .pin { position:relative; top:0; height:100dvh; min-height:0; grid-template-columns:1fr; padding:12px; max-width:none; }
+body.embed .stage { min-width:0; width:100%; aspect-ratio:auto; }
+body.embed #hero-ink { cursor:pointer; }
+#selection-status { position:absolute; top:8px; left:12px; right:12px; width:fit-content; max-width:calc(100% - 24px); margin:0; padding:8px 10px; background:var(--bg); color:var(--ink); font:12px/1.5 var(--mono); z-index:3; }
+body.embed .stage canvas, body.embed .stage svg { height:calc(100% - 48px); }
+body.embed .embedctl { max-width:calc(100% - 24px); }
 body.embed .embedctl { display:flex; position:absolute; right:16px; bottom:14px; z-index:3; gap:14px; align-items:center; font:500 11px var(--mono); letter-spacing:.04em; background:color-mix(in srgb, var(--bg) 90%, transparent); padding:8px 12px; border:1px solid var(--rule); }
 body.embed .embedctl input { width:180px; margin:0; }
 body.embed .embedctl button { font:inherit; border:1px solid var(--rule); background:transparent; padding:4px 10px; cursor:pointer; }
@@ -383,7 +390,7 @@ body.embed .embedctl button:last-child { border-right:0; }
         <canvas id="hero-ink"></canvas><canvas id="hero-lens" aria-hidden="true"></canvas><svg id="hero-notes" class="ovl" aria-hidden="true"></svg><svg id="hero-cold" class="ovl" aria-hidden="true"></svg>
         <div class="hlegend" id="hero-legend" aria-hidden="true"></div>
         <p class="wcap">Winter night &#183; &#8722;7&nbsp;&#176;C outside, 20&nbsp;&#176;C in. Colours are computed temperatures through the cut.</p>
-        <div class="caption"><span class="k">AXO 01</span> &middot; Threshold to garden &middot; section box 5.6 &#215; 4.5 &#215; 1.2&nbsp;m, cut at W&nbsp;2000 (sliding panel) &middot; <b>12&nbsp;mm threshold</b></div>
+        <div class="caption"><span class="k">AXO 01</span> &middot; Threshold to garden &middot; section box 6.8 &#215; 4.5 &#215; 1.2&nbsp;m, cut at W&nbsp;2000 (sliding panel) &middot; <b>12&nbsp;mm threshold</b></div>
         <div class="embedctl" role="group" aria-label="Model state"><button type="button" data-k="0" aria-pressed="true">Assembled</button><button type="button" data-k="1" aria-pressed="false">Taken apart</button><button type="button" data-k="2" aria-pressed="false">Winter night</button></div>
       </div>
     </div>

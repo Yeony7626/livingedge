@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = fileURLToPath(new URL(".", import.meta.url));
+// node serve.mjs [port] [root]: root defaults to this folder (e.g. pass ../../review for the review pages)
+const root = process.argv[3] ? join(process.cwd(), process.argv[3], "/") : fileURLToPath(new URL(".", import.meta.url));
 const port = +(process.argv[2] ?? 5179);
 const types = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".json": "application/json", ".png": "image/png" };
 createServer(async (req, res) => {

@@ -168,7 +168,7 @@ function drawDraft() {
   const wrap = (t) => { if (t.length <= 26) return [t]; const cut = t.lastIndexOf(" ", 26); const i = cut > 10 ? cut : 26; return [t.slice(0, i), t.slice(i).trim().slice(0, 26)]; };
   const tagOf = (p) => (tagOf.last = keyOf(p));
   DRAFT.keys = [];
-  const M = `font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.04em;paint-order:stroke;stroke:${PAPER};stroke-width:3px;stroke-linejoin:round`;
+  const M = `font-family:'Barlow Semi Condensed',Barlow,sans-serif;font-size:11px;letter-spacing:.04em;paint-order:stroke;stroke:${PAPER};stroke-width:3px;stroke-linejoin:round`;
   let ann = "";
   [...chosen].sort((a, b) => (a.left === b.left ? a.ly - b.ly : a.left ? -1 : 1)).forEach((l) => {
     const on = DRAFT.sel === l.p.id, c = on ? SIGNAL : INK, lines = wrap(shortName(l.p) + (l.p.nocarbon ? " (MANUFACTURER)" : ""));

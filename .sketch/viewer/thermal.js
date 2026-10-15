@@ -145,7 +145,7 @@ function drawThermal() {
       let ly = +m[2] - (c.x[1] - c.x[0]) / 32;
       while (placed.some(([px, py]) => Math.abs(py - ly) < fsz * 1.4 && Math.abs(px - +m[1]) < fsz * 12)) ly -= fsz * 1.6;   // two labels starting at one edge never overprint
       placed.push([+m[1], ly]);
-      Object.entries({ x: +m[1] + 6, y: ly, "font-size": fsz, fill: "#1E1E1E", "font-family": "Geist Mono, monospace", "paint-order": "stroke", stroke: "#F4F2EC", "stroke-width": (c.x[1] - c.x[0]) / 600 }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); };
+      Object.entries({ x: +m[1] + 6, y: ly, "font-size": fsz, fill: "#1E1E1E", "font-family": "Barlow Semi Condensed, Barlow, sans-serif", "paint-order": "stroke", stroke: "#F4F2EC", "stroke-width": (c.x[1] - c.x[0]) / 600 }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); };
     lab(cc, `${critT(bc).toFixed(1)} °C · fRsi 0.70`);
     lab(c0, "0 °C");
   }
@@ -169,7 +169,7 @@ function drawThermal() {
     into(svg.lastChild);
   }
   { const fs = (c.x[1] - c.x[0]) / 66, put = (text, x, y, anchor = "start") => { const el = document.createElementNS(NS, "text"); el.textContent = text;
-      Object.entries({ x, y, "font-size": fs, fill: "#5b5a55", "font-family": "Geist Mono, monospace", "text-anchor": anchor }).forEach(([k, v]) => el.setAttribute(k, v)); svg.appendChild(el); };
+      Object.entries({ x, y, "font-size": fs, fill: "#5b5a55", "font-family": "Barlow Semi Condensed, Barlow, sans-serif", "text-anchor": anchor }).forEach(([k, v]) => el.setAttribute(k, v)); svg.appendChild(el); };
     put("INTERIOR AIR · Rsi", c.x[1] - (c.x[1] - c.x[0]) * 0.02, -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "end");
     for (const [x, t] of [[c.x[0] + fs * 1.2, "W"], [c.x[1] - fs * 1.2, "E"]]) { const ci = document.createElementNS(NS, "circle"); Object.entries({ cx: x, cy: -c.y[1] - fs * 1.4, r: fs * 0.9, fill: "none", stroke: "#1E1E1E", "stroke-width": 0.75, "vector-effect": "non-scaling-stroke" }).forEach(([k, v]) => ci.setAttribute(k, v)); svg.appendChild(ci); put(t, x, -c.y[1] - fs * 1.05, "middle"); }
     put("SOIL CROP ADIABATIC; GROUND TEMPERATURES INDICATIVE", c.x[0], -c.y[0] + fs * 3.2);
@@ -177,7 +177,7 @@ function drawThermal() {
     const r = document.createElementNS(NS, "path"); r.setAttribute("d", `M${bx} ${by} h${bar}`); r.setAttribute("stroke", "#1E1E1E"); r.setAttribute("stroke-width", 3); r.setAttribute("vector-effect", "non-scaling-stroke"); svg.appendChild(r);
     put(`${bar} MM`, bx + bar, by - fs * 0.5, "end"); }
   { const el = document.createElementNS(NS, "text"); el.textContent = "EXTERIOR AIR · Rse";
-    Object.entries({ x: c.x[0] + (c.x[1] - c.x[0]) * 0.02, y: -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "font-size": (c.x[1] - c.x[0]) / 66, fill: "#5b5a55", "font-family": "Geist Mono, monospace" }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); }
+    Object.entries({ x: c.x[0] + (c.x[1] - c.x[0]) * 0.02, y: -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "font-size": (c.x[1] - c.x[0]) / 66, fill: "#5b5a55", "font-family": "Barlow Semi Condensed, Barlow, sans-serif" }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); }
   // Coldest interior surface.
   const m = R.tsMin, rr = (c.x[1] - c.x[0]) / 110, mark = document.createElementNS(NS, "g");
   mark.innerHTML = `<circle cx="${m.x}" cy="${-m.y}" r="${rr}" fill="none" stroke="#fff" stroke-width="4" vector-effect="non-scaling-stroke"/>` +

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typeface Compare</title>
+<style>
+:root { --bg:#F2F1EC; --fg:#1B1B1A; --mute:#5F5E59; --rule:#D6D3CA; --signal:#E0482B; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#161615; --fg:#ECEAE4; --mute:#A3A09A; --rule:#34332F; } }
+:root[data-theme="dark"] { --bg:#161615; --fg:#ECEAE4; --mute:#A3A09A; --rule:#34332F; }
+body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui, sans-serif; }
+main { max-width:1500px; margin:0 auto; padding:32px 16px 64px; }
+h1 { font-size:22px; margin:0 0 6px; } h2 { font-size:15px; margin:40px 0 12px; text-transform:uppercase; letter-spacing:.06em; }
+p.lede { color:var(--mute); max-width:75ch; margin:0 0 24px; }
+.keys { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; margin-bottom:8px; }
+.key { border:1px solid var(--rule); padding:14px 16px; }
+.key b { display:block; } .key small { color:var(--mute); display:block; margin-top:4px; }
+.key .tag { font:600 12px ui-monospace, monospace; color:var(--signal); }
+.grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+@media (max-width: 800px) { .grid { grid-template-columns:1fr; } }
+figure { margin:0; } figure img { width:100%; display:block; border:1px solid var(--rule); }
+figcaption { font-size:13px; color:var(--mute); margin-top:6px; } figcaption b { color:var(--fg); }
+a { color:inherit; }
+</style>
+</head>
+<body>
+<main>
+<h1>Typeface candidates for Living Edge</h1>
+<p class="lede" style="color:var(--fg)"><b>Decision, 15 October 2026: 1 · DIN lineage.</b> It is now applied to the landing page, the tool and the drawing labels. The tool's long part descriptions use regular Barlow; tags and drawing labels use Barlow Semi Condensed. Applied captures: <a href="applied-hero.png">hero</a>, <a href="applied-draft.png">draft</a>, <a href="applied-thermal.png">thermal</a>, <a href="applied-phone.png">phone</a>.</p>
+<p class="lede">The previous fonts, Geist and Geist Mono, had been picked in an earlier session and were never chosen by you. Each candidate below comes from a real lettering tradition. They are shown on the same three views, and only the fonts change. Click any image for full size.</p>
+<div class="keys">
+  <div class="key"><span class="tag">0 · CURRENT</span><b>Geist / Geist Mono / Barlow Condensed numerals</b><small>Software-UI fonts, common in AI-generated interfaces. The monospaced labels read as code, not drawing.</small></div>
+  <div class="key"><span class="tag">1 · DIN LINEAGE</span><b>Barlow / Barlow Semi Condensed labels / Barlow Condensed numerals</b><small>Descends from DIN 1451, the German standard lettering for technical drawings and signage: even stroke width, simple grid, condensed labels. Reuses the numeral font already on the page.</small></div>
+  <div class="key"><span class="tag">2 · GROTESQUE</span><b>Archivo / Archivo Narrow labels and numerals</b><small>A 19th-century American grotesque, close to the plain sans of architecture monographs and office sheet titles. Narrow labels pack tightly on the drawing.</small></div>
+  <div class="key"><span class="tag">3 · ENGINEERING SUPERFAMILY</span><b>IBM Plex Sans / Plex Mono labels / Plex Sans Condensed numerals</b><small>One family designed for engineering documentation. It keeps monospaced labels like the current look, but with more character.</small></div>
+</div>
+
+<h2>Landing hero</h2>
+<div class="grid">
+  <figure><a href="c0_geist-hero.png"><img src="c0_geist-hero.png" alt="Landing hero set in Geist"></a><figcaption><b>0 · Current</b> Geist</figcaption></figure>
+  <figure><a href="c1_din-hero.png"><img src="c1_din-hero.png" alt="Landing hero set in Barlow"></a><figcaption><b>1 · DIN lineage</b> Barlow</figcaption></figure>
+  <figure><a href="c2_grotesque-hero.png"><img src="c2_grotesque-hero.png" alt="Landing hero set in Archivo"></a><figcaption><b>2 · Grotesque</b> Archivo</figcaption></figure>
+  <figure><a href="c3_plex-hero.png"><img src="c3_plex-hero.png" alt="Landing hero set in IBM Plex"></a><figcaption><b>3 · Engineering</b> IBM Plex</figcaption></figure>
+</div>
+
+<h2>Tool · Draft section with labels</h2>
+<div class="grid">
+  <figure><a href="c0_geist-draft.png"><img src="c0_geist-draft.png" alt="Draft drawing set in Geist Mono"></a><figcaption><b>0 · Current</b> Geist Mono labels</figcaption></figure>
+  <figure><a href="c1_din-draft.png"><img src="c1_din-draft.png" alt="Draft drawing set in Barlow Semi Condensed"></a><figcaption><b>1 · DIN lineage</b> Barlow Semi Condensed labels</figcaption></figure>
+  <figure><a href="c2_grotesque-draft.png"><img src="c2_grotesque-draft.png" alt="Draft drawing set in Archivo Narrow"></a><figcaption><b>2 · Grotesque</b> Archivo Narrow labels</figcaption></figure>
+  <figure><a href="c3_plex-draft.png"><img src="c3_plex-draft.png" alt="Draft drawing set in IBM Plex Mono"></a><figcaption><b>3 · Engineering</b> Plex Mono labels</figcaption></figure>
+</div>
+
+<h2>Tool · 3D, taken apart</h2>
+<div class="grid">
+  <figure><a href="c0_geist-exploded.png"><img src="c0_geist-exploded.png" alt="Exploded axo labels in Geist Mono"></a><figcaption><b>0 · Current</b></figcaption></figure>
+  <figure><a href="c1_din-exploded.png"><img src="c1_din-exploded.png" alt="Exploded axo labels in Barlow Semi Condensed"></a><figcaption><b>1 · DIN lineage</b></figcaption></figure>
+  <figure><a href="c2_grotesque-exploded.png"><img src="c2_grotesque-exploded.png" alt="Exploded axo labels in Archivo Narrow"></a><figcaption><b>2 · Grotesque</b></figcaption></figure>
+  <figure><a href="c3_plex-exploded.png"><img src="c3_plex-exploded.png" alt="Exploded axo labels in IBM Plex Mono"></a><figcaption><b>3 · Engineering</b></figcaption></figure>
+</div>
+<p class="lede" style="margin-top:32px">These are mock-ups only: fonts were swapped at capture time and no source has changed. References: DIN 1451 (<a href="https://en.wikipedia.org/wiki/DIN_1451">Wikipedia</a>), ISO 3098 technical lettering (<a href="https://roymech.org/Useful_Tables/Drawing/Lettering.html">Roymech summary</a>).</p>
+</main>
+</body>
+</html>

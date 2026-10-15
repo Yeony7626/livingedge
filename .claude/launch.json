@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": [".sketch/viewer/serve.mjs", "5179"],
       "port": 5179
+    },
+    {
+      "name": "review",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".sketch/viewer/serve.mjs", "5180", "review"],
+      "port": 5180
     }
   ]
 }

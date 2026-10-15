@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Living Edge Viewer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@400;500&family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">
 <style>
 /* Tokens: drafting paper and ink, one signal colour; living and water only inside analysis modes (direction s1). */
 :root { --bg:#F2F1EC; --panel:#FAFAF7; --fg:#1B1B1A; --mute:#6B6A65; --line:#55534e; --canvas:#F2F1EC; --rule:#DCD9D1; --accent:#E0482B;
-  --signal:#E0482B; --living:#6E8B4E; --water:#2F6FB0; --chip:#ECEAE3; --sans:"Geist", ui-sans-serif, system-ui, sans-serif; --mono:"Geist Mono", ui-monospace, monospace; }
+  --signal:#E0482B; --living:#6E8B4E; --water:#2F6FB0; --chip:#ECEAE3; --sans:"Barlow", ui-sans-serif, system-ui, sans-serif; --mono:"Barlow Semi Condensed", "Barlow", ui-sans-serif, sans-serif; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#9A9892; --line:#2C2C2A; --canvas:#161615; --rule:#2C2C2A; --chip:#232321; } }
 :root[data-theme="dark"] { --bg:#121211; --panel:#191918; --fg:#ECEBE6; --mute:#9A9892; --line:#2C2C2A; --canvas:#161615; --rule:#2C2C2A; --chip:#232321; }
 * { box-sizing: border-box; }
-body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 var(--sans); min-height:100dvh; height:100dvh; display:grid; grid-template-rows:56px 1fr; }
+body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 var(--sans); font-variant-numeric:tabular-nums; min-height:100dvh; height:100dvh; display:grid; grid-template-rows:56px 1fr; }
 /* Header: brand, detail, one segmented mode control */
 header { display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:18px; padding:0 18px; border-bottom:1px solid var(--rule); background:var(--panel); }
 .brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:-.01em; white-space:nowrap; }
@@ -92,10 +92,10 @@ label.blk select { font:500 12px var(--mono); letter-spacing:0; text-transform:n
 .modes label { display:flex; margin:3px 0; font-size:13px; }
 #th-run, #print, #svgout, #share { background:var(--fg); color:var(--bg); border-color:var(--fg); border-radius:0; padding:11px 14px; font:500 12px/1 var(--mono); letter-spacing:.06em; text-transform:uppercase; }
 #print, #svgout, #share { background:transparent; color:var(--fg); padding:8px 12px; }
-.keys { list-style:none; margin:0; padding:0; font:500 11px/1.3 var(--mono); }
+.keys { list-style:none; margin:0; padding:0; font:400 13px/1.35 var(--sans); }
 .keys button { all:unset; box-sizing:border-box; width:100%; display:grid; grid-template-columns:34px 1fr; gap:6px; padding:5px 0; border-bottom:1px solid var(--rule); cursor:pointer; color:var(--fg); }
 .keys button:hover { background:var(--chip); }
-.keys b { font-weight:500; color:var(--mute); }
+.keys b { font:500 11px/1.6 var(--mono); color:var(--mute); }
 #thermal-out .big { font:300 40px/1 "Barlow Condensed", var(--sans); margin-top:12px; }
 #thermal-out .big small { display:block; font:400 12px/1.45 var(--sans); color:var(--mute); margin-top:6px; }
 table.t { width:100%; border-collapse:collapse; margin-top:12px; font-size:12px; }
@@ -950,7 +950,7 @@ function drawThermal() {
       let ly = +m[2] - (c.x[1] - c.x[0]) / 32;
       while (placed.some(([px, py]) => Math.abs(py - ly) < fsz * 1.4 && Math.abs(px - +m[1]) < fsz * 12)) ly -= fsz * 1.6;   // two labels starting at one edge never overprint
       placed.push([+m[1], ly]);
-      Object.entries({ x: +m[1] + 6, y: ly, "font-size": fsz, fill: "#1E1E1E", "font-family": "Geist Mono, monospace", "paint-order": "stroke", stroke: "#F4F2EC", "stroke-width": (c.x[1] - c.x[0]) / 600 }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); };
+      Object.entries({ x: +m[1] + 6, y: ly, "font-size": fsz, fill: "#1E1E1E", "font-family": "Barlow Semi Condensed, Barlow, sans-serif", "paint-order": "stroke", stroke: "#F4F2EC", "stroke-width": (c.x[1] - c.x[0]) / 600 }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); };
     lab(cc, `${critT(bc).toFixed(1)} °C · fRsi 0.70`);
     lab(c0, "0 °C");
   }
@@ -974,7 +974,7 @@ function drawThermal() {
     into(svg.lastChild);
   }
   { const fs = (c.x[1] - c.x[0]) / 66, put = (text, x, y, anchor = "start") => { const el = document.createElementNS(NS, "text"); el.textContent = text;
-      Object.entries({ x, y, "font-size": fs, fill: "#5b5a55", "font-family": "Geist Mono, monospace", "text-anchor": anchor }).forEach(([k, v]) => el.setAttribute(k, v)); svg.appendChild(el); };
+      Object.entries({ x, y, "font-size": fs, fill: "#5b5a55", "font-family": "Barlow Semi Condensed, Barlow, sans-serif", "text-anchor": anchor }).forEach(([k, v]) => el.setAttribute(k, v)); svg.appendChild(el); };
     put("INTERIOR AIR · Rsi", c.x[1] - (c.x[1] - c.x[0]) * 0.02, -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "end");
     for (const [x, t] of [[c.x[0] + fs * 1.2, "W"], [c.x[1] - fs * 1.2, "E"]]) { const ci = document.createElementNS(NS, "circle"); Object.entries({ cx: x, cy: -c.y[1] - fs * 1.4, r: fs * 0.9, fill: "none", stroke: "#1E1E1E", "stroke-width": 0.75, "vector-effect": "non-scaling-stroke" }).forEach(([k, v]) => ci.setAttribute(k, v)); svg.appendChild(ci); put(t, x, -c.y[1] - fs * 1.05, "middle"); }
     put("SOIL CROP ADIABATIC; GROUND TEMPERATURES INDICATIVE", c.x[0], -c.y[0] + fs * 3.2);
@@ -982,7 +982,7 @@ function drawThermal() {
     const r = document.createElementNS(NS, "path"); r.setAttribute("d", `M${bx} ${by} h${bar}`); r.setAttribute("stroke", "#1E1E1E"); r.setAttribute("stroke-width", 3); r.setAttribute("vector-effect", "non-scaling-stroke"); svg.appendChild(r);
     put(`${bar} MM`, bx + bar, by - fs * 0.5, "end"); }
   { const el = document.createElementNS(NS, "text"); el.textContent = "EXTERIOR AIR · Rse";
-    Object.entries({ x: c.x[0] + (c.x[1] - c.x[0]) * 0.02, y: -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "font-size": (c.x[1] - c.x[0]) / 66, fill: "#5b5a55", "font-family": "Geist Mono, monospace" }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); }
+    Object.entries({ x: c.x[0] + (c.x[1] - c.x[0]) * 0.02, y: -c.y[1] + (c.y[1] - c.y[0]) * 0.06, "font-size": (c.x[1] - c.x[0]) / 66, fill: "#5b5a55", "font-family": "Barlow Semi Condensed, Barlow, sans-serif" }).forEach(([k, v]) => el.setAttribute(k, v)); into(el); }
   // Coldest interior surface.
   const m = R.tsMin, rr = (c.x[1] - c.x[0]) / 110, mark = document.createElementNS(NS, "g");
   mark.innerHTML = `<circle cx="${m.x}" cy="${-m.y}" r="${rr}" fill="none" stroke="#fff" stroke-width="4" vector-effect="non-scaling-stroke"/>` +
@@ -1207,7 +1207,7 @@ function drawDraft() {
   const wrap = (t) => { if (t.length <= 26) return [t]; const cut = t.lastIndexOf(" ", 26); const i = cut > 10 ? cut : 26; return [t.slice(0, i), t.slice(i).trim().slice(0, 26)]; };
   const tagOf = (p) => (tagOf.last = keyOf(p));
   DRAFT.keys = [];
-  const M = `font-family:'Geist Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.04em;paint-order:stroke;stroke:${PAPER};stroke-width:3px;stroke-linejoin:round`;
+  const M = `font-family:'Barlow Semi Condensed',Barlow,sans-serif;font-size:11px;letter-spacing:.04em;paint-order:stroke;stroke:${PAPER};stroke-width:3px;stroke-linejoin:round`;
   let ann = "";
   [...chosen].sort((a, b) => (a.left === b.left ? a.ly - b.ly : a.left ? -1 : 1)).forEach((l) => {
     const on = DRAFT.sel === l.p.id, c = on ? SIGNAL : INK, lines = wrap(shortName(l.p) + (l.p.nocarbon ? " (MANUFACTURER)" : ""));
